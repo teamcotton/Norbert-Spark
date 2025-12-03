@@ -1,14 +1,16 @@
-import tseslint from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import astroPlugin from 'eslint-plugin-astro';
-import rootConfig from '../eslint.config.js';
+import tseslint from 'typescript-eslint'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
+import astroPlugin from 'eslint-plugin-astro'
+import rootConfig from '../eslint.config.js'
 
 export default [
   ...rootConfig,
   ...tseslint.configs.recommended,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
+  jsxA11yPlugin.flatConfigs.recommended,
   ...astroPlugin.configs.recommended,
   {
     files: ['**/*.astro'],
@@ -51,4 +53,4 @@ export default [
       'no-unused-vars': 'off',
     },
   },
-];
+]
