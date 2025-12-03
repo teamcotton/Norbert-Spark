@@ -1,8 +1,9 @@
-import tseslint from 'typescript-eslint'
+import astroPlugin from 'eslint-plugin-astro'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
-import astroPlugin from 'eslint-plugin-astro'
+import tseslint from 'typescript-eslint'
+
 import rootConfig from '../eslint.config.js'
 
 export default [
@@ -51,6 +52,14 @@ export default [
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/triple-slash-reference': 'off',
       'no-unused-vars': 'off',
+    },
+  },
+  {
+    // Global settings for React
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
 ]
