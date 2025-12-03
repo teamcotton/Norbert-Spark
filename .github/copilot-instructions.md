@@ -51,6 +51,13 @@ pnpm typecheck    # TypeScript type checking (no emit)
 
 ### Git Hooks (Husky)
 
+**Commit-msg hook** (validates commit message format):
+
+- Enforces Conventional Commits specification (https://www.conventionalcommits.org/)
+- Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+- Format: `type(scope): subject` or `type: subject`
+- Example: `feat(auth): add login functionality` or `fix: resolve navigation bug`
+
 **Pre-commit hook** (runs before each commit):
 
 - `pnpm run format` - Format code with Prettier
