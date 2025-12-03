@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Button, Card, CardContent, Typography, Box } from '@mui/material';
+import { useState } from 'react'
+import { Button, Card, CardContent, Typography, Box } from '@mui/material'
 
 export default function SampleComponent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   return (
     <Card sx={{ maxWidth: 400, margin: 2 }}>
@@ -24,5 +24,5 @@ export default function SampleComponent() {
         </Box>
       </CardContent>
     </Card>
-  );
+  )
 }
