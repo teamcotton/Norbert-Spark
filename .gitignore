@@ -151,3 +151,6 @@ drizzle/
 
 # PNPM
 pnpm-lock.yaml
+
+# Turbo
+.turbo/

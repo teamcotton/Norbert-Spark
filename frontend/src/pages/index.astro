@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Button } from '@mui/material';
+import SampleComponent from '../components/SampleComponent';
 ---
 
 <Layout title="Level 2 Gym">
@@ -13,9 +13,7 @@ import { Button } from '@mui/material';
       <br />
       Features: ESLint, Prettier, Vitest, Playwright, Drizzle, AI SDK
     </p>
-    <Button variant="contained" color="primary">
-      Get Started
-    </Button>
+    <SampleComponent client:load />
   </main>
 </Layout>
 

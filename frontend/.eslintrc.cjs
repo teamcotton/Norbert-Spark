@@ -11,7 +11,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
-    'plugin:astro/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -30,15 +29,20 @@ module.exports = {
   overrides: [
     {
       files: ['*.astro'],
+      extends: ['plugin:astro/recommended'],
       parser: 'astro-eslint-parser',
       parserOptions: {
         parser: '@typescript-eslint/parser',
         extraFileExtensions: ['.astro'],
+      },
+      rules: {
+        'react/no-unknown-property': 'off',
       },
     },
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/triple-slash-reference': 'off',
   },
 };
