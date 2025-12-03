@@ -4,16 +4,142 @@
 
 This is a **Turborepo monorepo** with PNPM workspaces containing:
 
-- **frontend/**: Astro 5 SSG with React 19 islands, Material UI 7, Drizzle ORM, AI SDK v5 integration
+- **frontend/**: Next.js 16 with React 19, Material UI 7, Drizzle ORM, AI SDK v5 integration, **Domain-Driven Design (DDD) architecture**
 - **backend/**: Fastify TypeScript API server (port 3000)
 - **supabase/**: Docker-based self-hosted PostgreSQL documentation
 
 Key architectural decisions:
 
-- Astro uses `output: 'static'` for static site generation
-- React components are "islands" for interactive UI (use `.tsx` files in `components/`)
-- Database logic lives in frontend (`frontend/src/db/`) - unusual but intentional for this SSG setup
+- Next.js 16 App Router with Server/Client Components
+- **Domain-Driven Design** with clear separation of concerns across 4 layers
+- React components use `'use client'` directive for client-side interactivity
+- Database logic in `frontend/src/infrastructure/` following DDD principles
 - PostgreSQL accessed via Drizzle ORM with `postgres` driver (not Supabase client)
+
+## Domain-Driven Design Architecture
+
+The frontend follows a **4-layer DDD architecture**. Always organize code into these layers:
+
+### 1. Domain Layer (`src/domain/`)
+
+**Purpose**: Core business logic (pure functions, entities, value objects)
+
+**Contains**:
+
+- **Entities**: Objects with identity (e.g., User)
+- **Value Objects**: Self-contained types with validation (e.g., Email)
+- **Schemas**: Defined using Zod for typing and validation
+
+**Example structure**:
+
+```
+src/domain/
+  ├── user/
+  │   ├── user.ts          # UserSchema, NewUserSchema, types
+  │   └── valueObjects/
+  │       └── email.ts      # EmailSchema, validateEmail()
+```
+
+**Rules**:
+
+- Must be framework-agnostic (no React, Next.js, or UI imports)
+- Use Zod schemas for validation and type inference
+- Pure functions only, no side effects
+- Value objects encapsulate validation logic
+
+### 2. Application Layer (`src/application/`)
+
+**Purpose**: Application-level use cases and orchestration
+
+**Contains**:
+
+- **Use Cases**: Specific operations (e.g., createUser, getAllUsers)
+- **Services**: Business logic that doesn't belong to a single entity
+
+**Example structure**:
+
+```
+src/application/
+  ├── userService.ts       # prepareUser(), domain logic
+  └── createUser.ts        # createUser(), getAllUsers()
+```
+
+**Rules**:
+
+- Coordinates domain and infrastructure layers
+- No knowledge of UI or HTTP details
+- Orchestrates business flows
+- Calls infrastructure for I/O operations
+
+### 3. Infrastructure Layer (`src/infrastructure/`)
+
+**Purpose**: External I/O (API, database, third-party services)
+
+**Contains**:
+
+- **API clients**: Axios instances, HTTP requests
+- **Repositories**: Data access abstractions
+- **Database**: Drizzle schema and client configuration
+
+**Example structure**:
+
+```
+src/infrastructure/
+  ├── axiosInstance.ts     # Axios config
+  ├── userApi.ts           # API repository (create, getAll)
+  └── db/
+      ├── schema.ts        # Drizzle table definitions
+      └── index.ts         # Database client export
+```
+
+**Rules**:
+
+- No business logic, only I/O operations
+- Implements interfaces expected by application layer
+- Handles API calls, database queries, external services
+
+### 4. View Layer (`src/view/`)
+
+**Purpose**: Presentation logic and UI components
+
+**Contains**:
+
+- **Components** (`components/`): "Dumb" presentational components
+- **Hooks** (`hooks/`): Custom React hooks for UI logic
+- **Pages** (`app/`): Next.js App Router pages (orchestration only)
+
+**Example structure**:
+
+```
+src/view/
+  ├── components/
+  │   ├── UserForm.tsx     # Renders form, uses hook
+  │   └── UserList.tsx     # Renders list, uses hook
+  └── hooks/
+      ├── useUserForm.ts   # Form logic, mutations
+      └── useUserList.ts   # Data fetching with React Query
+```
+
+**Rules**:
+
+- Components are presentation-only (no logic)
+- All behavior comes from hooks
+- Hooks use `@tanstack/react-query` for data fetching
+- Components must have `'use client'` directive if using hooks/state
+- Next.js pages in `src/app/` are minimal and declarative
+
+### DDD Layer Dependencies
+
+```
+Domain ← Application ← Infrastructure
+   ↑         ↑
+   └─────────┴──── View
+```
+
+- **Domain** has no dependencies (pure business logic)
+- **Application** depends on Domain only
+- **Infrastructure** implements contracts from Application
+- **View** can use Application and Domain (via hooks)
 
 ## Development Workflows
 
@@ -35,10 +161,11 @@ pnpm typecheck    # TypeScript type checking (no emit)
 pnpm format       # Format code with Prettier
 
 # Frontend-specific (cd frontend first)
-pnpm dev          # Astro dev server on :4321
+pnpm dev          # Next.js dev server on :4321
 pnpm test         # Vitest unit tests
 pnpm test:e2e     # Playwright E2E tests (auto-starts dev server)
-pnpm check        # TypeScript + Astro check
+pnpm build        # Next.js production build
+pnpm start        # Start production server on :4321
 pnpm typecheck    # TypeScript type checking (no emit)
 
 # Backend-specific (cd backend first)
@@ -104,11 +231,16 @@ Client configured in `frontend/src/db/index.ts` using `import.meta.env.DATABASE_
 
 ### File Organization
 
-**Frontend:**
+**Frontend (DDD Architecture):**
 
-- **Pages**: `frontend/src/pages/*.astro` - file-based routing
-- **Layouts**: `frontend/src/layouts/*.astro` - shared page templates
-- **Components**: `frontend/src/components/*.tsx` - React components (note `.tsx` not `.astro`)
+- **Domain**: `frontend/src/domain/` - Entities, value objects, Zod schemas
+- **Application**: `frontend/src/application/` - Use cases, services
+- **Infrastructure**: `frontend/src/infrastructure/` - API clients, database
+  - Database: `frontend/src/infrastructure/db/schema.ts` for tables, `index.ts` for client
+- **View**:
+  - Components: `frontend/src/view/components/*.tsx` - Presentational React components
+  - Hooks: `frontend/src/view/hooks/*.ts` - Custom React hooks with UI logic
+  - Pages: `frontend/src/app/` - Next.js App Router pages (minimal orchestration)t `.astro`)
 - **Database**: `frontend/src/db/schema.ts` for tables, `index.ts` for client export
 
 **Backend:**
@@ -116,24 +248,25 @@ Client configured in `frontend/src/db/index.ts` using `import.meta.env.DATABASE_
 - **Server**: `backend/src/index.ts` - Fastify server entry point
 - **App**: `backend/src/app.ts` - Fastify app factory (exported for testing)
 - **Tests**: `backend/test/*.test.ts` - Vitest unit tests
-- **Build output**: `backend/dist/` - Compiled JavaScript (git-ignored)
-- **Config**: `backend/tsconfig.json` - TypeScript configuration with ESNext modules
-
-### Code Style (Enforced via ESLint + Prettier)
-
-- **Prettier**: 100 char line length, single quotes, 2 space tabs, trailing commas (ES5), LF endings
+- **Prettier**: 100 char line length, single quotes, 2 space tabs, trailing commas (ES5), LF endings, **no semicolons**
 - **ESLint 9**: Unified flat config at root `eslint.config.js` (ESM) extended by frontend and backend
-  - Frontend: TypeScript, React, Astro plugins (see `frontend/eslint.config.js`)
+  - Frontend: TypeScript, React, Next.js, accessibility plugins (see `frontend/eslint.config.js`)
   - Backend: Basic ESLint rules for Node.js (see `backend/eslint.config.js`)
   - Uses new flat config format (not legacy `.eslintrc.*`)
 - React imports not required (`'react/react-in-jsx-scope': 'off'`)
 - Unused vars prefixed with `_` allowed (`argsIgnorePattern: '^_'`)
-- Astro files have React rules disabled (`react/no-unknown-property: 'off'`)
-- Console statements warn at root level, but allowed in backend
+- Next.js-specific rules enabled via `@next/eslint-plugin-next`
+- Console statements warn at root level, but allowed in backendt.config.js`)
+  - Uses new flat config format (not legacy `.eslintrc.*`)
+- React imports not required (`'react/react-in-jsx-scope': 'off'`)
 
 ### Environment Variables
 
-**Frontend uses Astro's `import.meta.env` pattern:**
+**Frontend uses Next.js `process.env` pattern:**
+
+- Public vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (exposed to browser)
+- Private vars: `DATABASE_URL`, `GOOGLE_API_KEY`, `DB_HOST`, etc. (server-only)
+- Example file: `frontend/.env.example` - copy to `.env.local` before development
 
 - Public vars: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` (exposed to browser)
 - Private vars: `DATABASE_URL`, `GOOGLE_API_KEY`, `DB_HOST`, etc. (server-only)
@@ -153,17 +286,21 @@ const { text } = await generateText({
 })
 ```
 
-Requires `GOOGLE_API_KEY` in frontend `.env`.
-
-## Integration Points
-
 ### Database Connection
 
 - **Driver**: `postgres` (not `@supabase/supabase-js`)
-- **Connection string**: Reads from `import.meta.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/postgres`
+- **Connection string**: Reads from `process.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/postgres`
 - **Self-hosted Supabase**: Optional Docker setup (see `supabase/README.md`), exposes PostgreSQL on `:5432` and API on `:8000`
+- **Location**: Database client in `frontend/src/infrastructure/db/index.ts` following DDD architecture
 
-### Astro + React Integration
+### Next.js + React Integration
+
+- Next.js 16 App Router with TypeScript
+- Use `'use client'` directive for components with state, hooks, or event handlers
+- Server Components are default (no directive needed)
+- Material UI components require `'use client'` (use in view layer only)
+- React Query (`@tanstack/react-query`) for data fetching in hooks
+- Material UI theme configured in `src/app/ThemeRegistry.tsx`
 
 - React added via `@astrojs/react` integration in `astro.config.mjs`
 - Use `.astro` files for static pages, `.tsx` components for interactive islands
@@ -175,29 +312,36 @@ Defined in `turbo.json`:
 
 - `build` depends on `^build` (topological order), outputs to `dist/`, `.next/`, `.astro/`
 - `dev` is persistent (doesn't exit), no caching
-- `lint` depends on `^lint`
-- `test` depends on `^build`, outputs coverage
-- `test:e2e` has no caching (always runs fresh)
 
 ## Common Pitfalls
 
 1. **Don't use npm/yarn** - PNPM workspace required for monorepo
 2. **Backend uses tsx for dev** - Backend runs TypeScript directly via `tsx watch` in development, compiles to `dist/` for production
-3. **Database in frontend** - Unusual but correct for this SSG architecture with server endpoints
-4. **Astro env vars** - Use `import.meta.env`, not `process.env` (except in config files)
-5. **React components** - Must be `.tsx` files, not `.astro`, to use Material UI
+3. **Follow DDD layers strictly** - Don't mix concerns across domain/application/infrastructure/view
+4. **Next.js env vars** - Use `process.env`, not `import.meta.env`
+5. **Client components** - Must add `'use client'` directive for hooks, state, or event handlers
 6. **Playwright needs dev server** - Config auto-starts it, but tests fail if port 4321 is blocked
 7. **ESLint 9 flat config** - Root `eslint.config.js` (ESM) is base, frontend/backend extend it
 8. **TypeScript ESLint rules** - Frontend uses TypeScript ESLint; disable base `no-unused-vars` to avoid conflicts
 9. **ESM configs** - All config files use ESM exports (`export default`) since root has `"type": "module"`
 10. **No .eslintignore** - ESLint 9 uses `ignores` property in config file, not `.eslintignore`
+11. **Zod for validation** - Always use Zod schemas in domain layer, infer types with `z.infer<>`
 
 ## Key Files Reference
 
 - `turbo.json` - Build orchestration and caching config
 - `pnpm-workspace.yaml` - Workspace packages definition
-- `frontend/astro.config.mjs` - Astro framework config (React integration, output mode)
+- `frontend/next.config.ts` - Next.js framework configuration
 - `frontend/drizzle.config.ts` - Database migration settings
+- `eslint.config.js` - Root ESLint 9 flat config (base rules)
+- `frontend/eslint.config.js` - Frontend linting (TypeScript, React, Next.js, accessibility)
+- `backend/eslint.config.js` - Backend linting (extends root)
+- `backend/tsconfig.json` - TypeScript config (ESNext, bundler resolution)
+- `backend/src/index.ts` - Fastify server with routes (/, /health)
+- `.prettierrc` - Code formatting rules (no semicolons)
+- `DEVELOPMENT.md` - Detailed developer workflows and troubleshooting
+- `frontend/src/domain/*/readme.txt` - DDD layer documentation
+- `frontend/src/app/ThemeRegistry.tsx` - Material UI theme provider
 - `eslint.config.js` - Root ESLint 9 flat config (base rules)
 - `frontend/eslint.config.js` - Frontend linting (TypeScript, React, Astro)
 - `backend/eslint.config.js` - Backend linting (extends root)

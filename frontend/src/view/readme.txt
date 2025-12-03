@@ -1,0 +1,1 @@
+Presentation logic and UI components (was ui/, renamed to avoid confusion with shared UI libraries)

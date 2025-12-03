@@ -11,12 +11,7 @@
   },
   {
     "question": "Which of the following is a health-related component of fitness?",
-    "options": [
-      "Agility",
-      "Coordination",
-      "Flexibility",
-      "Reaction time"
-    ],
+    "options": ["Agility", "Coordination", "Flexibility", "Reaction time"],
     "correctAnswer": ""
   },
   {
@@ -71,12 +66,7 @@
   },
   {
     "question": "Which of the following is a skill-related component of fitness?",
-    "options": [
-      "Flexibility",
-      "Body composition",
-      "Reaction time",
-      "Muscular endurance"
-    ],
+    "options": ["Flexibility", "Body composition", "Reaction time", "Muscular endurance"],
     "correctAnswer": ""
   },
   {
@@ -101,12 +91,7 @@
   },
   {
     "question": "Which body type is naturally lean and muscular?",
-    "options": [
-      "Ectomorph",
-      "Mesomorph",
-      "Endomorph",
-      "Perimorph"
-    ],
+    "options": ["Ectomorph", "Mesomorph", "Endomorph", "Perimorph"],
     "correctAnswer": ""
   },
   {
@@ -191,22 +176,12 @@
   },
   {
     "question": "The FITT principle includes all of the following EXCEPT:",
-    "options": [
-      "Frequency",
-      "Intensity",
-      "Time",
-      "Flexibility"
-    ],
+    "options": ["Frequency", "Intensity", "Time", "Flexibility"],
     "correctAnswer": ""
   },
   {
     "question": "Which activity best improves cardiovascular fitness?",
-    "options": [
-      "Bicep curls",
-      "Sit-ups",
-      "Swimming",
-      "Static stretching"
-    ],
+    "options": ["Bicep curls", "Sit-ups", "Swimming", "Static stretching"],
     "correctAnswer": ""
   },
   {
@@ -231,22 +206,12 @@
   },
   {
     "question": "An example of an activity requiring high agility is:",
-    "options": [
-      "Long-distance cycling",
-      "Yoga",
-      "Zig-zag running in team sports",
-      "Rowing"
-    ],
+    "options": ["Long-distance cycling", "Yoga", "Zig-zag running in team sports", "Rowing"],
     "correctAnswer": ""
   },
   {
     "question": "Which body type is naturally thin with long limbs?",
-    "options": [
-      "Mesomorph",
-      "Ectomorph",
-      "Endomorph",
-      "Polymorph"
-    ],
+    "options": ["Mesomorph", "Ectomorph", "Endomorph", "Polymorph"],
     "correctAnswer": ""
   },
   {
@@ -261,22 +226,12 @@
   },
   {
     "question": "Which principle refers to “use it or lose it”?",
-    "options": [
-      "Progressive overload",
-      "Reversibility",
-      "Individuality",
-      "Specificity"
-    ],
+    "options": ["Progressive overload", "Reversibility", "Individuality", "Specificity"],
     "correctAnswer": ""
   },
   {
     "question": "What does the “I” stand for in FITT?",
-    "options": [
-      "Interval",
-      "Intensity",
-      "Integration",
-      "Injury prevention"
-    ],
+    "options": ["Interval", "Intensity", "Integration", "Injury prevention"],
     "correctAnswer": ""
   },
   {
@@ -291,12 +246,7 @@
   },
   {
     "question": "Which gender tends to have a wider pelvis and larger Q-angle?",
-    "options": [
-      "Male",
-      "Female",
-      "Both equally",
-      "Neither"
-    ],
+    "options": ["Male", "Female", "Both equally", "Neither"],
     "correctAnswer": ""
   },
   {
@@ -311,12 +261,7 @@
   },
   {
     "question": "Which pregnancy-related hormone increases joint laxity?",
-    "options": [
-      "Estrogen",
-      "Progesterone",
-      "Relaxin",
-      "Cortisol"
-    ],
+    "options": ["Estrogen", "Progesterone", "Relaxin", "Cortisol"],
     "correctAnswer": ""
   },
   {
@@ -371,12 +316,7 @@
   },
   {
     "question": "Which environmental factor reduces available oxygen for exercise?",
-    "options": [
-      "High humidity",
-      "Cold air",
-      "High altitude",
-      "Indoor lighting"
-    ],
+    "options": ["High humidity", "Cold air", "High altitude", "Indoor lighting"],
     "correctAnswer": ""
   },
   {
@@ -401,42 +341,22 @@
   },
   {
     "question": "What percentage of body weight is made up of bone and cartilage?",
-    "options": [
-      "One tenth",
-      "One fifth",
-      "One third",
-      "One half"
-    ],
+    "options": ["One tenth", "One fifth", "One third", "One half"],
     "correctAnswer": ""
   },
   {
     "question": "Which type of cartilage covers the ends of long bones?",
-    "options": [
-      "Elastic cartilage",
-      "Fibrocartilage",
-      "Hyaline cartilage",
-      "Rough cartilage"
-    ],
+    "options": ["Elastic cartilage", "Fibrocartilage", "Hyaline cartilage", "Rough cartilage"],
     "correctAnswer": ""
   },
   {
     "question": "The axial skeleton includes:",
-    "options": [
-      "Arms and legs",
-      "Pelvis",
-      "Skull, ribs, and spine",
-      "Wrist and ankle bones"
-    ],
+    "options": ["Arms and legs", "Pelvis", "Skull, ribs, and spine", "Wrist and ankle bones"],
     "correctAnswer": ""
   },
   {
     "question": "The appendicular skeleton includes:",
-    "options": [
-      "Skull",
-      "Vertebrae",
-      "Limbs and girdles",
-      "Ribcage"
-    ],
+    "options": ["Skull", "Vertebrae", "Limbs and girdles", "Ribcage"],
     "correctAnswer": ""
   },
   {
@@ -461,12 +381,7 @@
   },
   {
     "question": "The patella is classified as a:",
-    "options": [
-      "Flat bone",
-      "Irregular bone",
-      "Sesamoid bone",
-      "Long bone"
-    ],
+    "options": ["Flat bone", "Irregular bone", "Sesamoid bone", "Long bone"],
     "correctAnswer": ""
   },
   {
@@ -491,72 +406,37 @@
   },
   {
     "question": "The medullary cavity is found in:",
-    "options": [
-      "Epiphysis",
-      "Diaphysis",
-      "Periosteum",
-      "Articular cartilage"
-    ],
+    "options": ["Epiphysis", "Diaphysis", "Periosteum", "Articular cartilage"],
     "correctAnswer": ""
   },
   {
     "question": "The epiphyseal plates are responsible for:",
-    "options": [
-      "Blood cell production",
-      "Fat storage",
-      "Bone lengthening",
-      "Joint lubrication"
-    ],
+    "options": ["Blood cell production", "Fat storage", "Bone lengthening", "Joint lubrication"],
     "correctAnswer": ""
   },
   {
     "question": "Which joint type is immovable?",
-    "options": [
-      "Synovial",
-      "Fibrous",
-      "Cartilaginous",
-      "Ball-and-socket"
-    ],
+    "options": ["Synovial", "Fibrous", "Cartilaginous", "Ball-and-socket"],
     "correctAnswer": ""
   },
   {
     "question": "Cartilaginous joints are:",
-    "options": [
-      "Free moving",
-      "Slightly movable",
-      "Fixed",
-      "Non-functional"
-    ],
+    "options": ["Free moving", "Slightly movable", "Fixed", "Non-functional"],
     "correctAnswer": ""
   },
   {
     "question": "Synovial joints are:",
-    "options": [
-      "Fixed",
-      "Slightly movable",
-      "Freely movable",
-      "Fused"
-    ],
+    "options": ["Fixed", "Slightly movable", "Freely movable", "Fused"],
     "correctAnswer": ""
   },
   {
     "question": "Ligaments connect:",
-    "options": [
-      "Muscle to bone",
-      "Bone to bone",
-      "Bone to cartilage",
-      "Tendon to bone"
-    ],
+    "options": ["Muscle to bone", "Bone to bone", "Bone to cartilage", "Tendon to bone"],
     "correctAnswer": ""
   },
   {
     "question": "Tendons connect:",
-    "options": [
-      "Bone to bone",
-      "Muscle to bone",
-      "Bone to cartilage",
-      "Cartilage to muscle"
-    ],
+    "options": ["Bone to bone", "Muscle to bone", "Bone to cartilage", "Cartilage to muscle"],
     "correctAnswer": ""
   },
   {
@@ -581,42 +461,22 @@
   },
   {
     "question": "Which joint allows bending and straightening?",
-    "options": [
-      "Pivot",
-      "Ball-and-socket",
-      "Hinge",
-      "Saddle"
-    ],
+    "options": ["Pivot", "Ball-and-socket", "Hinge", "Saddle"],
     "correctAnswer": ""
   },
   {
     "question": "The carpometacarpal joint is an example of a:",
-    "options": [
-      "Ball-and-socket joint",
-      "Saddle joint",
-      "Gliding joint",
-      "Hinge joint"
-    ],
+    "options": ["Ball-and-socket joint", "Saddle joint", "Gliding joint", "Hinge joint"],
     "correctAnswer": ""
   },
   {
     "question": "The shoulder girdle primarily uses which joint type?",
-    "options": [
-      "Saddle",
-      "Gliding",
-      "Pivot",
-      "Hinge"
-    ],
+    "options": ["Saddle", "Gliding", "Pivot", "Hinge"],
     "correctAnswer": ""
   },
   {
     "question": "The atlas and axis form which type of joint?",
-    "options": [
-      "Gliding",
-      "Ball-and-socket",
-      "Pivot",
-      "Ellipsoid"
-    ],
+    "options": ["Gliding", "Ball-and-socket", "Pivot", "Ellipsoid"],
     "correctAnswer": ""
   },
   {
@@ -631,12 +491,7 @@
   },
   {
     "question": "Which movement occurs at the elbow?",
-    "options": [
-      "Abduction",
-      "Flexion and extension",
-      "Circumduction",
-      "Eversion"
-    ],
+    "options": ["Abduction", "Flexion and extension", "Circumduction", "Eversion"],
     "correctAnswer": ""
   },
   {
@@ -651,32 +506,17 @@
   },
   {
     "question": "The lumbar spine is designed to:",
-    "options": [
-      "Rotate freely",
-      "Support the ribs",
-      "Absorb the most shock",
-      "Protect the skull"
-    ],
+    "options": ["Rotate freely", "Support the ribs", "Absorb the most shock", "Protect the skull"],
     "correctAnswer": ""
   },
   {
     "question": "Which region of the spine has fused bones?",
-    "options": [
-      "Cervical",
-      "Thoracic",
-      "Lumbar",
-      "Sacral and coccyx"
-    ],
+    "options": ["Cervical", "Thoracic", "Lumbar", "Sacral and coccyx"],
     "correctAnswer": ""
   },
   {
     "question": "Hyperkyphosis affects which area?",
-    "options": [
-      "Lower back",
-      "Pelvis",
-      "Upper back",
-      "Neck only"
-    ],
+    "options": ["Lower back", "Pelvis", "Upper back", "Neck only"],
     "correctAnswer": ""
   },
   {
@@ -721,12 +561,7 @@
   },
   {
     "question": "Epiphyseal plates are made of:",
-    "options": [
-      "Hard bone",
-      "Cartilage",
-      "Tendons",
-      "Ligaments"
-    ],
+    "options": ["Hard bone", "Cartilage", "Tendons", "Ligaments"],
     "correctAnswer": ""
   },
   {
@@ -861,42 +696,22 @@
   },
   {
     "question": "Which factor affecting health cannot be controlled?",
-    "options": [
-      "Genetics",
-      "Diet",
-      "Smoking",
-      "Activity levels"
-    ],
+    "options": ["Genetics", "Diet", "Smoking", "Activity levels"],
     "correctAnswer": ""
   },
   {
     "question": "A child generally recovers from illness faster because of:",
-    "options": [
-      "Stronger bones",
-      "Younger age",
-      "Higher income",
-      "Better education"
-    ],
+    "options": ["Stronger bones", "Younger age", "Higher income", "Better education"],
     "correctAnswer": ""
   },
   {
     "question": "Some illnesses differ between males and females due to:",
-    "options": [
-      "Smoking habits",
-      "Income",
-      "Gender",
-      "Social networks"
-    ],
+    "options": ["Smoking habits", "Income", "Gender", "Social networks"],
     "correctAnswer": ""
   },
   {
     "question": "Which is a controlled factor influencing health?",
-    "options": [
-      "Age",
-      "Genetics",
-      "Gender",
-      "Diet"
-    ],
+    "options": ["Age", "Genetics", "Gender", "Diet"],
     "correctAnswer": ""
   },
   {
@@ -941,12 +756,7 @@
   },
   {
     "question": "Clean air and safe water relate to which determinant?",
-    "options": [
-      "Genetics",
-      "Physical environment",
-      "Social networks",
-      "Medical fitness"
-    ],
+    "options": ["Genetics", "Physical environment", "Social networks", "Medical fitness"],
     "correctAnswer": ""
   },
   {
@@ -971,12 +781,7 @@
   },
   {
     "question": "Which condition is listed as a long-term health risk?",
-    "options": [
-      "High flexibility",
-      "Type 2 diabetes",
-      "Stronger bones",
-      "Improved memory"
-    ],
+    "options": ["High flexibility", "Type 2 diabetes", "Stronger bones", "Improved memory"],
     "correctAnswer": ""
   },
   {
@@ -991,32 +796,17 @@
   },
   {
     "question": "Which activity counts as physical activity?",
-    "options": [
-      "Sleeping",
-      "Sitting",
-      "Briskly walking the dog",
-      "Watching TV"
-    ],
+    "options": ["Sleeping", "Sitting", "Briskly walking the dog", "Watching TV"],
     "correctAnswer": ""
   },
   {
     "question": "Physical inactivity causes approximately how many deaths per year globally?",
-    "options": [
-      "100,000",
-      "600,000",
-      "1.1 million",
-      "3.2 million"
-    ],
+    "options": ["100,000", "600,000", "1.1 million", "3.2 million"],
     "correctAnswer": ""
   },
   {
     "question": "The Chief Medical Officer classifies “Fairly active” as:",
-    "options": [
-      "Under 30 min/week",
-      "30–149 min/week",
-      "150+ min/week",
-      "300+ min/week"
-    ],
+    "options": ["Under 30 min/week", "30–149 min/week", "150+ min/week", "300+ min/week"],
     "correctAnswer": ""
   },
   {
@@ -1051,32 +841,17 @@
   },
   {
     "question": "Regular physical activity reduces premature death risk by:",
-    "options": [
-      "5–10%",
-      "10–15%",
-      "20–30%",
-      "50–60%"
-    ],
+    "options": ["5–10%", "10–15%", "20–30%", "50–60%"],
     "correctAnswer": ""
   },
   {
     "question": "Exercise can reduce the risk of CHD, stroke, diabetes and cancers by:",
-    "options": [
-      "10%",
-      "25%",
-      "40%",
-      "Up to 50%"
-    ],
+    "options": ["10%", "25%", "40%", "Up to 50%"],
     "correctAnswer": ""
   },
   {
     "question": "Physical activity helps reduce:",
-    "options": [
-      "Muscle size",
-      "Bone density",
-      "Back pain",
-      "Hydration needs"
-    ],
+    "options": ["Muscle size", "Bone density", "Back pain", "Hydration needs"],
     "correctAnswer": ""
   },
   {
@@ -1091,12 +866,7 @@
   },
   {
     "question": "Exercise increases bone density which reduces risk of:",
-    "options": [
-      "Heart disease",
-      "Stroke",
-      "Osteoporosis",
-      "Diabetes"
-    ],
+    "options": ["Heart disease", "Stroke", "Osteoporosis", "Diabetes"],
     "correctAnswer": ""
   },
   {
@@ -1111,12 +881,7 @@
   },
   {
     "question": "Reducing the risk of falls in older adults is achieved through:",
-    "options": [
-      "Inactivity",
-      "Physical activity",
-      "High-fat diet",
-      "Smoking cessation only"
-    ],
+    "options": ["Inactivity", "Physical activity", "High-fat diet", "Smoking cessation only"],
     "correctAnswer": ""
   },
   {
@@ -1141,32 +906,17 @@
   },
   {
     "question": "A non-controlled factor affecting health is:",
-    "options": [
-      "Smoking",
-      "Diet",
-      "Physical activity",
-      "Age"
-    ],
+    "options": ["Smoking", "Diet", "Physical activity", "Age"],
     "correctAnswer": ""
   },
   {
     "question": "A controlled factor greatly affecting wellbeing is:",
-    "options": [
-      "Genetics",
-      "Gender",
-      "Activity levels",
-      "Early childhood"
-    ],
+    "options": ["Genetics", "Gender", "Activity levels", "Early childhood"],
     "correctAnswer": ""
   },
   {
     "question": "High stress and low self-confidence are linked to:",
-    "options": [
-      "Good education",
-      "Regular exercise",
-      "Low education levels",
-      "High social status"
-    ],
+    "options": ["Good education", "Regular exercise", "Low education levels", "High social status"],
     "correctAnswer": ""
   },
   {
@@ -1181,12 +931,7 @@
   },
   {
     "question": "Poor diet increases risk of:",
-    "options": [
-      "Longevity",
-      "Illness and disease",
-      "High muscle mass",
-      "Improved bone density"
-    ],
+    "options": ["Longevity", "Illness and disease", "High muscle mass", "Improved bone density"],
     "correctAnswer": ""
   },
   {
@@ -1211,32 +956,17 @@
   },
   {
     "question": "What type of muscle is the heart made from?",
-    "options": [
-      "Smooth",
-      "Cardiac",
-      "Skeletal",
-      "Striated"
-    ],
+    "options": ["Smooth", "Cardiac", "Skeletal", "Striated"],
     "correctAnswer": ""
   },
   {
     "question": "Which chambers receive blood from the veins?",
-    "options": [
-      "Ventricles",
-      "Atria",
-      "Valves",
-      "Arterioles"
-    ],
+    "options": ["Ventricles", "Atria", "Valves", "Arterioles"],
     "correctAnswer": ""
   },
   {
     "question": "Which side of the heart pumps blood to the lungs?",
-    "options": [
-      "Left",
-      "Neither",
-      "Right",
-      "Both"
-    ],
+    "options": ["Left", "Neither", "Right", "Both"],
     "correctAnswer": ""
   },
   {
@@ -1261,32 +991,17 @@
   },
   {
     "question": "Optimal blood pressure is:",
-    "options": [
-      "100/60 mmHg",
-      "120/80 mmHg",
-      "150/100 mmHg",
-      "180/110 mmHg"
-    ],
+    "options": ["100/60 mmHg", "120/80 mmHg", "150/100 mmHg", "180/110 mmHg"],
     "correctAnswer": ""
   },
   {
     "question": "Vasoconstriction means a blood vessel:",
-    "options": [
-      "Narrows",
-      "Widens",
-      "Breaks",
-      "Thickens"
-    ],
+    "options": ["Narrows", "Widens", "Breaks", "Thickens"],
     "correctAnswer": ""
   },
   {
     "question": "During exercise, blood flow increases primarily to the:",
-    "options": [
-      "Skin",
-      "Muscles",
-      "Digestive system",
-      "Kidneys"
-    ],
+    "options": ["Skin", "Muscles", "Digestive system", "Kidneys"],
     "correctAnswer": ""
   },
   {
@@ -1311,12 +1026,7 @@
   },
   {
     "question": "What type of circulatory system do humans have?",
-    "options": [
-      "Single",
-      "Open",
-      "Double",
-      "Partial"
-    ],
+    "options": ["Single", "Open", "Double", "Partial"],
     "correctAnswer": ""
   },
   {
@@ -1331,12 +1041,7 @@
   },
   {
     "question": "Which blood vessel carries blood away from the heart?",
-    "options": [
-      "Veins",
-      "Capillaries",
-      "Arteries",
-      "Venules"
-    ],
+    "options": ["Veins", "Capillaries", "Arteries", "Venules"],
     "correctAnswer": ""
   },
   {
@@ -1351,52 +1056,27 @@
   },
   {
     "question": "Capillaries have walls that are:",
-    "options": [
-      "Thick and flexible",
-      "Two cells thick",
-      "One cell thick",
-      "Muscle-lined"
-    ],
+    "options": ["Thick and flexible", "Two cells thick", "One cell thick", "Muscle-lined"],
     "correctAnswer": ""
   },
   {
     "question": "Which blood component carries oxygen?",
-    "options": [
-      "Platelets",
-      "Plasma",
-      "Red blood cells",
-      "White blood cells"
-    ],
+    "options": ["Platelets", "Plasma", "Red blood cells", "White blood cells"],
     "correctAnswer": ""
   },
   {
     "question": "The main role of white blood cells is:",
-    "options": [
-      "Carry nutrients",
-      "Aid clotting",
-      "Maintain pH",
-      "Fight infection"
-    ],
+    "options": ["Carry nutrients", "Aid clotting", "Maintain pH", "Fight infection"],
     "correctAnswer": ""
   },
   {
     "question": "Platelets assist with:",
-    "options": [
-      "Oxygen transport",
-      "Blood clotting",
-      "Gaseous exchange",
-      "Heat regulation"
-    ],
+    "options": ["Oxygen transport", "Blood clotting", "Gaseous exchange", "Heat regulation"],
     "correctAnswer": ""
   },
   {
     "question": "Plasma is mostly:",
-    "options": [
-      "Fat",
-      "Protein",
-      "Glucose",
-      "Water"
-    ],
+    "options": ["Fat", "Protein", "Glucose", "Water"],
     "correctAnswer": ""
   },
   {
@@ -1421,22 +1101,12 @@
   },
   {
     "question": "The lungs are located in the:",
-    "options": [
-      "Abdominal cavity",
-      "Pelvis",
-      "Thoracic cavity",
-      "Cranial cavity"
-    ],
+    "options": ["Abdominal cavity", "Pelvis", "Thoracic cavity", "Cranial cavity"],
     "correctAnswer": ""
   },
   {
     "question": "Air travels from the trachea into the:",
-    "options": [
-      "Alveoli directly",
-      "Bronchioles",
-      "Bronchi",
-      "Pharynx"
-    ],
+    "options": ["Alveoli directly", "Bronchioles", "Bronchi", "Pharynx"],
     "correctAnswer": ""
   },
   {
@@ -1471,12 +1141,7 @@
   },
   {
     "question": "Gaseous exchange occurs in the:",
-    "options": [
-      "Bronchi",
-      "Trachea",
-      "Bronchioles",
-      "Alveoli"
-    ],
+    "options": ["Bronchi", "Trachea", "Bronchioles", "Alveoli"],
     "correctAnswer": ""
   },
   {
@@ -1491,32 +1156,17 @@
   },
   {
     "question": "Oxygen diffuses from the alveoli into the:",
-    "options": [
-      "Bronchioles",
-      "Stomach",
-      "Veins in the arms",
-      "Capillaries"
-    ],
+    "options": ["Bronchioles", "Stomach", "Veins in the arms", "Capillaries"],
     "correctAnswer": ""
   },
   {
     "question": "Carbon dioxide moves from the cells into the:",
-    "options": [
-      "Lymph system",
-      "Bronchioles",
-      "Bloodstream",
-      "Liver"
-    ],
+    "options": ["Lymph system", "Bronchioles", "Bloodstream", "Liver"],
     "correctAnswer": ""
   },
   {
     "question": "Haemoglobin is found in:",
-    "options": [
-      "Plasma",
-      "Platelets",
-      "White blood cells",
-      "Red blood cells"
-    ],
+    "options": ["Plasma", "Platelets", "White blood cells", "Red blood cells"],
     "correctAnswer": ""
   },
   {
@@ -1551,12 +1201,7 @@
   },
   {
     "question": "In early childhood, which heart chamber grows faster?",
-    "options": [
-      "Right ventricle",
-      "Left ventricle",
-      "Left atrium",
-      "Right atrium"
-    ],
+    "options": ["Right ventricle", "Left ventricle", "Left atrium", "Right atrium"],
     "correctAnswer": ""
   },
   {
@@ -1581,72 +1226,37 @@
   },
   {
     "question": "Exercise increases the size and elasticity of:",
-    "options": [
-      "Veins",
-      "Capillaries only",
-      "Arteries",
-      "Alveoli only"
-    ],
+    "options": ["Veins", "Capillaries only", "Arteries", "Alveoli only"],
     "correctAnswer": ""
   },
   {
     "question": "A short-term effect of exercise is increased:",
-    "options": [
-      "Red blood cell count",
-      "Artery size",
-      "Heart rate",
-      "Left ventricle size"
-    ],
+    "options": ["Red blood cell count", "Artery size", "Heart rate", "Left ventricle size"],
     "correctAnswer": ""
   },
   {
     "question": "What is the first stage of digestion?",
-    "options": [
-      "Ingestion",
-      "Absorption",
-      "Digestion",
-      "Elimination"
-    ],
+    "options": ["Ingestion", "Absorption", "Digestion", "Elimination"],
     "correctAnswer": ""
   },
   {
     "question": "Which process refers to breaking down food using enzymes?",
-    "options": [
-      "Ingestion",
-      "Chemical digestion",
-      "Absorption",
-      "Elimination"
-    ],
+    "options": ["Ingestion", "Chemical digestion", "Absorption", "Elimination"],
     "correctAnswer": ""
   },
   {
     "question": "Which stage involves nutrients entering the bloodstream?",
-    "options": [
-      "Ingestion",
-      "Digestion",
-      "Absorption",
-      "Elimination"
-    ],
+    "options": ["Ingestion", "Digestion", "Absorption", "Elimination"],
     "correctAnswer": ""
   },
   {
     "question": "Which part of the digestive system removes waste?",
-    "options": [
-      "Ingestion",
-      "Digestion",
-      "Absorption",
-      "Elimination"
-    ],
+    "options": ["Ingestion", "Digestion", "Absorption", "Elimination"],
     "correctAnswer": ""
   },
   {
     "question": "Where does mastication occur?",
-    "options": [
-      "Mouth",
-      "Oesophagus",
-      "Stomach",
-      "Large intestine"
-    ],
+    "options": ["Mouth", "Oesophagus", "Stomach", "Large intestine"],
     "correctAnswer": ""
   },
   {
@@ -1671,12 +1281,7 @@
   },
   {
     "question": "Which part of the small intestine is first in order?",
-    "options": [
-      "Ileum",
-      "Jejunum",
-      "Duodenum",
-      "Colon"
-    ],
+    "options": ["Ileum", "Jejunum", "Duodenum", "Colon"],
     "correctAnswer": ""
   },
   {
@@ -1701,62 +1306,32 @@
   },
   {
     "question": "Carbohydrates are broken down by:",
-    "options": [
-      "Lipase",
-      "Pepsin",
-      "Amylase, sucrase, maltase, lactase",
-      "Bile"
-    ],
+    "options": ["Lipase", "Pepsin", "Amylase, sucrase, maltase, lactase", "Bile"],
     "correctAnswer": ""
   },
   {
     "question": "Carbohydrates are ultimately converted into:",
-    "options": [
-      "Amino acids",
-      "Glucose",
-      "Fatty acids",
-      "Peptide chains"
-    ],
+    "options": ["Amino acids", "Glucose", "Fatty acids", "Peptide chains"],
     "correctAnswer": ""
   },
   {
     "question": "Fats are broken down by:",
-    "options": [
-      "Pepsin",
-      "Lipase",
-      "Amylase",
-      "Sucrase"
-    ],
+    "options": ["Pepsin", "Lipase", "Amylase", "Sucrase"],
     "correctAnswer": ""
   },
   {
     "question": "Fats are broken down into:",
-    "options": [
-      "Glucose",
-      "Amino acids",
-      "Fatty acids and glycerol",
-      "Peptide chains"
-    ],
+    "options": ["Glucose", "Amino acids", "Fatty acids and glycerol", "Peptide chains"],
     "correctAnswer": ""
   },
   {
     "question": "Proteins are broken down by:",
-    "options": [
-      "Lipase only",
-      "Sucrase",
-      "Maltase",
-      "Pepsin and peptidase"
-    ],
+    "options": ["Lipase only", "Sucrase", "Maltase", "Pepsin and peptidase"],
     "correctAnswer": ""
   },
   {
     "question": "Proteins are ultimately converted to:",
-    "options": [
-      "Glucose",
-      "Fatty acids",
-      "Amino acids",
-      "Glycerol"
-    ],
+    "options": ["Glucose", "Fatty acids", "Amino acids", "Glycerol"],
     "correctAnswer": ""
   },
   {
@@ -1771,12 +1346,7 @@
   },
   {
     "question": "How much fibre should an average adult consume daily?",
-    "options": [
-      "10g",
-      "20g",
-      "30g",
-      "50g"
-    ],
+    "options": ["10g", "20g", "30g", "50g"],
     "correctAnswer": ""
   },
   {
@@ -1791,62 +1361,32 @@
   },
   {
     "question": "Fibre requires which additional factor to work effectively?",
-    "options": [
-      "Vitamins",
-      "Protein",
-      "Carbohydrates",
-      "Adequate hydration"
-    ],
+    "options": ["Vitamins", "Protein", "Carbohydrates", "Adequate hydration"],
     "correctAnswer": ""
   },
   {
     "question": "Which organ secretes bile?",
-    "options": [
-      "Liver",
-      "Pancreas",
-      "Stomach",
-      "Colon"
-    ],
+    "options": ["Liver", "Pancreas", "Stomach", "Colon"],
     "correctAnswer": ""
   },
   {
     "question": "Bile is essential for digesting:",
-    "options": [
-      "Carbohydrates",
-      "Protein",
-      "Fats",
-      "Fibre"
-    ],
+    "options": ["Carbohydrates", "Protein", "Fats", "Fibre"],
     "correctAnswer": ""
   },
   {
     "question": "The liver converts unused glucose into:",
-    "options": [
-      "Lactose",
-      "Amino acids",
-      "Glycogen",
-      "Fatty acids"
-    ],
+    "options": ["Lactose", "Amino acids", "Glycogen", "Fatty acids"],
     "correctAnswer": ""
   },
   {
     "question": "The liver detoxifies harmful substances by converting them into:",
-    "options": [
-      "Glucose",
-      "Minerals",
-      "Fibre",
-      "Urea"
-    ],
+    "options": ["Glucose", "Minerals", "Fibre", "Urea"],
     "correctAnswer": ""
   },
   {
     "question": "Which organ stores vitamins and minerals?",
-    "options": [
-      "Pancreas",
-      "Small intestine",
-      "Liver",
-      "Rectum"
-    ],
+    "options": ["Pancreas", "Small intestine", "Liver", "Rectum"],
     "correctAnswer": ""
   },
   {
@@ -1861,92 +1401,47 @@
   },
   {
     "question": "How long does food typically remain in the stomach?",
-    "options": [
-      "30–60 seconds",
-      "1–3 seconds",
-      "2–6 hours",
-      "9–72 hours"
-    ],
+    "options": ["30–60 seconds", "1–3 seconds", "2–6 hours", "9–72 hours"],
     "correctAnswer": ""
   },
   {
     "question": "Food normally stays in the small intestine for:",
-    "options": [
-      "10 seconds",
-      "30 minutes",
-      "1–5 hours",
-      "24 hours"
-    ],
+    "options": ["10 seconds", "30 minutes", "1–5 hours", "24 hours"],
     "correctAnswer": ""
   },
   {
     "question": "Digestion in the large intestine takes approximately:",
-    "options": [
-      "1–5 hours",
-      "2–6 hours",
-      "30–60 seconds",
-      "9–72 hours"
-    ],
+    "options": ["1–5 hours", "2–6 hours", "30–60 seconds", "9–72 hours"],
     "correctAnswer": ""
   },
   {
     "question": "The colon is part of which digestive structure?",
-    "options": [
-      "Small intestine",
-      "Stomach",
-      "Pancreas",
-      "Large intestine"
-    ],
+    "options": ["Small intestine", "Stomach", "Pancreas", "Large intestine"],
     "correctAnswer": ""
   },
   {
     "question": "Which term describes chewing food into a bolus?",
-    "options": [
-      "Peristalsis",
-      "Absorption",
-      "Mastication",
-      "Emulsification"
-    ],
+    "options": ["Peristalsis", "Absorption", "Mastication", "Emulsification"],
     "correctAnswer": ""
   },
   {
     "question": "The small intestine is responsible for absorbing:",
-    "options": [
-      "Only fat",
-      "Only carbohydrates",
-      "Most nutrients",
-      "Only water"
-    ],
+    "options": ["Only fat", "Only carbohydrates", "Most nutrients", "Only water"],
     "correctAnswer": ""
   },
   {
     "question": "The large intestine primarily absorbs:",
-    "options": [
-      "Proteins",
-      "Glucose",
-      "Water and vitamins",
-      "Fats"
-    ],
+    "options": ["Proteins", "Glucose", "Water and vitamins", "Fats"],
     "correctAnswer": ""
   },
   {
     "question": "Which organ kills bacteria in food as part of digestion?",
-    "options": [
-      "Large intestine",
-      "Stomach",
-      "Liver",
-      "Pancreas"
-    ],
+    "options": ["Large intestine", "Stomach", "Liver", "Pancreas"],
     "correctAnswer": ""
   },
   {
     "question": "Waste is eliminated from the body through the:",
-    "options": [
-      "Liver",
-      "Stomach",
-      "Jejunum",
-      "Anus"
-    ],
+    "options": ["Liver", "Stomach", "Jejunum", "Anus"],
     "correctAnswer": ""
   },
   {
@@ -1961,12 +1456,7 @@
   },
   {
     "question": "Digestive enzymes from the pancreas enter the:",
-    "options": [
-      "Liver",
-      "Colon",
-      "Small intestine",
-      "Rectum"
-    ],
+    "options": ["Liver", "Colon", "Small intestine", "Rectum"],
     "correctAnswer": ""
   },
   {
@@ -1981,12 +1471,7 @@
   },
   {
     "question": "The end of the alimentary canal is called the:",
-    "options": [
-      "Ileum",
-      "Colon",
-      "Rectum",
-      "Anus"
-    ],
+    "options": ["Ileum", "Colon", "Rectum", "Anus"],
     "correctAnswer": ""
   },
   {
@@ -2001,32 +1486,17 @@
   },
   {
     "question": "What molecule is described as the “energy currency” of the body?",
-    "options": [
-      "Glucose",
-      "Creatine",
-      "ATP",
-      "Glycogen"
-    ],
+    "options": ["Glucose", "Creatine", "ATP", "Glycogen"],
     "correctAnswer": ""
   },
   {
     "question": "ATP releases energy when it becomes:",
-    "options": [
-      "AMP",
-      "ADP",
-      "CP",
-      "Lactate"
-    ],
+    "options": ["AMP", "ADP", "CP", "Lactate"],
     "correctAnswer": ""
   },
   {
     "question": "Energy in ATP is stored in:",
-    "options": [
-      "Adenosine ring",
-      "Nitrogen bonds",
-      "Phosphate bonds",
-      "Hydrogen atoms"
-    ],
+    "options": ["Adenosine ring", "Nitrogen bonds", "Phosphate bonds", "Hydrogen atoms"],
     "correctAnswer": ""
   },
   {
@@ -2061,22 +1531,12 @@
   },
   {
     "question": "The CP system produces energy for approximately:",
-    "options": [
-      "30 seconds",
-      "Up to 10 seconds",
-      "5 minutes",
-      "Only during rest"
-    ],
+    "options": ["30 seconds", "Up to 10 seconds", "5 minutes", "Only during rest"],
     "correctAnswer": ""
   },
   {
     "question": "The CP system breaks down phosphocreatine using which enzyme?",
-    "options": [
-      "Lactate dehydrogenase",
-      "Creatine kinase",
-      "Amylase",
-      "Lipase"
-    ],
+    "options": ["Lactate dehydrogenase", "Creatine kinase", "Amylase", "Lipase"],
     "correctAnswer": ""
   },
   {
@@ -2091,12 +1551,7 @@
   },
   {
     "question": "The lactate system uses which substrate?",
-    "options": [
-      "Fatty acids",
-      "Protein",
-      "Glycogen",
-      "Water"
-    ],
+    "options": ["Fatty acids", "Protein", "Glycogen", "Water"],
     "correctAnswer": ""
   },
   {
@@ -2111,12 +1566,7 @@
   },
   {
     "question": "A common sensation during OBLA is:",
-    "options": [
-      "Itchiness",
-      "Sweating",
-      "“Heavy limbs” and breathlessness",
-      "Hunger"
-    ],
+    "options": ["Itchiness", "Sweating", "“Heavy limbs” and breathlessness", "Hunger"],
     "correctAnswer": ""
   },
   {
@@ -2151,42 +1601,22 @@
   },
   {
     "question": "The aerobic system works:",
-    "options": [
-      "Without oxygen",
-      "With oxygen",
-      "Only at maximal intensity",
-      "Only when fatigued"
-    ],
+    "options": ["Without oxygen", "With oxygen", "Only at maximal intensity", "Only when fatigued"],
     "correctAnswer": ""
   },
   {
     "question": "The aerobic system uses which substrates?",
-    "options": [
-      "Vitamins only",
-      "Carbohydrate, fat, and protein",
-      "Minerals only",
-      "Lactate"
-    ],
+    "options": ["Vitamins only", "Carbohydrate, fat, and protein", "Minerals only", "Lactate"],
     "correctAnswer": ""
   },
   {
     "question": "By-products of aerobic metabolism include:",
-    "options": [
-      "Lactic acid only",
-      "CO₂, water, and heat",
-      "Ammonia only",
-      "Ketones only"
-    ],
+    "options": ["Lactic acid only", "CO₂, water, and heat", "Ammonia only", "Ketones only"],
     "correctAnswer": ""
   },
   {
     "question": "Resting oxygen consumption (VO₂) is approximately:",
-    "options": [
-      "10 ml/kg/min",
-      "7 ml/kg/min",
-      "3.5 ml/kg/min",
-      "1 ml/kg/min"
-    ],
+    "options": ["10 ml/kg/min", "7 ml/kg/min", "3.5 ml/kg/min", "1 ml/kg/min"],
     "correctAnswer": ""
   },
   {
@@ -2201,22 +1631,12 @@
   },
   {
     "question": "A higher VO₂max indicates:",
-    "options": [
-      "Poor fitness",
-      "Better aerobic fitness",
-      "Poor endurance",
-      "Lower metabolic rate"
-    ],
+    "options": ["Poor fitness", "Better aerobic fitness", "Poor endurance", "Lower metabolic rate"],
     "correctAnswer": ""
   },
   {
     "question": "Aerobic ATP production occurs in the:",
-    "options": [
-      "Nucleus",
-      "Ribosomes",
-      "Mitochondria",
-      "Cytoplasm"
-    ],
+    "options": ["Nucleus", "Ribosomes", "Mitochondria", "Cytoplasm"],
     "correctAnswer": ""
   },
   {
@@ -2231,32 +1651,17 @@
   },
   {
     "question": "The CP system is dominant in:",
-    "options": [
-      "Jogging",
-      "Long cycling",
-      "Shot put",
-      "Rowing marathon"
-    ],
+    "options": ["Jogging", "Long cycling", "Shot put", "Rowing marathon"],
     "correctAnswer": ""
   },
   {
     "question": "The lactate system is dominant in:",
-    "options": [
-      "Sprint starts",
-      "400m sprint",
-      "5-hour cycling",
-      "Sleeping"
-    ],
+    "options": ["Sprint starts", "400m sprint", "5-hour cycling", "Sleeping"],
     "correctAnswer": ""
   },
   {
     "question": "The aerobic system is dominant in:",
-    "options": [
-      "100m sprint",
-      "Shot put",
-      "Marathon running",
-      "High-intensity interval training"
-    ],
+    "options": ["100m sprint", "Shot put", "Marathon running", "High-intensity interval training"],
     "correctAnswer": ""
   },
   {
@@ -2271,12 +1676,7 @@
   },
   {
     "question": "The lactate system produces:",
-    "options": [
-      "Unlimited ATP",
-      "Limited ATP",
-      "ATP for hours",
-      "No ATP"
-    ],
+    "options": ["Unlimited ATP", "Limited ATP", "ATP for hours", "No ATP"],
     "correctAnswer": ""
   },
   {
@@ -2291,142 +1691,72 @@
   },
   {
     "question": "Which system produces NO fatiguing waste products?",
-    "options": [
-      "Lactate",
-      "CP system",
-      "Aerobic system",
-      "All systems"
-    ],
+    "options": ["Lactate", "CP system", "Aerobic system", "All systems"],
     "correctAnswer": ""
   },
   {
     "question": "Which system causes lactic acid accumulation?",
-    "options": [
-      "CP system",
-      "Lactate system",
-      "Aerobic system",
-      "Mitochondrial system"
-    ],
+    "options": ["CP system", "Lactate system", "Aerobic system", "Mitochondrial system"],
     "correctAnswer": ""
   },
   {
     "question": "Which system uses fatty acids as a fuel source?",
-    "options": [
-      "CP system",
-      "Lactate system",
-      "Aerobic system",
-      "All systems"
-    ],
+    "options": ["CP system", "Lactate system", "Aerobic system", "All systems"],
     "correctAnswer": ""
   },
   {
     "question": "The CP system supports intensities of:",
-    "options": [
-      "0–50% effort",
-      "95–100% effort",
-      "40–60% effort",
-      "10–30% effort"
-    ],
+    "options": ["0–50% effort", "95–100% effort", "40–60% effort", "10–30% effort"],
     "correctAnswer": ""
   },
   {
     "question": "The lactate system supports intensities of:",
-    "options": [
-      "10–30%",
-      "40–60%",
-      "60–95%",
-      "100% only"
-    ],
+    "options": ["10–30%", "40–60%", "60–95%", "100% only"],
     "correctAnswer": ""
   },
   {
     "question": "The aerobic system supports intensities of:",
-    "options": [
-      "95–100%",
-      "60–95%",
-      "Up to 60%",
-      "Only 0%"
-    ],
+    "options": ["95–100%", "60–95%", "Up to 60%", "Only 0%"],
     "correctAnswer": ""
   },
   {
     "question": "CP system recovery time is approximately:",
-    "options": [
-      "10–20 minutes",
-      "3 hours",
-      "30 seconds – 5 minutes",
-      "No recovery required"
-    ],
+    "options": ["10–20 minutes", "3 hours", "30 seconds – 5 minutes", "No recovery required"],
     "correctAnswer": ""
   },
   {
     "question": "Lactate system recovery time is:",
-    "options": [
-      "10 seconds",
-      "5 minutes",
-      "20 minutes – 2 hours",
-      "24 hours"
-    ],
+    "options": ["10 seconds", "5 minutes", "20 minutes – 2 hours", "24 hours"],
     "correctAnswer": ""
   },
   {
     "question": "Aerobic recovery primarily requires:",
-    "options": [
-      "Sleep",
-      "Static stretching",
-      "Eating and drinking to replenish fuel",
-      "Ice baths"
-    ],
+    "options": ["Sleep", "Static stretching", "Eating and drinking to replenish fuel", "Ice baths"],
     "correctAnswer": ""
   },
   {
     "question": "The CP system uses which fibre type predominantly?",
-    "options": [
-      "Type I",
-      "Type IIa",
-      "Type IIb",
-      "Type III"
-    ],
+    "options": ["Type I", "Type IIa", "Type IIb", "Type III"],
     "correctAnswer": ""
   },
   {
     "question": "The aerobic system predominantly uses:",
-    "options": [
-      "Type IIb",
-      "Type IIa",
-      "Type I",
-      "Intermediate only"
-    ],
+    "options": ["Type IIb", "Type IIa", "Type I", "Intermediate only"],
     "correctAnswer": ""
   },
   {
     "question": "How much of a person’s total weight is made up of muscle?",
-    "options": [
-      "20%",
-      "30%",
-      "40%",
-      "55%"
-    ],
+    "options": ["20%", "30%", "40%", "55%"],
     "correctAnswer": ""
   },
   {
     "question": "How many muscles are in the human body?",
-    "options": [
-      "300",
-      "450",
-      "Over 600",
-      "Over 1000"
-    ],
+    "options": ["300", "450", "Over 600", "Over 1000"],
     "correctAnswer": ""
   },
   {
     "question": "Which type of muscle is found in the heart?",
-    "options": [
-      "Smooth",
-      "Skeletal",
-      "Cardiac",
-      "Voluntary"
-    ],
+    "options": ["Smooth", "Skeletal", "Cardiac", "Voluntary"],
     "correctAnswer": ""
   },
   {
@@ -2441,12 +1771,7 @@
   },
   {
     "question": "Smooth muscle is found in:",
-    "options": [
-      "Arms and legs",
-      "Digestive system and blood vessels",
-      "Heart",
-      "Brain"
-    ],
+    "options": ["Arms and legs", "Digestive system and blood vessels", "Heart", "Brain"],
     "correctAnswer": ""
   },
   {
@@ -2461,32 +1786,17 @@
   },
   {
     "question": "Which characteristic refers to the ability of muscle to shorten?",
-    "options": [
-      "Elasticity",
-      "Excitability",
-      "Contractility",
-      "Extensibility"
-    ],
+    "options": ["Elasticity", "Excitability", "Contractility", "Extensibility"],
     "correctAnswer": ""
   },
   {
     "question": "The ability of muscle to return to its original shape is called:",
-    "options": [
-      "Excitability",
-      "Contractility",
-      "Extensibility",
-      "Elasticity"
-    ],
+    "options": ["Excitability", "Contractility", "Extensibility", "Elasticity"],
     "correctAnswer": ""
   },
   {
     "question": "Excitability means a muscle can:",
-    "options": [
-      "Contract",
-      "Stretch",
-      "Respond to nerve stimuli",
-      "Relax"
-    ],
+    "options": ["Contract", "Stretch", "Respond to nerve stimuli", "Relax"],
     "correctAnswer": ""
   },
   {
@@ -2501,22 +1811,12 @@
   },
   {
     "question": "Which protein does calcium bind to during contraction?",
-    "options": [
-      "Myosin",
-      "Actin",
-      "Troponin",
-      "Tropomyosin"
-    ],
+    "options": ["Myosin", "Actin", "Troponin", "Tropomyosin"],
     "correctAnswer": ""
   },
   {
     "question": "Myosin heads form cross-bridges with:",
-    "options": [
-      "Myosin",
-      "Actin",
-      "Calcium",
-      "ATP"
-    ],
+    "options": ["Myosin", "Actin", "Calcium", "ATP"],
     "correctAnswer": ""
   },
   {
@@ -2531,42 +1831,22 @@
   },
   {
     "question": "Type I muscle fibres are also known as:",
-    "options": [
-      "Fast twitch",
-      "Slow twitch",
-      "Hybrid fibres",
-      "Power fibres"
-    ],
+    "options": ["Fast twitch", "Slow twitch", "Hybrid fibres", "Power fibres"],
     "correctAnswer": ""
   },
   {
     "question": "Slow twitch fibres are best for:",
-    "options": [
-      "Sprinting",
-      "Powerlifting",
-      "Endurance work",
-      "Explosive movement"
-    ],
+    "options": ["Sprinting", "Powerlifting", "Endurance work", "Explosive movement"],
     "correctAnswer": ""
   },
   {
     "question": "Type II muscle fibres have:",
-    "options": [
-      "High myoglobin",
-      "Low myoglobin",
-      "Many mitochondria",
-      "Slow contraction speed"
-    ],
+    "options": ["High myoglobin", "Low myoglobin", "Many mitochondria", "Slow contraction speed"],
     "correctAnswer": ""
   },
   {
     "question": "Which fibres fatigue the fastest?",
-    "options": [
-      "Slow twitch",
-      "Intermediate",
-      "Fast twitch",
-      "All equally"
-    ],
+    "options": ["Slow twitch", "Intermediate", "Fast twitch", "All equally"],
     "correctAnswer": ""
   },
   {
@@ -2581,22 +1861,12 @@
   },
   {
     "question": "Fast twitch fibres are:",
-    "options": [
-      "Red",
-      "White (pale)",
-      "Blue",
-      "Pink"
-    ],
+    "options": ["Red", "White (pale)", "Blue", "Pink"],
     "correctAnswer": ""
   },
   {
     "question": "Concentric contraction means the muscle:",
-    "options": [
-      "Lengthens",
-      "Shortens",
-      "Stays the same length",
-      "Contracts at constant speed"
-    ],
+    "options": ["Lengthens", "Shortens", "Stays the same length", "Contracts at constant speed"],
     "correctAnswer": ""
   },
   {
@@ -2651,12 +1921,7 @@
   },
   {
     "question": "The agonist is the muscle that:",
-    "options": [
-      "Stabilises",
-      "Relaxes",
-      "Causes the movement",
-      "Opposes the movement"
-    ],
+    "options": ["Stabilises", "Relaxes", "Causes the movement", "Opposes the movement"],
     "correctAnswer": ""
   },
   {
@@ -2691,22 +1956,12 @@
   },
   {
     "question": "Which muscle performs elbow flexion?",
-    "options": [
-      "Triceps",
-      "Biceps brachii",
-      "Gastrocnemius",
-      "Rhomboids"
-    ],
+    "options": ["Triceps", "Biceps brachii", "Gastrocnemius", "Rhomboids"],
     "correctAnswer": ""
   },
   {
     "question": "Which muscle performs knee extension?",
-    "options": [
-      "Hamstrings",
-      "Gluteus maximus",
-      "Quadriceps",
-      "Tibialis anterior"
-    ],
+    "options": ["Hamstrings", "Gluteus maximus", "Quadriceps", "Tibialis anterior"],
     "correctAnswer": ""
   },
   {
@@ -2731,12 +1986,7 @@
   },
   {
     "question": "The gastrocnemius performs:",
-    "options": [
-      "Dorsiflexion",
-      "Plantarflexion",
-      "Hip extension",
-      "Elbow flexion"
-    ],
+    "options": ["Dorsiflexion", "Plantarflexion", "Hip extension", "Elbow flexion"],
     "correctAnswer": ""
   },
   {
@@ -2781,12 +2031,7 @@
   },
   {
     "question": "The somatic nervous system controls:",
-    "options": [
-      "Digestion",
-      "Heart rate",
-      "Voluntary movement",
-      "Hormones"
-    ],
+    "options": ["Digestion", "Heart rate", "Voluntary movement", "Hormones"],
     "correctAnswer": ""
   },
   {
@@ -2801,12 +2046,7 @@
   },
   {
     "question": "Which part of the brain stores learned motor skills?",
-    "options": [
-      "Cerebrum",
-      "Cerebellum",
-      "Brain stem",
-      "Diencephalon"
-    ],
+    "options": ["Cerebrum", "Cerebellum", "Brain stem", "Diencephalon"],
     "correctAnswer": ""
   },
   {
@@ -2821,22 +2061,12 @@
   },
   {
     "question": "Sensory neurons carry signals:",
-    "options": [
-      "To organs",
-      "To the CNS",
-      "Away from the CNS",
-      "To muscles"
-    ],
+    "options": ["To organs", "To the CNS", "Away from the CNS", "To muscles"],
     "correctAnswer": ""
   },
   {
     "question": "Motor neurons carry signals:",
-    "options": [
-      "To the brain",
-      "To sensory organs",
-      "From CNS to muscle",
-      "To skin receptors"
-    ],
+    "options": ["To the brain", "To sensory organs", "From CNS to muscle", "To skin receptors"],
     "correctAnswer": ""
   },
   {
@@ -2871,52 +2101,27 @@
   },
   {
     "question": "Muscles with many small motor units provide:",
-    "options": [
-      "Strength",
-      "Fine control",
-      "Endurance",
-      "Reflexes"
-    ],
+    "options": ["Strength", "Fine control", "Endurance", "Reflexes"],
     "correctAnswer": ""
   },
   {
     "question": "Golgi tendon organs detect:",
-    "options": [
-      "Muscle length",
-      "Joint angle",
-      "Muscle tension",
-      "Blood pressure"
-    ],
+    "options": ["Muscle length", "Joint angle", "Muscle tension", "Blood pressure"],
     "correctAnswer": ""
   },
   {
     "question": "Muscle spindles detect:",
-    "options": [
-      "Heat",
-      "Tension",
-      "Muscle length changes",
-      "Joint pressure"
-    ],
+    "options": ["Heat", "Tension", "Muscle length changes", "Joint pressure"],
     "correctAnswer": ""
   },
   {
     "question": "Neural pathways increase rapidly during:",
-    "options": [
-      "Old age",
-      "Adulthood",
-      "Early childhood",
-      "Puberty"
-    ],
+    "options": ["Old age", "Adulthood", "Early childhood", "Puberty"],
     "correctAnswer": ""
   },
   {
     "question": "Muscle mass increases rapidly in boys during puberty due to:",
-    "options": [
-      "Increased oxygen",
-      "Increased sleep",
-      "Testosterone",
-      "Oestrogen"
-    ],
+    "options": ["Increased oxygen", "Increased sleep", "Testosterone", "Oestrogen"],
     "correctAnswer": ""
   },
   {
@@ -2931,12 +2136,7 @@
   },
   {
     "question": "Neuron loss begins at approximately age:",
-    "options": [
-      "15",
-      "20",
-      "30",
-      "50"
-    ],
+    "options": ["15", "20", "30", "50"],
     "correctAnswer": ""
   },
   {
@@ -2961,22 +2161,12 @@
   },
   {
     "question": "Creatine phosphate stores increase as a result of:",
-    "options": [
-      "Aerobic training",
-      "Long-term resistance training",
-      "Stretching",
-      "Rest"
-    ],
+    "options": ["Aerobic training", "Long-term resistance training", "Stretching", "Rest"],
     "correctAnswer": ""
   },
   {
     "question": "Increased actin and myosin leads to:",
-    "options": [
-      "Faster reflexes",
-      "Weaker muscles",
-      "More force production",
-      "Reduced stability"
-    ],
+    "options": ["Faster reflexes", "Weaker muscles", "More force production", "Reduced stability"],
     "correctAnswer": ""
   },
   {
@@ -2991,12 +2181,7 @@
   },
   {
     "question": "Improved posture from training is a:",
-    "options": [
-      "Short-term effect",
-      "Long-term benefit",
-      "Neural injury",
-      "Hormonal response"
-    ],
+    "options": ["Short-term effect", "Long-term benefit", "Neural injury", "Hormonal response"],
     "correctAnswer": ""
   }
 ]
