@@ -1,6 +1,5 @@
 extends:
   - spectral:oas
-  - spectral:asyncapi
 
 rules:
   # OpenAPI Rules
