@@ -59,6 +59,25 @@ pnpm dev
 
 The server will run on http://localhost:3000 with hot reloading via `tsx watch`.
 
+#### HTTPS in Development
+
+To enable HTTPS in development:
+
+1. SSL certificates have already been generated in `backend/certs/`
+2. Set `USE_HTTPS=true` in your `.env` file
+3. Restart the dev server
+
+The server will then run on https://localhost:3000
+
+**Note**: Since this is a self-signed certificate, your browser will show a security warning. This is expected in development. You can safely proceed by accepting the certificate.
+
+To regenerate certificates if needed:
+
+```bash
+cd backend/certs
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
+```
+
 ## Available Scripts
 
 - `pnpm dev` - Start development server with hot reloading
@@ -120,10 +139,13 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
 ```
 backend/
 ├── src/
-│   ├── index.ts          # Server entry point
+│   ├── index.ts          # Server entry point with HTTPS support
 │   └── app.ts            # Fastify app factory
 ├── test/
 │   └── *.test.ts         # Vitest unit tests
+├── certs/                # SSL certificates (git-ignored)
+│   ├── key.pem           # Private key
+│   └── cert.pem          # Certificate
 ├── init-scripts/         # PostgreSQL initialization scripts
 ├── docker-compose.yml    # PostgreSQL Docker configuration
 ├── .env.example          # Environment variables template
@@ -159,9 +181,37 @@ POSTGRES_DB=level2gym
 
 # Database connection string
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+
+# Server Configuration
+USE_HTTPS=true  # Enable HTTPS in development
+# PORT=3000     # Optional: Change server port
 ```
 
-## Troubleshooting
+### Port 3000 already in use
+
+The backend runs on port 3000 by default. Change it by setting the `PORT` environment variable in `.env`:
+
+```env
+PORT=3001
+```
+
+### HTTPS certificate issues
+
+If you see HTTPS-related errors:
+
+1. Verify certificates exist: `ls -la backend/certs/`
+2. Regenerate certificates if needed (see HTTPS section above)
+3. Or disable HTTPS by setting `USE_HTTPS=false` in `.env`
+
+### Browser security warnings with HTTPS
+
+When using HTTPS in development, browsers will show a security warning because the certificate is self-signed. This is expected and safe in development:
+
+- **Chrome/Edge**: Click "Advanced" → "Proceed to localhost (unsafe)"
+- **Firefox**: Click "Advanced" → "Accept the Risk and Continue"
+- **Safari**: Click "Show Details" → "visit this website"
+
+### Database connection issues
 
 ### Port 3000 already in use
 

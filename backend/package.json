@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "fastify": "^5.2.3"
   },
   "devDependencies": {

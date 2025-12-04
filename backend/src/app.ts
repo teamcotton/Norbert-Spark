@@ -1,8 +1,9 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 
-export function buildApp(): FastifyInstance {
+export function buildApp(options?: FastifyServerOptions): FastifyInstance {
   const fastify = Fastify({
     logger: true,
+    ...options,
   })
 
   // Declare routes
