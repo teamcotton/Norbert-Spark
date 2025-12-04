@@ -79,11 +79,128 @@ TESTING STRATEGY:
 
 MIGRATION GUIDE:
 
-1. Move existing entities to domain/entities/
-2. Extract business logic from controllers to domain/services/
-3. Create use cases in application/use-cases/
-4. Define port interfaces in application/ports/
-5. Move controllers to adapters/primary/http/
-6. Move repository implementations to adapters/secondary/repositories/
-7. Keep infrastructure setup in infrastructure/
-8. Wire everything together in infrastructure/di/container.ts
+NOTE: The current backend structure is intentionally simple with routes in app.ts.
+This hexagonal architecture is documented for future implementation as the application
+grows in complexity. The migration should be done incrementally as needed, not all at once.
+
+PREPARATION:
+The directory structure already exists in backend/src/ with README.txt files showing
+examples. If you need to create additional subdirectories:
+
+  mkdir -p backend/src/domain/{entities,value-objects,services,events}
+  mkdir -p backend/src/application/{use-cases,ports,dtos}
+  mkdir -p backend/src/adapters/{primary/http,primary/cli,secondary/repositories,secondary/services}
+  mkdir -p backend/src/infrastructure/{database,http,config,security,di}
+  mkdir -p backend/src/shared/{types,utils,constants,exceptions,guards}
+
+MIGRATION STEPS (Incremental Approach):
+
+1. START WITH ONE FEATURE AT A TIME
+   - Choose a single feature or domain concept (e.g., "User Management")
+   - Migrate it completely before moving to the next feature
+   - This allows testing and validation at each step
+
+2. EXTRACT DOMAIN LOGIC FIRST
+   - Create domain/entities/ for business objects (e.g., User, Workout)
+   - Create domain/value-objects/ for validated types (e.g., Email, Password)
+   - Move pure business rules from controllers to domain/services/
+   - Keep existing routes working by importing from new locations
+
+3. CREATE APPLICATION LAYER
+   - Define port interfaces in application/ports/ (e.g., UserRepositoryPort)
+   - Create DTOs in application/dtos/ for data validation
+   - Build use cases in application/use-cases/ that orchestrate domain objects
+   - Test use cases in isolation with mocked ports
+
+4. IMPLEMENT ADAPTERS
+   - Create repository adapters in adapters/secondary/repositories/
+   - Move HTTP route handlers to adapters/primary/http/
+   - Keep both old and new implementations during transition
+   - Use feature flags or gradual rollout to switch between implementations
+
+5. SET UP INFRASTRUCTURE
+   - Configure database connection in infrastructure/database/
+   - Set up dependency injection in infrastructure/di/container.ts
+   - Wire together use cases with their adapter implementations
+   - Update index.ts to use the new structure
+
+6. GRADUAL CUTOVER
+   - Start with new architecture for new features
+   - Migrate existing features one at a time
+   - Maintain backward compatibility during transition
+   - Update tests to match new structure for each migrated feature
+
+HANDLING THE TRANSITION PERIOD:
+
+During migration, you'll have mixed architecture. This is expected and manageable:
+
+✓ Old Structure (app.ts with inline routes)
+  - Keep existing routes working
+  - Don't remove until new implementation is tested
+  - Can coexist with new hexagonal structure
+
+✓ New Structure (hexagonal architecture)
+  - Implement alongside existing code
+  - Test thoroughly before switching traffic
+  - Use dependency injection to wire components
+
+✓ Example Transition Pattern:
+  // app.ts (during transition)
+  import { UserController } from './adapters/primary/http/user.controller.js'
+  import { container } from './infrastructure/di/container.js'
+  
+  // Old route (to be deprecated)
+  fastify.get('/users/:id', async (req, reply) => {
+    // Old implementation
+  })
+  
+  // New route using hexagonal architecture
+  const userController = container.resolve<UserController>('UserController')
+  userController.registerRoutes(fastify)
+
+TESTING STRATEGY DURING MIGRATION:
+
+1. UNIT TESTS (First Priority)
+   - Test domain entities and value objects in isolation
+   - Test domain services with pure business logic
+   - Test use cases with mocked port interfaces
+   - These tests should have NO infrastructure dependencies
+
+2. INTEGRATION TESTS
+   - Test adapters with real infrastructure (database, external services)
+   - Test repository implementations against real database
+   - Test HTTP controllers with Fastify's inject() method
+   - Use test database or containers for isolation
+
+3. MIGRATION TESTING CHECKLIST
+   ✓ Write tests for new architecture before migrating code
+   ✓ Ensure old tests still pass during transition
+   ✓ Add integration tests that verify old and new produce same results
+   ✓ Use feature flags to A/B test old vs new implementation
+   ✓ Monitor error rates and performance during cutover
+   ✓ Keep rollback plan ready (revert to old implementation)
+
+4. TEST ORGANIZATION
+   backend/test/
+   ├── unit/
+   │   ├── domain/           # Test entities, value objects, services
+   │   ├── application/      # Test use cases with mocked ports
+   │   └── adapters/         # Test adapter logic
+   ├── integration/
+   │   ├── repositories/     # Test with real database
+   │   └── controllers/      # Test HTTP endpoints
+   └── e2e/
+       └── features/         # End-to-end feature tests
+
+VALIDATION CHECKLIST:
+
+Before considering migration complete for a feature:
+□ All unit tests pass for domain and application layers
+□ Integration tests pass for adapters
+□ Old and new implementations produce identical results
+□ Performance is acceptable (compare with baseline)
+□ Error handling works correctly
+□ Logging and monitoring are in place
+□ Documentation is updated
+□ Team is trained on new structure
+□ Rollback plan is documented and tested
