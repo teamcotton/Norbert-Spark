@@ -187,7 +187,7 @@ export class JwtUtil {
     return jwt.verify(token, EnvConfig.JWT_SECRET) as { userId: string; email: string }
   }
 
-  static decodeToken(token: string): any {
+  static decodeToken(token: string): unknown {
     return jwt.decode(token)
   }
 }
