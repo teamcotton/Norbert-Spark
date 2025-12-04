@@ -16,11 +16,9 @@ const useHttps = isDevelopment && process.env.USE_HTTPS === 'true'
 let httpsOptions: FastifyServerOptions | undefined
 if (useHttps) {
   try {
-    // Determine certs path - works for both dev (tsx) and production (compiled)
-    const isCompiledDist = __dirname.includes('/dist/')
-    const certsPath = isCompiledDist
-      ? join(__dirname, '..', 'certs') // When running from dist/
-      : join(__dirname, '..', 'certs') // When running from src/ - go up one level to backend/certs
+    // __dirname points to src/ or dist/ directory
+    // Go up one level to backend/, then into certs/
+    const certsPath = join(__dirname, '..', 'certs')
 
     httpsOptions = {
       https: {
