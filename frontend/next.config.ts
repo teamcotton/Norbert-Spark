@@ -8,10 +8,6 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [],
   },
-  // Configure Turbopack root for monorepo
-  turbopack: {
-    root: '/Applications/MAMP/htdocs/level-2-gym',
-  },
 }
 
 export default nextConfig
