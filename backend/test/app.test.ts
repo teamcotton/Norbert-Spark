@@ -117,7 +117,7 @@ describe('Fastify API Server', () => {
 
       expect(response.statusCode).toBe(200)
       expect(response.json()).toEqual({ message: 'Level 2 Gym API' })
-      
+
       await httpsApp.close()
     })
 
