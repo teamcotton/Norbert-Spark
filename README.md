@@ -8,7 +8,7 @@ This project is a monorepo with the following structure:
 
 - **frontend**: Next.js framework with React 19 and Material UI
 - **backend**: Fastify TypeScript API server
-- **supabase**: Self-hosted Supabase with Docker for PostgreSQL support
+- **PostgreSQL**: Docker-based PostgreSQL 18.1 database
 
 ## Tech Stack
 
@@ -30,13 +30,13 @@ This project is a monorepo with the following structure:
 
 ### Database
 
-- **PostgreSQL**: Self-hosted via [Supabase](https://supabase.com/docs/guides/self-hosting/docker)
+- **PostgreSQL 18.1**: Docker-based PostgreSQL instance
 
 ## Prerequisites
 
 - Node.js >= 18
 - PNPM >= 8
-- Docker and Docker Compose (for Supabase)
+- Docker and Docker Compose (for PostgreSQL)
 
 ## Getting Started
 
@@ -48,17 +48,25 @@ pnpm install
 
 ### 2. Set Up Environment Variables
 
-Copy the example environment file in the frontend:
+Copy the example environment file:
 
 ```bash
-cp frontend/.env.example frontend/.env
+cd backend
+cp .env.example .env
 ```
 
-Update the values in `frontend/.env` with your configuration.
+Update the values in `.env` with your configuration.
 
-### 3. Start Supabase (Optional)
+### 3. Start PostgreSQL
 
-Follow the instructions in `supabase/README.md` to set up the self-hosted Supabase instance.
+Start the PostgreSQL database:
+
+```bash
+cd backend
+docker compose up -d
+```
+
+See `DOCKER_POSTGRES.md` for detailed database setup instructions.
 
 ### 4. Development
 
@@ -123,14 +131,18 @@ level-2-gym/
 ├── frontend/           # Next.js + React frontend
 │   ├── src/
 │   │   ├── app/       # Next.js App Router
-│   │   ├── components/# React components
-│   │   ├── db/        # Drizzle schema and client
+│   │   ├── view/      # View layer (components, hooks)
+│   │   ├── domain/    # Domain layer (entities, schemas)
+│   │   ├── application/ # Application layer (use cases)
+│   │   ├── infrastructure/ # Infrastructure layer (DB, API)
 │   │   └── test/      # Test utilities
 │   ├── e2e/           # Playwright E2E tests
 │   └── public/        # Static assets
 ├── backend/           # Fastify TypeScript API
-│   └── src/
-├── supabase/          # Supabase Docker setup
+│   ├── src/
+│   ├── docker-compose.yml  # PostgreSQL Docker configuration
+│   ├── init-scripts/       # PostgreSQL initialization scripts
+│   └── .env.example        # Environment variables template
 ├── turbo.json         # Turborepo configuration
 ├── pnpm-workspace.yaml# PNPM workspace configuration
 └── package.json       # Root package.json

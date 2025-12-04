@@ -90,7 +90,7 @@ cd frontend && pnpm lint --fix
 pnpm format
 
 # Check formatting without fixing
-pnpm prettier --check "**/*.{js,jsx,ts,tsx,json,md,astro}"
+pnpm prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
 ```
 
 ### Type Checking
@@ -146,58 +146,50 @@ const { text } = await generateText({
 })
 ```
 
-## Supabase Setup
+## PostgreSQL Setup
 
 ### Local Development with Docker
 
-1. Clone the Supabase repository:
+1. Create your environment file:
 
 ```bash
-git clone --depth 1 https://github.com/supabase/supabase
-```
-
-2. Navigate to the docker directory:
-
-```bash
-cd supabase/docker
-```
-
-3. Copy the example environment file:
-
-```bash
+cd backend
 cp .env.example .env
 ```
 
-4. Start Supabase:
+2. Start PostgreSQL:
 
 ```bash
 docker compose up -d
 ```
 
-5. Access the services:
+3. Access the database:
 
-- Supabase Studio: http://localhost:3000
 - PostgreSQL: localhost:5432
-- API Gateway: http://localhost:8000
+- Database name: level2gym
+- User/Password: postgres/postgres (or as configured in .env)
 
-See `supabase/README.md` for more details.
+See `DOCKER_POSTGRES.md` for detailed instructions.
 
 ## Project Structure
 
 ```
 level-2-gym/
-├── frontend/              # Astro + React frontend
+├── frontend/              # Next.js + React frontend
 │   ├── src/
-│   │   ├── components/   # React components
-│   │   ├── pages/        # Astro pages
-│   │   ├── layouts/      # Astro layouts
-│   │   ├── db/           # Drizzle schema and client
+│   │   ├── app/          # Next.js App Router pages
+│   │   ├── view/         # View layer (components, hooks)
+│   │   ├── domain/       # Domain layer (entities, value objects)
+│   │   ├── application/  # Application layer (use cases, services)
+│   │   ├── infrastructure/ # Infrastructure layer (API, DB)
 │   │   └── test/         # Test utilities and unit tests
 │   ├── e2e/              # Playwright E2E tests
 │   └── public/           # Static assets
-├── backend/              # Backend services
-│   └── src/
-├── supabase/             # Supabase documentation
+├── backend/              # Fastify backend server
+│   ├── src/
+│   ├── docker-compose.yml  # PostgreSQL Docker configuration
+│   ├── init-scripts/       # PostgreSQL initialization scripts
+│   └── .env.example        # Environment variables template
 ├── turbo.json            # Turborepo configuration
 ├── pnpm-workspace.yaml   # PNPM workspace configuration
 └── package.json          # Root package.json
@@ -217,7 +209,7 @@ rm -rf .turbo
 
 For debugging React components, you can use React DevTools browser extension.
 
-For debugging Astro pages, check the terminal output where you ran `pnpm dev`.
+For debugging Next.js pages, check the terminal output where you ran `pnpm dev`.
 
 ### Hot Reload
 
@@ -227,15 +219,10 @@ The development server supports hot module replacement (HMR). Changes to files w
 
 ### Port Already in Use
 
-If port 4321 is already in use, you can change it in `frontend/astro.config.mjs`:
+If port 4321 is already in use, you can change it in `frontend/next.config.ts` or set the PORT environment variable:
 
-```javascript
-export default defineConfig({
-  server: {
-    port: 3000,
-  },
-  // ... rest of config
-})
+```bash
+PORT=4322 pnpm dev
 ```
 
 ### TypeScript Errors
@@ -257,7 +244,7 @@ npx playwright install
 
 ## Resources
 
-- [Astro Documentation](https://docs.astro.build/)
+- [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://react.dev/)
 - [Material UI Documentation](https://mui.com/)
 - [Turborepo Documentation](https://turbo.build/repo/docs)

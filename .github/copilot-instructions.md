@@ -6,7 +6,7 @@ This is a **Turborepo monorepo** with PNPM workspaces containing:
 
 - **frontend/**: Next.js 16 with React 19, Material UI 7, Drizzle ORM, AI SDK v5 integration, **Domain-Driven Design (DDD) architecture**
 - **backend/**: Fastify TypeScript API server (port 3000)
-- **supabase/**: Docker-based self-hosted PostgreSQL documentation
+- **PostgreSQL**: Docker-based PostgreSQL 18.1 database (port 5432)
 
 Key architectural decisions:
 
@@ -14,7 +14,7 @@ Key architectural decisions:
 - **Domain-Driven Design** with clear separation of concerns across 4 layers
 - React components use `'use client'` directive for client-side interactivity
 - Database logic in `frontend/src/infrastructure/` following DDD principles
-- PostgreSQL accessed via Drizzle ORM with `postgres` driver (not Supabase client)
+- PostgreSQL accessed via Drizzle ORM with `postgres` driver
 
 ## Domain-Driven Design Architecture
 
@@ -240,8 +240,8 @@ Client configured in `frontend/src/db/index.ts` using `import.meta.env.DATABASE_
 - **View**:
   - Components: `frontend/src/view/components/*.tsx` - Presentational React components
   - Hooks: `frontend/src/view/hooks/*.ts` - Custom React hooks with UI logic
-  - Pages: `frontend/src/app/` - Next.js App Router pages (minimal orchestration)t `.astro`)
-- **Database**: `frontend/src/db/schema.ts` for tables, `index.ts` for client export
+  - Pages: `frontend/src/app/` - Next.js App Router pages (minimal orchestration)
+- **Database**: `frontend/src/infrastructure/db/schema.ts` for tables, `index.ts` for client export
 
 **Backend:**
 
@@ -264,13 +264,9 @@ Client configured in `frontend/src/db/index.ts` using `import.meta.env.DATABASE_
 
 **Frontend uses Next.js `process.env` pattern:**
 
-- Public vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (exposed to browser)
+- Public vars: `NEXT_PUBLIC_*` (exposed to browser)
 - Private vars: `DATABASE_URL`, `GOOGLE_API_KEY`, `DB_HOST`, etc. (server-only)
 - Example file: `frontend/.env.example` - copy to `.env.local` before development
-
-- Public vars: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` (exposed to browser)
-- Private vars: `DATABASE_URL`, `GOOGLE_API_KEY`, `DB_HOST`, etc. (server-only)
-- Example file: `frontend/.env.example` - copy to `.env` before development
 
 ### AI SDK Integration
 
@@ -288,9 +284,9 @@ const { text } = await generateText({
 
 ### Database Connection
 
-- **Driver**: `postgres` (not `@supabase/supabase-js`)
-- **Connection string**: Reads from `process.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/postgres`
-- **Self-hosted Supabase**: Optional Docker setup (see `supabase/README.md`), exposes PostgreSQL on `:5432` and API on `:8000`
+- **Driver**: `postgres` driver via Drizzle ORM
+- **Connection string**: Reads from `process.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/level2gym`
+- **Docker setup**: PostgreSQL 18.1 runs in Docker (see `DOCKER_POSTGRES.md`), exposed on port 5432
 - **Location**: Database client in `frontend/src/infrastructure/db/index.ts` following DDD architecture
 
 ### Next.js + React Integration
@@ -302,15 +298,11 @@ const { text } = await generateText({
 - React Query (`@tanstack/react-query`) for data fetching in hooks
 - Material UI theme configured in `src/app/ThemeRegistry.tsx`
 
-- React added via `@astrojs/react` integration in `astro.config.mjs`
-- Use `.astro` files for static pages, `.tsx` components for interactive islands
-- Material UI components work in `.tsx` files (Emotion runtime included)
-
 ### Turborepo Task Pipeline
 
 Defined in `turbo.json`:
 
-- `build` depends on `^build` (topological order), outputs to `dist/`, `.next/`, `.astro/`
+- `build` depends on `^build` (topological order), outputs to `dist/`, `.next/`
 - `dev` is persistent (doesn't exit), no caching
 
 ## Common Pitfalls
@@ -342,10 +334,3 @@ Defined in `turbo.json`:
 - `DEVELOPMENT.md` - Detailed developer workflows and troubleshooting
 - `frontend/src/domain/*/readme.txt` - DDD layer documentation
 - `frontend/src/app/ThemeRegistry.tsx` - Material UI theme provider
-- `eslint.config.js` - Root ESLint 9 flat config (base rules)
-- `frontend/eslint.config.js` - Frontend linting (TypeScript, React, Astro)
-- `backend/eslint.config.js` - Backend linting (extends root)
-- `backend/tsconfig.json` - TypeScript config (ESNext, bundler resolution)
-- `backend/src/index.ts` - Fastify server with routes (/, /health)
-- `.prettierrc` - Code formatting rules
-- `DEVELOPMENT.md` - Detailed developer workflows and troubleshooting

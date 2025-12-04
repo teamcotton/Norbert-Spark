@@ -6,13 +6,5 @@
   "printWidth": 100,
   "useTabs": false,
   "arrowParens": "always",
-  "endOfLine": "lf",
-  "overrides": [
-    {
-      "files": "*.astro",
-      "options": {
-        "parser": "astro"
-      }
-    }
-  ]
+  "endOfLine": "lf"
 }

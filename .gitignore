@@ -77,6 +77,27 @@ web_modules/
 # Next.js build output
 .next
 out
+.next/
+out/
+
+# Next.js cache
+.next/cache
+
+# Next.js trace files
+.trace
+
+# Next.js server components
+.server/
+
+# Next.js static files (if using static export)
+# out/
+
+# Next.js standalone build
+.next/standalone/
+.next/static/
+
+# Vercel
+.vercel
 
 # Nuxt.js build / generate output
 .nuxt
@@ -138,8 +159,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Astro build output
-.astro/
+
 
 # Playwright
 test-results/

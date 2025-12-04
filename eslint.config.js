@@ -60,13 +60,6 @@ export default [
     },
   },
   {
-    ignores: [
-      '**/node_modules/',
-      '**/dist/',
-      '**/.astro/',
-      '**/.next/',
-      '**/coverage/',
-      '**/build/',
-    ],
+    ignores: ['**/node_modules/', '**/dist/', '**/.next/', '**/coverage/', '**/build/'],
   },
 ]

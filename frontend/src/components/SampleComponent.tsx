@@ -12,8 +12,7 @@ export default function SampleComponent() {
           Material UI Demo
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
-          This is a sample React component demonstrating Material UI integration in the Astro
-          project.
+          This is a sample React component demonstrating Material UI integration in Next.js.
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button variant="contained" color="primary" onClick={() => setCount(count + 1)}>
