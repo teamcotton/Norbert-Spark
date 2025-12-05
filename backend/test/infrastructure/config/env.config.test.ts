@@ -53,7 +53,7 @@ describe('EnvConfig', () => {
       expect(() => EnvConfig.validate()).toThrow(/NODE_ENV/)
     })
 
-    it('should validate without errors when NODE_ENV is empty string', () => {
+    it('should throw error when NODE_ENV is empty string', () => {
       // Empty string is considered as "set" but empty
       process.env.NODE_ENV = ''
       expect(() => EnvConfig.validate()).toThrow('Missing required environment variables: NODE_ENV')
