@@ -174,11 +174,18 @@ export class StringUtil {
     return str.substring(0, maxLength - suffix.length) + suffix
   }
 
+  /**
+   * Generates a cryptographically secure random string.
+   * Uses Node.js crypto.randomBytes for security.
+   * Do NOT use Math.random() for security-sensitive values.
+   */
   static randomString(length: number): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const bytes = require('crypto').randomBytes(length)
     let result = ''
     for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length))
+      // Map each byte to a character in the allowed set
+      result += chars.charAt(bytes[i] % chars.length)
     }
     return result
   }
