@@ -45,9 +45,7 @@ describe('EnvConfig', () => {
 
     it('should throw error when NODE_ENV is missing', () => {
       delete process.env.NODE_ENV
-      expect(() => EnvConfig.validate()).toThrow(
-        'Missing required environment variables: NODE_ENV',
-      )
+      expect(() => EnvConfig.validate()).toThrow('Missing required environment variables: NODE_ENV')
     })
 
     it('should throw error message containing missing variable name', () => {
@@ -64,7 +62,7 @@ describe('EnvConfig', () => {
     it('should validate successfully with valid NODE_ENV values', () => {
       const validEnvs = ['development', 'test', 'production', 'staging']
 
-      validEnvs.forEach(env => {
+      validEnvs.forEach((env) => {
         process.env.NODE_ENV = env
         expect(() => EnvConfig.validate()).not.toThrow()
       })
