@@ -62,7 +62,14 @@ const config: Linter.Config[] = [
     },
   },
   {
-    ignores: ['**/node_modules/', '**/dist/', '**/.next/', '**/coverage/', '**/build/'],
+    ignores: [
+      '**/node_modules/',
+      '**/dist/',
+      '**/.next/',
+      '**/coverage/',
+      '**/build/',
+      '**/frontend/next-env.d.ts',
+    ],
   },
 ]
 
