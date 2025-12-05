@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { existsSync, readFileSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
@@ -104,11 +104,12 @@ describe('Fastify API Server', () => {
 
       const httpsApp = buildApp({
         logger: false,
+        http2: true,
         https: {
           key,
           cert,
         },
-      })
+      } as any)
 
       const response = await httpsApp.inject({
         method: 'GET',
