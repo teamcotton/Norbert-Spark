@@ -1,4 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
+import { obscured } from 'obscured'
 import { EnvConfig } from './src/infrastructure/config/env.config.js'
 
 export default defineConfig({
@@ -6,7 +7,7 @@ export default defineConfig({
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    url: EnvConfig.DATABASE_URL,
+    url: obscured.value(EnvConfig.DATABASE_URL) || '',
   },
   strict: true,
   verbose: true,
