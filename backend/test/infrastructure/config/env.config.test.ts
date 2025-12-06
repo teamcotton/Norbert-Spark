@@ -1,3 +1,4 @@
+import type { Obscured } from 'obscured'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('EnvConfig', () => {
@@ -56,6 +57,24 @@ describe('EnvConfig', () => {
       expect(descriptor?.configurable).toBe(true)
       expect(descriptor?.enumerable).toBe(true)
     })
+
+    it('should have type Obscured<string | undefined>', async () => {
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      // Type assertion to verify compile-time type
+      const _typeCheck: Obscured<string | undefined> = EnvConfig.DATABASE_URL
+
+      // Runtime checks - Obscured objects have specific characteristics
+      expect(EnvConfig.DATABASE_URL).toBeDefined()
+      expect(typeof EnvConfig.DATABASE_URL).toBe('object')
+
+      // Obscured objects return '[OBSCURED]' when converted to string
+      expect(String(EnvConfig.DATABASE_URL)).toBe('[OBSCURED]')
+      expect(EnvConfig.DATABASE_URL.toString()).toBe('[OBSCURED]')
+
+      // Prevent unused variable warning
+      void _typeCheck
+    })
   })
 
   describe('validate()', () => {
@@ -64,7 +83,7 @@ describe('EnvConfig', () => {
 
       // Check that DATABASE_URL is either set or undefined (no default empty string)
       expect(
-        typeof EnvConfig.DATABASE_URL === 'string' || EnvConfig.DATABASE_URL === undefined
+        typeof EnvConfig.DATABASE_URL === 'object' || EnvConfig.DATABASE_URL === undefined
       ).toBe(true)
     })
 
@@ -99,8 +118,18 @@ describe('EnvConfig', () => {
 
       const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
 
+      // Type assertion to verify compile-time type
+      const _typeCheck: Obscured<string | undefined> = EnvConfig.DATABASE_URL
+
+      // Runtime checks
       expect(EnvConfig.DATABASE_URL).toBeDefined()
-      expect(typeof EnvConfig.DATABASE_URL).toBe('string')
+      expect(typeof EnvConfig.DATABASE_URL).toBe('object')
+
+      // Obscured objects return '[OBSCURED]' when converted to string
+      expect(String(EnvConfig.DATABASE_URL)).toBe('[OBSCURED]')
+
+      // Prevent unused variable warning
+      void _typeCheck
     })
 
     it('should have static validate method accessible without instantiation', async () => {
