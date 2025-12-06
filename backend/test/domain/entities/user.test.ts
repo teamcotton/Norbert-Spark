@@ -25,9 +25,7 @@ describe('User Entity', () => {
     })
 
     it('should create a user with default createdAt date', () => {
-      const beforeCreation = new Date()
       const user = new User('user-456', testEmail, testPassword, 'Jane Doe')
-      const afterCreation = new Date()
 
       // createdAt should be between beforeCreation and afterCreation
       // We can't directly access createdAt as it's private, but we can verify the user was created
@@ -55,7 +53,7 @@ describe('User Entity', () => {
       expect(typeof email).toBe('string')
     })
 
-    it('should return normalized lowercase email', async () => {
+    it('should return normalized lowercase email', () => {
       const upperEmail = new Email('TEST@EXAMPLE.COM')
       const user = new User('user-123', upperEmail, testPassword, 'Test User')
 
@@ -225,13 +223,13 @@ describe('User Entity', () => {
   })
 
   describe('Edge Cases', () => {
-    it('should handle user with empty name', async () => {
+    it('should handle user with empty name', () => {
       const user = new User('id-123', testEmail, testPassword, '')
 
       expect(user.getName()).toBe('')
     })
 
-    it('should handle user with very long name', async () => {
+    it('should handle user with very long name', () => {
       const longName = 'A'.repeat(1000)
       const user = new User('id-123', testEmail, testPassword, longName)
 
@@ -239,7 +237,7 @@ describe('User Entity', () => {
       expect(user.getName().length).toBe(1000)
     })
 
-    it('should handle user with special characters in name', async () => {
+    it('should handle user with special characters in name', () => {
       const specialNames = [
         'Jean-Pierre François',
         "O'Brien-Smith",
