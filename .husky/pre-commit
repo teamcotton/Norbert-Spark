@@ -1,12 +1,14 @@
-#!/bin/sh
-
-# Check if pnpm is available, if not skip in CI environment
+# Check if pnpm is available, fail in CI if missing, warn and skip locally
 if command -v pnpm >/dev/null 2>&1; then
   pnpm run format
   pnpm run lint
   pnpm run typecheck
 else
-  echo "pnpm not found, skipping pre-commit hooks in CI environment"
-  exit 0
+  if [ "$CI" = "true" ]; then
+    echo "ERROR: pnpm not found in CI environment. Please ensure pnpm is installed (e.g., via corepack enable)."
+    exit 1
+  else
+    echo "WARNING: pnpm not found, skipping pre-commit hooks. Please install pnpm (see packageManager in package.json)."
+    exit 0
+  fi
 fi
-

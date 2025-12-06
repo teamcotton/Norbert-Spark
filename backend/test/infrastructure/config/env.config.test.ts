@@ -59,7 +59,6 @@ describe('EnvConfig', () => {
   })
 
   describe('validate()', () => {
-
     it('should have DATABASE_URL validation logic', async () => {
       const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
 

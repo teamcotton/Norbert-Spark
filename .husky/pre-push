@@ -1,13 +1,12 @@
-#!/bin/sh
-
-# Check if pnpm is available, if not use npm
-if command -v pnpm >/dev/null 2>&1; then
-  pnpm run format
-  pnpm run lint
-  pnpm run typecheck
-  pnpm run test:unit
-  pnpm run test:e2e
-else
-  echo "pnpm not found, skipping pre-push hooks in CI environment"
-  exit 0
+# Ensure pnpm is available
+if ! command -v pnpm >/dev/null 2>&1; then
+  echo "Error: pnpm is required for pre-push hooks. Please install pnpm (https://pnpm.io/)."
+  exit 1
 fi
+# Always run from repo root to ensure scripts exist
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT" || exit 1
+pnpm run format
+pnpm run lint
+pnpm run typecheck
+pnpm run test

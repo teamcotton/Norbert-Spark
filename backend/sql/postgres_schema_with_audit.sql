@@ -6,7 +6,7 @@
 CREATE TABLE users (
     user_id     UUID PRIMARY KEY DEFAULT uuidv7(),
     name        TEXT NOT NULL,
-    password    TEXT NOT NULL,
+    password    TEXT NOT NULL CHECK (length(password) = 60), -- bcrypt hash
     email       CITEXT      NOT NULL UNIQUE,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
