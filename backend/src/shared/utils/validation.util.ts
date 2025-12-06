@@ -124,12 +124,12 @@ export class ValidationUtil {
    * ```typescript
    * ValidationUtil.isStrongPassword('MyP@ssw0rd') // true
    * ValidationUtil.isStrongPassword('SecureP@ss1') // true
-   * ValidationUtil.isStrongPassword('Test123!@#') // true
+   * ValidationUtil.isStrongPassword('Test123!@$') // true
    * ValidationUtil.isStrongPassword('weak') // false (too short, missing requirements)
    * ValidationUtil.isStrongPassword('NoSpecialChar123') // false (missing special char)
-   * ValidationUtil.isStrongPassword('no-uppercase-1!') // false (missing uppercase)
-   * ValidationUtil.isStrongPassword('NO-LOWERCASE-1!') // false (missing lowercase)
-   * ValidationUtil.isStrongPassword('NoDigits!@#') // false (missing digit)
+   * ValidationUtil.isStrongPassword('nouppercase1!') // false (missing uppercase)
+   * ValidationUtil.isStrongPassword('NOLOWERCASE1!') // false (missing lowercase)
+   * ValidationUtil.isStrongPassword('NoDigits!@$') // false (missing digit)
    * ```
    */
   static isStrongPassword(password: string): boolean {
@@ -160,7 +160,7 @@ export class ValidationUtil {
    * ValidationUtil.isPhoneNumber('+33123456789') // true (France number)
    * ValidationUtil.isPhoneNumber('14155552671') // true (without +)
    * ValidationUtil.isPhoneNumber('+1-415-555-2671') // false (has separators)
-   * ValidationUtil.isPhoneNumber('123') // false (too short)
+   * ValidationUtil.isPhoneNumber('1') // false (too short)
    * ValidationUtil.isPhoneNumber('+0123456789') // false (starts with 0)
    * ```
    */
