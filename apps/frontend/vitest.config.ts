@@ -13,5 +13,9 @@ export default defineConfig({
       '**/e2e/**',
       '**/.{idea,git,cache,output,temp}/**',
     ],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: ['node_modules/', 'dist/', '**/*.test.ts', '**/*.spec.ts'],
+    },
   },
 })

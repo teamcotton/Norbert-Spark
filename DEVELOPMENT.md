@@ -52,7 +52,7 @@ cd frontend && pnpm test
 cd frontend && pnpm test
 
 # Run tests with coverage
-cd frontend && pnpm test -- --coverage
+pnpm test:unit:coverage
 ```
 
 ### E2E Tests (Playwright)
