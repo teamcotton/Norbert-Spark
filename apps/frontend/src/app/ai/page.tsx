@@ -94,6 +94,7 @@ export default function AIChatPage() {
                   <Avatar
                     sx={{
                       bgcolor: message.role === 'user' ? 'primary.main' : 'secondary.main',
+                      color: message.role === 'user' ? 'primary.contrastText' : 'text.primary',
                     }}
                   >
                     {message.role === 'user' ? <PersonIcon /> : <SmartToyIcon />}
