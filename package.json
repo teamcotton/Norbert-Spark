@@ -40,8 +40,12 @@
     "turbo": "^2.6.3"
   },
   "engines": {
-    "node": ">=18",
+    "node": ">=20",
     "pnpm": ">=10"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "packageManager": "pnpm@10.24.0"
 }

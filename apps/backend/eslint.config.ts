@@ -4,7 +4,7 @@ import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import vitestPlugin from '@vitest/eslint-plugin'
 
-import rootConfig from '../eslint.config.js'
+import rootConfig from '../../eslint.config.js'
 
 const config: Linter.Config[] = [
   ...rootConfig,

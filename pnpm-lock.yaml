@@ -69,7 +69,7 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
 
-  backend:
+  apps/backend:
     dependencies:
       '@fastify/swagger':
         specifier: ^9.6.1
@@ -178,7 +178,7 @@ importers:
         specifier: ^4.0.15
         version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(jiti@2.6.1)(jsdom@27.2.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  frontend:
+  apps/frontend:
     dependencies:
       '@ai-sdk/google':
         specifier: ^2.0.44
@@ -6894,7 +6894,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.5
+      minimatch: 10.1.1
 
   '@types/ms@2.1.0': {}
 

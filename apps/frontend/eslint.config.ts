@@ -14,7 +14,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import sortDestructureKeys from 'eslint-plugin-sort-destructure-keys'
 import tseslint from 'typescript-eslint'
 
-import rootConfig from '../eslint.config.js'
+import rootConfig from '../../eslint.config.js'
 
 const config: Linter.Config[] = [
   ...rootConfig,
