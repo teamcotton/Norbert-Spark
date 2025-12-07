@@ -10,7 +10,6 @@ export class RegisterUserDto {
   ) {}
 
   static validate(data: any): RegisterUserDto {
-
     if (!data || typeof data !== 'object' || Array.isArray(data)) {
       throw new TypeErrorException('Data must be a valid object')
     }

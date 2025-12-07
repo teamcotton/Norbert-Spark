@@ -2,10 +2,11 @@
 import { useChat } from '@ai-sdk/react'
 import PersonIcon from '@mui/icons-material/Person'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
-import { Avatar, Box, CircularProgress, Paper, Stack } from '@mui/material'
+import { Alert, Avatar, Box, CircularProgress, Paper, Snackbar, Stack } from '@mui/material'
 import { DefaultChatTransport } from 'ai'
 import React, { useEffect, useRef, useState } from 'react'
 
+import { fileToDataURL } from '@/application/services/fileToDataURL.js'
 import { ChatInput } from '@/view/components/ChatInputComponent.js'
 import { IntroComponent } from '@/view/components/IntroComponent.js'
 import { Message } from '@/view/components/MessageComponent.js'
@@ -22,6 +23,8 @@ export default function AIChatPage() {
 
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -35,15 +38,46 @@ export default function AIChatPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
-    /* console.log('Sending message:', userMessage)*/
-    sendMessage({
-      text: input,
-    })
-    /*    console.log('messages', messages)
-    console.log('Sent message:', userMessage)
-    console.log('Status:', status)*/
-    setInput('')
-    setIsLoading(false)
+
+    setIsLoading(true) // Set to true when starting
+
+    try {
+      const parts: Array<
+        { type: 'text'; text: string } | { type: 'file'; mediaType: string; url: string }
+      > = [
+        {
+          type: 'text',
+          text: input,
+        },
+      ]
+
+      if (selectedFile) {
+        parts.push({
+          type: 'file',
+          mediaType: selectedFile.type,
+          url: await fileToDataURL(selectedFile),
+        })
+      }
+
+      sendMessage({ parts })
+
+      setInput('')
+      setSelectedFile(null)
+    } finally {
+      setIsLoading(false) // Always set to false when done
+    }
+  }
+
+  const handleFileSelect = (file: File | null) => {
+    if (file) {
+      const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+      if (file.size > MAX_FILE_SIZE) {
+        // Show error to user
+        setErrorMessage('File too large. Maximum size is 10MB')
+        return
+      }
+    }
+    setSelectedFile(file)
   }
 
   return (
@@ -130,8 +164,21 @@ export default function AIChatPage() {
           onChange={(e) => setInput(e.target.value)}
           onSubmit={handleSubmit}
           isLoading={isLoading}
+          enableFileUpload={true}
+          onFileSelect={handleFileSelect}
+          selectedFile={selectedFile}
         />
       </Paper>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Wrapper>
   )
 }
