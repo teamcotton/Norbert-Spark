@@ -121,7 +121,7 @@ describe('Password', () => {
     })
 
     it('should throw ValidationException for hash with invalid characters', () => {
-      const invalidChars = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh@#'
+      const invalidChars = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL!@#$%'
       expect(() => Password.fromHash(invalidChars)).toThrow(ValidationException)
     })
   })
