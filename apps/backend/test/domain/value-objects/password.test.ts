@@ -98,14 +98,14 @@ describe('Password', () => {
 
     it('should throw ValidationException for invalid hash format', () => {
       const invalidHash = 'not-a-real-hash'
-      expect(() => Password.fromHash(invalidHash)).toThrow(ConflictException)
+      expect(() => Password.fromHash(invalidHash)).toThrow(ValidationException)
       expect(() => Password.fromHash(invalidHash)).toThrow(
         'Invalid bcrypt hash provided to Password.fromHash'
       )
     })
 
     it('should throw ValidationException for empty string', () => {
-      expect(() => Password.fromHash('')).toThrow(ConflictException)
+      expect(() => Password.fromHash('')).toThrow(ValidationException)
       expect(() => Password.fromHash('')).toThrow(
         'Invalid bcrypt hash provided to Password.fromHash'
       )
@@ -113,17 +113,17 @@ describe('Password', () => {
 
     it('should throw ValidationException for hash with wrong length', () => {
       const shortHash = '$2b$10$tooshort'
-      expect(() => Password.fromHash(shortHash)).toThrow(ConflictException)
+      expect(() => Password.fromHash(shortHash)).toThrow(ValidationException)
     })
 
     it('should throw ValidationException for hash with wrong prefix', () => {
       const wrongPrefix = '$3b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
-      expect(() => Password.fromHash(wrongPrefix)).toThrow(ConflictException)
+      expect(() => Password.fromHash(wrongPrefix)).toThrow(ValidationException)
     })
 
     it('should throw ValidationException for hash with invalid characters', () => {
       const invalidChars = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL!@#$%'
-      expect(() => Password.fromHash(invalidChars)).toThrow(ConflictException)
+      expect(() => Password.fromHash(invalidChars)).toThrow(ValidationException)
     })
   })
 
