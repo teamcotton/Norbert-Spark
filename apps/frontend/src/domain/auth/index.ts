@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Value object schemas
-export const EmailSchema = z.email('Invalid email')
+export const EmailSchema = z.email('Please enter a valid email address')
 export const PasswordSchema = z.string().min(12, 'Password must be at least 12 characters')
 export const NameSchema = z.string().min(1, 'Name is required')
 
