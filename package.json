@@ -48,8 +48,5 @@
     "apps/*",
     "packages/*"
   ],
-  "packageManager": "pnpm@10.24.0",
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1"
-  }
+  "packageManager": "pnpm@10.24.0"
 }

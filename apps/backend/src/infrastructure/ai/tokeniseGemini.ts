@@ -34,14 +34,14 @@ import { readFileSync } from 'node:fs'
  */
 export class TokeniseGemini {
   private static instance: TokeniseGemini
-  private ggenai: GoogleGenerativeAI
+  private generativeAI: GoogleGenerativeAI
   private model: GenerativeModel
 
   private constructor() {
-    this.ggenai = new GoogleGenerativeAI(
+    this.generativeAI = new GoogleGenerativeAI(
       obscured.value(EnvConfig.GOOGLE_GENERATIVE_AI_API_KEY) || ''
     )
-    this.model = this.ggenai.getGenerativeModel({ model: EnvConfig.MODEL_PROVIDER || '' })
+    this.model = this.generativeAI.getGenerativeModel({ model: EnvConfig.MODEL_PROVIDER || '' })
   }
 
   /**
