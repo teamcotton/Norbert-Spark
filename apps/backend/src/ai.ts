@@ -11,13 +11,13 @@ import {
 import { z } from 'zod'
 import { fileSystemTools } from './shared/utils/file.util.js'
 
-import { isValidUUID, uuidVersionValidation } from 'uuidv7-utilities';
+import { isValidUUID, uuidVersionValidation } from 'uuidv7-utilities'
 
 function processUserUUID(userInput: string | Buffer) {
   if (!isValidUUID(userInput)) {
-    throw new Error('Invalid UUID format provided');
+    throw new Error('Invalid UUID format provided')
   }
-  return uuidVersionValidation(userInput);
+  return uuidVersionValidation(userInput)
 }
 
 export const GET = async (req: Request): Promise<Response> => {
@@ -26,7 +26,7 @@ export const GET = async (req: Request): Promise<Response> => {
   if (!chatId) {
     return new Response('No chatId provided', { status: 400 })
   }
-  if (!isValidUUID(chatId)) {
+  if (!processUserUUID(chatId)) {
     return new Response('Invalid chatId provided', { status: 400 })
   }
   const chat = { id: chatId, messages: [] as UIMessage[] }
