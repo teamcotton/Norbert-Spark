@@ -22,7 +22,7 @@ CREATE INDEX chats_user_id_updated_at_idx ON chats(user_id, updated_at DESC);
 -- Messages table: Stores individual messages within chats
 CREATE TABLE messages (
     id UUID PRIMARY KEY,
-    chat_id VARCHAR NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+    chat_id UUID NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     role VARCHAR NOT NULL
 );
