@@ -335,7 +335,7 @@ describe('UserController', () => {
 
         await controller.register(mockRequest, mockReply)
 
-        expect(mockReply.code).toHaveBeenCalledWith(400)
+        expect(mockReply.code).toHaveBeenCalledWith(500)
         expect(mockReply.send).toHaveBeenCalledWith({
           success: false,
           error: 'User with this email already exists',
@@ -375,7 +375,7 @@ describe('UserController', () => {
 
         await controller.register(mockRequest, mockReply)
 
-        expect(mockReply.code).toHaveBeenCalledWith(400)
+        expect(mockReply.code).toHaveBeenCalledWith(500)
         expect(mockReply.send).toHaveBeenCalledWith({
           success: false,
           error: 'Database connection failed',
@@ -393,7 +393,7 @@ describe('UserController', () => {
 
         await controller.register(mockRequest, mockReply)
 
-        expect(mockReply.code).toHaveBeenCalledWith(400)
+        expect(mockReply.code).toHaveBeenCalledWith(500)
         expect(mockReply.send).toHaveBeenCalledWith({
           success: false,
           error: 'Unexpected error',

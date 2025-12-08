@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { RegisterUserUseCase } from '../../../application/use-cases/register-user.use-case.js'
 import { RegisterUserDto } from '../../../application/dtos/register-user.dto.js'
+import { BaseException } from '../../../shared/exceptions/base.exception.js'
 
 export class UserController {
   constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
@@ -25,7 +26,8 @@ export class UserController {
       })
     } catch (error) {
       const err = error as Error
-      reply.code(400).send({
+      const statusCode = err instanceof BaseException ? err.statusCode : 500
+      reply.code(statusCode).send({
         success: false,
         error: err.message,
       })

@@ -5,6 +5,8 @@ import type { UserRepositoryPort } from '../ports/user.repository.port.js'
 import type { EmailServicePort } from '../ports/email.service.port.js'
 import type { LoggerPort } from '../ports/logger.port.js'
 import { RegisterUserDto } from '../dtos/register-user.dto.js'
+import { ConflictException } from '../../shared/exceptions/conflict.exception.js'
+import { uuidv7 } from 'uuidv7'
 
 export class RegisterUserUseCase {
   constructor(
@@ -19,7 +21,7 @@ export class RegisterUserUseCase {
     // Check if user already exists
     const existingUser = await this.userRepository.findByEmail(dto.email)
     if (existingUser) {
-      throw new Error('User with this email already exists')
+      throw new ConflictException('User with this email already exists', { email: dto.email })
     }
 
     // Create domain objects
@@ -50,6 +52,6 @@ export class RegisterUserUseCase {
   }
 
   private generateId(): string {
-    return `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    return uuidv7()
   }
 }

@@ -33,7 +33,6 @@ describe('RegisterUserUseCase', () => {
     mockEmailService = {
       sendWelcomeEmail: vi.fn(),
       sendPasswordResetEmail: vi.fn(),
-      sendWorkoutReminder: vi.fn(),
     }
 
     mockLogger = {
@@ -63,7 +62,9 @@ describe('RegisterUserUseCase', () => {
         expect(result).toBeDefined()
         expect(result.userId).toBeDefined()
         expect(typeof result.userId).toBe('string')
-        expect(result.userId).toMatch(/^user-\d+-[a-z0-9]+$/)
+        expect(result.userId).toMatch(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        )
       })
 
       it('should check for existing user by email', async () => {
