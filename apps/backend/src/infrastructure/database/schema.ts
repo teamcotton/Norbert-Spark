@@ -94,7 +94,7 @@ export const messages = pgTable(
 /**
  * Parts table: Stores message parts with polymorphic structure based on type field
  * Type discriminator values: text, reasoning, file, source_url, source_document,
- * tool-getWeatherInformation, tool-getLocation, data-weather
+ * step-start, data (for custom data parts like darkness, weather, etc.)
  */
 export const parts = pgTable(
   'parts',
@@ -137,6 +137,9 @@ export const parts = pgTable(
     toolToolCallId: varchar('tool_tool_call_id'),
     toolState: varchar('tool_state'),
     toolErrorText: varchar('tool_error_text'),
+
+    // Data part fields (for custom data like darkness, weather, etc.)
+    dataContent: jsonb('data_content'),
 
     // Provider metadata
     providerMetadata: jsonb('provider_metadata'),

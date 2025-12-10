@@ -61,8 +61,15 @@ export const mapUIMessagePartsToDBParts = (
           order: index,
           type: part.type,
         }
+      case 'data':
+        return {
+          messageId,
+          order: index,
+          type: part.type,
+          dataContent: part.data,
+        }
       default:
-        throw new Error(`Unsupported part type: ${part}`)
+        throw new Error(`Unsupported part type: ${JSON.stringify(part)}`)
     }
   })
 }
@@ -107,6 +114,11 @@ export const mapDBPartToUIMessagePart = (part: MyDBUIMessagePartSelect): MyUIMes
     case 'step-start':
       return {
         type: part.type,
+      }
+    case 'data':
+      return {
+        type: part.type,
+        data: part.dataContent as any,
       }
     default:
       throw new Error(`Unsupported part type: ${part.type}`)
