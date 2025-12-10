@@ -19,6 +19,7 @@ export const pool = new Pool({
   idleTimeoutMillis: parseInt(EnvConfig.DATABASE_IDLE_TIMEOUT_MS),
   max: parseInt(EnvConfig.DATABASE_POOL_MAX),
   min: parseInt(EnvConfig.DATABASE_POOL_MIN),
+  maxLifetimeSeconds: parseInt(EnvConfig.DATABASE_POOL_MAX_LIFETIME_SECONDS),
 })
 
 pool.on('error', (err) => {
