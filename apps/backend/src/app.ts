@@ -55,12 +55,13 @@ export function buildApp(options?: FastifyServerOptions): FastifyInstance {
     const { GET } = await import('./ai-persistance.js')
     const response = await GET(request)
 
-    // Set the response headers
+    // Set the response headers (includes Content-Type: application/json)
     response.headers.forEach((value, key) => {
       reply.header(key, value)
     })
 
-    // Get the response body and send it
+    // Get the response body (already JSON-stringified) and send it
+    // Using text() instead of json() to avoid double-serialization
     const body = await response.text()
     return reply.status(response.status).send(body)
   })
