@@ -127,8 +127,8 @@ export class Container {
 
       await this.app.listen({ port, host })
       const protocol = useHttps ? 'https' : 'http'
-      console.log(`Server listening on ${protocol}://${host}:${port}`)
-      console.log(`📚 API Documentation: ${protocol}://${host}:${port}/docs`)
+      this.logger.info(`Server listening on ${protocol}://${host}:${port}`)
+      this.logger.info(`📚 API Documentation: ${protocol}://${host}:${port}/docs`)
     } catch (error) {
       this.logger.error('Failed to start server', error as Error)
       throw new InternalErrorException('Failed to start server', error as Error)
