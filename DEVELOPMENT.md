@@ -4,10 +4,28 @@
 
 ### Installation
 
-```bash
-# Install pnpm if not already installed
-npm install -g pnpm
+It is recommend to use Corepack to manage pnpm versions:
 
+Using Corepack
+Due to an issue with outdated signatures in Corepack, Corepack should be updated to its latest version first:
+
+npm install --global corepack@latest
+
+Since v16.13, Node.js is shipping Corepack for managing package managers. This is an experimental feature, so you need to enable it by running:
+
+```bash
+corepack enable pnpm
+```
+
+This will automatically install pnpm on your system.
+
+You can pin the version of pnpm used on your project using the following command:
+
+```bash
+corepack use pnpm@latest-10
+```
+
+```bash
 # Install dependencies
 pnpm install
 ```
