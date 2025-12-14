@@ -129,6 +129,65 @@ describe('EnvConfig', () => {
     })
   })
 
+  describe('EMAIL_FROM_ADDRESS', () => {
+    it('should be a static readonly property', async () => {
+      process.env.EMAIL_FROM_ADDRESS = 'noreply@example.com'
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      const descriptor = Object.getOwnPropertyDescriptor(EnvConfig, 'EMAIL_FROM_ADDRESS')
+      expect(descriptor).toBeDefined()
+      expect(descriptor?.configurable).toBe(true)
+      expect(descriptor?.enumerable).toBe(true)
+    })
+
+    it('should use EMAIL_FROM_ADDRESS from environment when set', async () => {
+      process.env.EMAIL_FROM_ADDRESS = 'test@example.com'
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      vi.resetModules()
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBe('test@example.com')
+    })
+
+    it('should default to empty string when EMAIL_FROM_ADDRESS is not set', async () => {
+      delete process.env.EMAIL_FROM_ADDRESS
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      vi.resetModules()
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBe('')
+    })
+
+    it('should have type string', async () => {
+      process.env.EMAIL_FROM_ADDRESS = 'noreply@gym.com'
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      vi.resetModules()
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      expect(typeof EnvConfig.EMAIL_FROM_ADDRESS).toBe('string')
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBe('noreply@gym.com')
+    })
+
+    it('should not be obscured (plain string value)', async () => {
+      process.env.EMAIL_FROM_ADDRESS = 'support@example.com'
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      vi.resetModules()
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      // EMAIL_FROM_ADDRESS should be a plain string, not obscured
+      expect(typeof EnvConfig.EMAIL_FROM_ADDRESS).toBe('string')
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBe('support@example.com')
+      // Should not have obscured behavior
+      expect(String(EnvConfig.EMAIL_FROM_ADDRESS)).toBe('support@example.com')
+    })
+  })
+
   describe('validate()', () => {
     it('should have DATABASE_URL validation logic', async () => {
       const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
@@ -225,6 +284,18 @@ describe('EnvConfig', () => {
 
       // Prevent unused variable warning
       void _typeCheck
+    })
+
+    it('should have static EMAIL_FROM_ADDRESS property accessible without instantiation', async () => {
+      process.env.EMAIL_FROM_ADDRESS = 'test@example.com'
+      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+
+      vi.resetModules()
+      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
+
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBeDefined()
+      expect(typeof EnvConfig.EMAIL_FROM_ADDRESS).toBe('string')
+      expect(EnvConfig.EMAIL_FROM_ADDRESS).toBe('test@example.com')
     })
 
     it('should have static validate method accessible without instantiation', async () => {

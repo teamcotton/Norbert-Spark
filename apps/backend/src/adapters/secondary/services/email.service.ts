@@ -4,6 +4,7 @@ import { Resend } from 'resend'
 import { obscured } from 'obscured'
 import type { Obscured } from 'obscured'
 import { ExternalServiceException } from '../../../shared/exceptions/external-service.exception.js'
+import { EnvConfig } from '../../../infrastructure/config/env.config.js'
 
 export class ResendService implements EmailServicePort {
   constructor(
@@ -19,7 +20,7 @@ export class ResendService implements EmailServicePort {
     this.logger.info('Sending welcome email', { to, name })
 
     const emailData = {
-      from: 'onboarding@resend.dev',
+      from: EnvConfig.EMAIL_FROM_ADDRESS,
       to: 'andy.walpole@gmail.com',
       subject: 'Hello World',
       html: '<p>Congrats on sending your <strong>first email</strong>!</p>',
