@@ -135,7 +135,7 @@ cd apps/backend/certs && openssl req -x509 -newkey rsa:4096 \\
       this.logger.info(`📚 API Documentation: ${protocol}://${host}:${port}/docs`)
     } catch (error) {
       this.logger.error('Failed to start server', error as Error)
-      throw new InternalErrorException('Failed to start server', error as Error)
+      process.exit(0)
     }
   }
 
