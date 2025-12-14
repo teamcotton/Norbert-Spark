@@ -55,11 +55,11 @@ export class Container {
 
       let httpsOptions: FastifyServerOptions | undefined
       if (useHttps) {
-        try {
-          // __dirname points to src/ or dist/ directory
-          // Go up one level to backend/, then into certs/
-          const certsPath = join(__dirname, '..', 'certs')
+        // __dirname points to src/ or dist/ directory
+        // Go up one level to backend/, then into certs/
+        const certsPath = join(__dirname, '..', 'certs')
 
+        try {
           httpsOptions = {
             https: {
               key: readFileSync(join(certsPath, 'key.pem')),
@@ -68,7 +68,6 @@ export class Container {
           } as FastifyServerOptions
           this.logger.info('🔒 HTTPS enabled for development')
         } catch (error) {
-          const certsPath = join(__dirname, '..', 'certs')
           const instructions = `To generate certificates with proper Subject Alternative Names:
 cd apps/backend/certs && openssl req -x509 -newkey rsa:4096 \\
   -keyout key.pem -out cert.pem -sha256 -days 365 -nodes \\
