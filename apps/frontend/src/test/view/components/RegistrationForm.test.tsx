@@ -50,9 +50,10 @@ describe('RegistrationForm', () => {
       expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/^name/i)).toBeInTheDocument()
 
-      const passwordFields = screen.getAllByLabelText(/password/i)
+      const passwordFields = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
       expect(passwordFields).toHaveLength(2)
-      expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument()
     })
 
     it('should render OAuth buttons', () => {
@@ -140,7 +141,9 @@ describe('RegistrationForm', () => {
       }
       render(<RegistrationForm {...props} />)
 
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement
+      const confirmPasswordInput = screen.getByLabelText(/confirm password/i, {
+        selector: 'input',
+      }) as HTMLInputElement
       expect(confirmPasswordInput.value).toBe('mypassword123')
     })
   })
@@ -252,7 +255,7 @@ describe('RegistrationForm', () => {
 
       render(<RegistrationForm {...defaultProps} />)
 
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const confirmPasswordInput = screen.getByLabelText(/confirm password/i, { selector: 'input' })
       fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } })
 
       expect(mockOnFieldChange).toHaveBeenCalledWith('confirmPassword')
@@ -342,7 +345,7 @@ describe('RegistrationForm', () => {
     it('should have confirm password field with correct type', () => {
       render(<RegistrationForm {...defaultProps} />)
 
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const confirmPasswordInput = screen.getByLabelText(/confirm password/i, { selector: 'input' })
       expect(confirmPasswordInput).toHaveAttribute('type', 'password')
     })
 
@@ -408,14 +411,18 @@ describe('RegistrationForm', () => {
       render(<RegistrationForm {...props} />)
 
       const emailInput = screen.getByLabelText(/email address/i)
-      const nameInput = screen.getByLabelText(/^name/i)
-      const passwordInputs = screen.getAllByLabelText(/password/i)
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const nameInput = screen.getByLabelText(/name/i)
+      const [passwordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
+      const [, confirmPasswordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
 
       // Fields with errors should have aria-invalid
       expect(emailInput).toHaveAttribute('aria-invalid', 'true')
       expect(nameInput).toHaveAttribute('aria-invalid', 'true')
-      expect(passwordInputs[0]).toHaveAttribute('aria-invalid', 'true')
+      expect(passwordInput).toHaveAttribute('aria-invalid', 'true')
       expect(confirmPasswordInput).toHaveAttribute('aria-invalid', 'true')
     })
 
@@ -424,12 +431,16 @@ describe('RegistrationForm', () => {
 
       const emailInput = screen.getByLabelText(/email address/i)
       const nameInput = screen.getByLabelText(/^name/i)
-      const passwordInputs = screen.getAllByLabelText(/password/i)
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const [passwordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
+      const [, confirmPasswordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
 
       expect(emailInput).toHaveAttribute('aria-invalid', 'false')
       expect(nameInput).toHaveAttribute('aria-invalid', 'false')
-      expect(passwordInputs[0]).toHaveAttribute('aria-invalid', 'false')
+      expect(passwordInput).toHaveAttribute('aria-invalid', 'false')
       expect(confirmPasswordInput).toHaveAttribute('aria-invalid', 'false')
     })
   })
@@ -452,13 +463,17 @@ describe('RegistrationForm', () => {
       // Fill in all fields
       const emailInput = screen.getByLabelText(/email address/i)
       const nameInput = screen.getByLabelText(/^name/i)
-      const passwordInputs = screen.getAllByLabelText(/password/i)
-      const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const [passwordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
+      const [, confirmPasswordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
 
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
       fireEvent.change(nameInput, { target: { value: 'John Doe' } })
-      fireEvent.change(passwordInputs[0] as Element, { target: { value: 'securepassword123' } })
-      fireEvent.change(confirmPasswordInput, { target: { value: 'securepassword123' } })
+      fireEvent.change(passwordInput!, { target: { value: 'securepassword123' } })
+      fireEvent.change(confirmPasswordInput!, { target: { value: 'securepassword123' } })
 
       // Submit the form
       const submitButton = screen.getByRole('button', { name: /create account/i })
@@ -601,6 +616,234 @@ describe('RegistrationForm', () => {
       const passwordInputs = screen.getAllByLabelText(/password/i)
       const passwordInput = passwordInputs[0] as HTMLInputElement
       expect(passwordInput.value).toBe(specialPassword)
+    })
+  })
+
+  describe('Password Visibility Toggle', () => {
+    it('should render password field with visibility toggle button', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+      expect(toggleButton).toBeInTheDocument()
+    })
+
+    it('should render confirm password field with visibility toggle button', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+      expect(toggleButton).toBeInTheDocument()
+    })
+
+    it('should initially render password field as type password', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const [passwordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
+      expect(passwordInput).toHaveAttribute('type', 'password')
+    })
+
+    it('should initially render confirm password field as type password', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const [, confirmPasswordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input[type="password"]',
+      })
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password')
+    })
+
+    it('should toggle password field type from password to text when clicking visibility button', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+      const passwordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[0]
+
+      // Initially type="password"
+      expect(passwordInput).toHaveAttribute('type', 'password')
+
+      // Click toggle button
+      fireEvent.click(toggleButton)
+
+      // Should change to type="text"
+      expect(passwordInput).toHaveAttribute('type', 'text')
+    })
+
+    it('should toggle password field type from text back to password when clicking visibility button twice', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+      const passwordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[0]
+
+      // Click toggle button twice
+      fireEvent.click(toggleButton)
+      fireEvent.click(toggleButton)
+
+      // Should be back to type="password"
+      expect(passwordInput).toHaveAttribute('type', 'password')
+    })
+
+    it('should toggle confirm password field type from password to text when clicking visibility button', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+      const confirmPasswordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[1]
+
+      // Initially type="password"
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password')
+
+      // Click toggle button
+      fireEvent.click(toggleButton)
+
+      // Should change to type="text"
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text')
+    })
+
+    it('should toggle confirm password field type from text back to password when clicking visibility button twice', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+      const confirmPasswordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[1]
+
+      // Click toggle button twice
+      fireEvent.click(toggleButton)
+      fireEvent.click(toggleButton)
+
+      // Should be back to type="password"
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password')
+    })
+
+    it('should toggle password and confirm password independently', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const passwordToggle = screen.getByLabelText(/toggle password visibility/i)
+      const confirmPasswordToggle = screen.getByLabelText(/toggle confirm password visibility/i)
+      const [passwordInput, confirmPasswordInput] = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })
+
+      // Toggle only password field
+      fireEvent.click(passwordToggle)
+
+      expect(passwordInput).toHaveAttribute('type', 'text')
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password')
+
+      // Toggle only confirm password field
+      fireEvent.click(confirmPasswordToggle)
+
+      expect(passwordInput).toHaveAttribute('type', 'text')
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text')
+
+      // Toggle password back
+      fireEvent.click(passwordToggle)
+
+      expect(passwordInput).toHaveAttribute('type', 'password')
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text')
+    })
+
+    it('should display Visibility icon when password is hidden', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+      const visibilityIcon = toggleButton.querySelector('svg[data-testid="VisibilityIcon"]')
+
+      expect(visibilityIcon).toBeInTheDocument()
+    })
+
+    it('should display VisibilityOff icon when password is visible', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+
+      // Click to show password
+      fireEvent.click(toggleButton)
+
+      const visibilityOffIcon = toggleButton.querySelector('svg[data-testid="VisibilityOffIcon"]')
+      expect(visibilityOffIcon).toBeInTheDocument()
+    })
+
+    it('should display Visibility icon when confirm password is hidden', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+      const visibilityIcon = toggleButton.querySelector('svg[data-testid="VisibilityIcon"]')
+
+      expect(visibilityIcon).toBeInTheDocument()
+    })
+
+    it('should display VisibilityOff icon when confirm password is visible', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+
+      // Click to show password
+      fireEvent.click(toggleButton)
+
+      const visibilityOffIcon = toggleButton.querySelector('svg[data-testid="VisibilityOffIcon"]')
+      expect(visibilityOffIcon).toBeInTheDocument()
+    })
+
+    it('should preserve password value when toggling visibility', () => {
+      const props = {
+        ...defaultProps,
+        formData: { ...defaultProps.formData, password: 'mySecretPassword123' },
+      }
+      render(<RegistrationForm {...props} />)
+
+      const toggleButton = screen.getByLabelText(/toggle password visibility/i)
+      const passwordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[0] as HTMLInputElement
+
+      // Value before toggle
+      expect(passwordInput.value).toBe('mySecretPassword123')
+
+      // Toggle visibility
+      fireEvent.click(toggleButton)
+
+      // Value should remain the same
+      expect(passwordInput.value).toBe('mySecretPassword123')
+
+      // Toggle back
+      fireEvent.click(toggleButton)
+
+      // Value should still remain the same
+      expect(passwordInput.value).toBe('mySecretPassword123')
+    })
+
+    it('should preserve confirm password value when toggling visibility', () => {
+      const props = {
+        ...defaultProps,
+        formData: { ...defaultProps.formData, confirmPassword: 'myConfirmPassword123' },
+      }
+      render(<RegistrationForm {...props} />)
+
+      const toggleButton = screen.getByLabelText(/toggle confirm password visibility/i)
+      const confirmPasswordInput = screen.getAllByLabelText(/password/i, {
+        selector: 'input',
+      })[1] as HTMLInputElement
+
+      // Value before toggle
+      expect(confirmPasswordInput.value).toBe('myConfirmPassword123')
+
+      // Toggle visibility
+      fireEvent.click(toggleButton)
+
+      // Value should remain the same
+      expect(confirmPasswordInput.value).toBe('myConfirmPassword123')
+
+      // Toggle back
+      fireEvent.click(toggleButton)
+
+      // Value should still remain the same
+      expect(confirmPasswordInput.value).toBe('myConfirmPassword123')
     })
   })
 })
