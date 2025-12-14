@@ -20,7 +20,7 @@ test.describe('Registration Page', () => {
     await expect(page.getByLabel(/email address/i)).toBeVisible()
     await expect(page.getByLabel(/^name/i)).toBeVisible()
     await expect(page.getByLabel(/^password/i, { exact: false })).toBeVisible()
-    await expect(page.locator('input[type="password"]').nth(1)).toBeVisible() // Confirm password input
+    await expect(page.locator('input[autocomplete="new-password"]').nth(1)).toBeVisible() // Confirm password input
 
     // Check submit button
     await expect(page.getByRole('button', { name: /create account/i })).toBeVisible()
@@ -41,7 +41,7 @@ test.describe('Registration Page', () => {
     const emailInput = page.getByLabel(/email address/i)
     const nameInput = page.getByLabel(/^name/i)
     const passwordInput = page.getByLabel(/^password/i, { exact: false }).first()
-    const confirmPasswordInput = page.locator('input[type="password"]').nth(1)
+    const confirmPasswordInput = page.locator('input[autocomplete="new-password"]').nth(1)
 
     // Fill in form fields
     await emailInput.fill('test@example.com')
@@ -73,7 +73,7 @@ test.describe('Registration Page', () => {
   })
 
   test('should toggle confirm password visibility', async ({ page }) => {
-    // Use a more stable selector - get the input by its label text via the id attribute
+    // Use autocomplete selector which remains stable when type attribute changes
     const confirmPasswordInput = page.locator('input[autocomplete="new-password"]').nth(1)
     const confirmPasswordToggle = page.getByLabel(/toggle confirm password visibility/i)
 
@@ -97,7 +97,7 @@ test.describe('Registration Page', () => {
       .getByLabel(/^password/i, { exact: false })
       .first()
       .fill('securepassword123')
-    await page.locator('input[type="password"]').nth(1).fill('securepassword123')
+    await page.locator('input[autocomplete="new-password"]').nth(1).fill('securepassword123')
 
     // Click submit button
     const submitButton = page.getByRole('button', { name: /create account/i })
@@ -123,7 +123,7 @@ test.describe('Registration Page', () => {
     const emailInput = page.getByLabel(/email address/i)
     const nameInput = page.getByLabel(/^name/i)
     const passwordInput = page.getByLabel(/^password/i, { exact: false }).first()
-    const confirmPasswordInput = page.locator('input[type="password"]').nth(1)
+    const confirmPasswordInput = page.locator('input[autocomplete="new-password"]').nth(1)
 
     // Check required attributes
     await expect(emailInput).toHaveAttribute('required', '')
@@ -168,7 +168,7 @@ test.describe('Registration Page', () => {
     const emailInput = page.getByLabel(/email address/i)
     const nameInput = page.getByLabel(/^name/i)
     const passwordInput = page.getByLabel(/^password/i, { exact: false }).first()
-    const confirmPasswordInput = page.locator('input[type="password"]').nth(1)
+    const confirmPasswordInput = page.locator('input[autocomplete="new-password"]').nth(1)
 
     // All inputs should be accessible via their labels
     await expect(emailInput).toBeVisible()
@@ -177,7 +177,7 @@ test.describe('Registration Page', () => {
     await expect(confirmPasswordInput).toBeVisible()
   })
 
-  test('should clear form fields when typing', async ({ page }) => {
+  test('should update field value when filling after clearing', async ({ page }) => {
     const emailInput = page.getByLabel(/email address/i)
 
     // Type something
