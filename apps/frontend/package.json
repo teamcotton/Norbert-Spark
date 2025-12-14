@@ -72,5 +72,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.48.1",
     "vitest": "^4.0.15"
-  }
+  },
+  "packageManager": "pnpm@10.25.0",
+  "preinstall": "npx --yes only-allow pnpm"
 }

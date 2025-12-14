@@ -32,12 +32,14 @@ export const user = pgTable(
     name: text('name').notNull(),
     password: text('password').notNull(),
     email: citext('email').notNull().unique(),
+    role: text('role').notNull().default('user'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`now()`),
   },
   (table) => ({
     passwordLengthCheck: check('password_length_check', sql`length(${table.password}) = 60`),
+    roleCheck: check('role_check', sql`${table.role} IN ('user', 'admin', 'moderator')`),
   })
 )
 
