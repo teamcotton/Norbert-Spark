@@ -32,8 +32,7 @@ export async function registerUser(data: RegisterUserData): Promise<RegisterUser
       },
       // Extract the actual password value for API transmission
       body: JSON.stringify({
-        email: data.email,
-        name: data.name,
+        ...data,
         password: obscured.value(obscuredData.password),
       }),
     })
