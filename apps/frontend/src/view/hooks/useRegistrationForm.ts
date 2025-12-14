@@ -1,6 +1,6 @@
 import type { Obscured } from 'obscured'
 import { obscured } from 'obscured'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { EmailSchema, NameSchema, PasswordSchema } from '@/domain/auth/index.js'
 
@@ -9,7 +9,6 @@ interface FormData {
   name: string
   password: string
   confirmPassword: string
-  [key: string]: string
 }
 
 interface FormErrors {
@@ -42,7 +41,14 @@ export function useRegistrationForm() {
 
   const validateForm = (): boolean => {
     // Obscure sensitive fields before validation
-    const obscuredData = obscured.obscureKeys(formData, ['password', 'confirmPassword'])
+    // Type assertion needed because FormData lacks index signature for Record<string, unknown>
+    const obscuredData = obscured.obscureKeys(formData as unknown as Record<string, unknown>, [
+      'password',
+      'confirmPassword',
+    ]) as unknown as FormData & {
+      password: Obscured<string>
+      confirmPassword: Obscured<string>
+    }
 
     const newErrors: FormErrors = {
       email: '',
@@ -73,7 +79,7 @@ export function useRegistrationForm() {
     } else {
       const result = PasswordSchema.safeParse(obscured.value(obscuredData.password))
       if (!result.success) {
-        newErrors.password = newErrors.password =
+        newErrors.password =
           result.error.issues[0]?.message || 'Password must be at least 12 characters'
       }
     }
@@ -94,7 +100,6 @@ export function useRegistrationForm() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     if (validateForm()) {
-      // Obscure sensitive fields before processing
       // Handle registration
       // TODO: Implement registration API call with obscuredData
       alert('Registration successful!')
