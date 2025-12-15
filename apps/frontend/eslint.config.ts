@@ -15,11 +15,11 @@ import rootConfig from '../../eslint.config.js'
 
 const config: Linter.Config[] = [
   ...rootConfig,
+  ...tanstackQueryPlugin.configs['flat/recommended'],
   {
     // Register plugins globally for all files
     plugins: {
       '@next/next': nextPlugin,
-      '@tanstack/query': tanstackQueryPlugin,
       vitest: vitestPlugin,
       drizzle: drizzlePlugin,
       jsdoc,
@@ -71,9 +71,6 @@ const config: Linter.Config[] = [
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/triple-slash-reference': 'off',
       'no-unused-vars': 'off',
-      // TanStack Query recommended rules (manually configured for v4)
-      '@tanstack/query/exhaustive-deps': 'error',
-      '@tanstack/query/stable-query-client': 'error',
     },
   },
   {
@@ -91,8 +88,6 @@ const config: Linter.Config[] = [
     },
     rules: {
       ...vitestPlugin.configs.recommended.rules,
-      // Disable TanStack Query rules that don't work well in test files with ESLint 9
-      '@tanstack/query/stable-query-client': 'off',
     },
   },
   {
