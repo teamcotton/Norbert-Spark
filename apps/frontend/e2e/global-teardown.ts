@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 async function globalTeardown() {
   console.warn('🧹 Starting E2E test environment teardown...')
