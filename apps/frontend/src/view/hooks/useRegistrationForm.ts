@@ -38,6 +38,7 @@ export function useRegistrationForm() {
     mutationFn: registerUserApi,
     onSuccess: (data) => {
       // Handle successful registration
+      // eslint-disable-next-line no-console
       console.log('Registration successful:', data.data)
       // TODO: Redirect to success page or show success message
     },
