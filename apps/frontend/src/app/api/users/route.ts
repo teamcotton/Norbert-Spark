@@ -25,7 +25,7 @@ export async function GET() {
       const nodeFetch = (await import('node-fetch')).default
 
       const agent = new https.Agent({
-        rejectUnauthorized: false,
+        rejectUnauthorized: process.env.NODE_ENV === 'production',
       })
 
       response = (await nodeFetch(`${apiUrl}/users`, {
