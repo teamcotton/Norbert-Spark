@@ -66,7 +66,7 @@ async function globalSetup() {
     process.env.TEST_DATABASE_URL = connectionString
 
     console.warn('✅ E2E test environment ready!')
-    console.warn(`📊 Database URL: ${connectionString}`)
+    console.warn(`📊 Database running at ${host}:${port}`)
   } catch (error) {
     console.error('❌ Failed to set up E2E test environment:', error)
     if (postgresContainer) {
