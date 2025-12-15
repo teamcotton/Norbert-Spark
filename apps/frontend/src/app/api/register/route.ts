@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     // Call infrastructure layer to handle the API request
     const result = await registerUserApi(body)
 
-    // Return appropriate status code based on the result
+    // Return 200 for success, 400 for business logic errors (e.g., user already exists)
     const statusCode = result.success ? 200 : 400
 
     return Response.json(result, { status: statusCode })

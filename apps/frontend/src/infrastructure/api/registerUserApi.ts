@@ -47,14 +47,22 @@ export async function registerUserApi(userData: RegisterUserData): Promise<Regis
     }),
   })
 
-  const result = (await response.json()) as RegisterUserResponse
-
   if (!response.ok) {
+    // Try to parse error response, but handle cases where response body is invalid
+    let errorMessage = 'Registration failed'
+    try {
+      const errorResult = (await response.json()) as RegisterUserResponse
+      errorMessage = errorResult.error || errorMessage
+    } catch {
+      // If JSON parsing fails, use default error message
+    }
+
     return {
       success: false,
-      error: result.error || 'Registration failed',
+      error: errorMessage,
     }
   }
 
+  const result = (await response.json()) as RegisterUserResponse
   return result
 }
