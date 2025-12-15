@@ -20,7 +20,7 @@ interface RegisterUserResponse {
 
 export async function registerUser(data: RegisterUserData): Promise<RegisterUserResponse> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+    const apiUrl = process.env.BACKEND_AI_CALLBACK_URL
 
     // Obscure sensitive data in memory to prevent exposure in logs/debugging
     const obscuredData = obscured.obscureKeys(data, ['password'])
