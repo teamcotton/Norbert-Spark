@@ -1,6 +1,7 @@
 import { obscured } from 'obscured'
 import { useState } from 'react'
 
+import { registerUser } from '@/application/actions/registerUser.js'
 import { EmailSchema, NameSchema, PasswordSchema } from '@/domain/auth/index.js'
 
 interface FormData extends Record<string, string> {
@@ -31,6 +32,8 @@ export function useRegistrationForm() {
     password: '',
     confirmPassword: '',
   })
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (field: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [field]: event.target.value })
@@ -93,15 +96,33 @@ export function useRegistrationForm() {
     return Object.values(newErrors).every((error) => error === '')
   }
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (validateForm()) {
-      // Obscure sensitive fields before processing
-      const obscuredData = obscured.obscureKeys(formData, ['password', 'confirmPassword'])
+      setIsSubmitting(true)
 
-      // Handle registration
-      // TODO: Implement registration API call with obscuredData
-      alert(`Registration successful! ${JSON.stringify(obscuredData)}`)
+      try {
+        const result = await registerUser(formData)
+
+        if (result.success) {
+          // Handle successful registration
+          // TODO: Redirect to success page or show success message
+          console.warn('Registration successful:', result.data)
+        } else {
+          // Handle registration error
+          setErrors((prev) => ({
+            ...prev,
+            email: result.error || 'Registration failed',
+          }))
+        }
+      } catch {
+        setErrors((prev) => ({
+          ...prev,
+          email: 'An unexpected error occurred. Please try again.',
+        }))
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -118,6 +139,7 @@ export function useRegistrationForm() {
   return {
     formData,
     errors,
+    isSubmitting,
     handleChange,
     handleSubmit,
     handleGoogleSignUp,

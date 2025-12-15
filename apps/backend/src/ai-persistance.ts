@@ -17,6 +17,7 @@ function processUserUUID(userInput: string | Buffer) {
 
 export const GET = async (req: FastifyRequest): Promise<Response> => {
   const url = new URL(req.url, `http://${req.hostname}`)
+
   const chatId = url.searchParams.get('id')
 
   if (!chatId) {
