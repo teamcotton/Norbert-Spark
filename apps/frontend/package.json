@@ -28,6 +28,8 @@
     "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.6",
     "@mui/system": "^7.3.6",
+    "@mui/x-data-grid": "^8.22.0",
+    "@mui/x-data-grid-generator": "^8.22.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "ai": "^5.0.113",
