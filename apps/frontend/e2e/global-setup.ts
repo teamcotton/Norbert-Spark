@@ -8,6 +8,9 @@ import postgres from 'postgres'
 
 let postgresContainer: StartedPostgreSqlContainer
 
+// Export the container so teardown logic can access and stop it
+export { postgresContainer }
+
 async function globalSetup() {
   console.warn('🚀 Starting E2E test environment setup...')
 
@@ -23,8 +26,9 @@ async function globalSetup() {
 
     const host = postgresContainer.getHost()
     const port = postgresContainer.getMappedPort(5432)
-    const connectionString = `postgresql://test:test@${host}:${port}/level2gym_test`
-
+    const username = postgresContainer.getUsername()
+    const password = postgresContainer.getPassword()
+    const connectionString = `postgresql://${username}:${password}@${host}:${port}/level2gym_test`
     console.warn(`✅ PostgreSQL container started at ${host}:${port}`)
 
     // Create required PostgreSQL extensions
@@ -65,6 +69,14 @@ async function globalSetup() {
     console.warn(`📊 Database URL: ${connectionString}`)
   } catch (error) {
     console.error('❌ Failed to set up E2E test environment:', error)
+    if (postgresContainer) {
+      try {
+        await postgresContainer.stop()
+        console.warn('🛑 PostgreSQL container stopped due to setup failure.')
+      } catch (stopError) {
+        console.error('⚠️ Failed to stop PostgreSQL container:', stopError)
+      }
+    }
     throw error
   }
 }
