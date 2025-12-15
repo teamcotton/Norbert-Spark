@@ -135,7 +135,7 @@ paths:
   /users:
     get:
       summary: Get all users
-      description: Endpoint for all users in date order
+      description: Retrieves all users in date order
       operationId: getAllUsers
       tags:
         - users

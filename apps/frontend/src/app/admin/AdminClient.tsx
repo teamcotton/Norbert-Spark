@@ -4,14 +4,7 @@ import { Box, Container, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import { useState } from 'react'
 
-// User type based on database schema
-interface User {
-  id: string
-  name: string
-  email: string
-  role: 'user' | 'admin' | 'moderator'
-  createdAt: string
-}
+import type { User } from '@/domain/user/user.js'
 
 interface AdminClientProps {
   users: readonly User[]

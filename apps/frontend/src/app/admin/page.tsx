@@ -1,13 +1,8 @@
+import type { User } from '@/domain/user/user.js'
+
 import AdminClient from './AdminClient.js'
-import * as https from 'node:https';
-// User type based on database schema
-interface User {
-  id: string
-  name: string
-  email: string
-  role: 'user' | 'admin' | 'moderator'
-  createdAt: string
-}
+import * as https from 'node:https'
+
 
 async function getUsers(): Promise<readonly User[]> {
   try {
