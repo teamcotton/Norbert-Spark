@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UserController } from '../../../../src/adapters/primary/http/user.controller.js'
 import { RegisterUserDto } from '../../../../src/application/dtos/register-user.dto.js'
+import { GetAllUsersUseCase } from '../../../../src/application/use-cases/get-all-users.use-case.js'
 import { RegisterUserUseCase } from '../../../../src/application/use-cases/register-user.use-case.js'
 import { ValidationException } from '../../../../src/shared/exceptions/validation.exception.js'
 
 describe('UserController', () => {
   let controller: UserController
   let mockRegisterUserUseCase: RegisterUserUseCase
+  let mockGetAllUsersUseCase: GetAllUsersUseCase
   let mockRequest: FastifyRequest
   let mockReply: FastifyReply
 
@@ -21,8 +23,13 @@ describe('UserController', () => {
       execute: vi.fn(),
     } as any
 
+    // Create mock get all users use case
+    mockGetAllUsersUseCase = {
+      execute: vi.fn(),
+    } as any
+
     // Create controller instance with mocked use case
-    controller = new UserController(mockRegisterUserUseCase)
+    controller = new UserController(mockRegisterUserUseCase, mockGetAllUsersUseCase)
 
     // Create mock Fastify reply with chainable methods
     mockReply = {
@@ -39,7 +46,7 @@ describe('UserController', () => {
 
   describe('constructor', () => {
     it('should create instance with RegisterUserUseCase dependency', () => {
-      const instance = new UserController(mockRegisterUserUseCase)
+      const instance = new UserController(mockRegisterUserUseCase, mockGetAllUsersUseCase)
 
       expect(instance).toBeInstanceOf(UserController)
       expect(instance).toBeDefined()
@@ -67,8 +74,9 @@ describe('UserController', () => {
 
       controller.registerRoutes(mockApp)
 
-      expect(mockApp.get).toHaveBeenCalledTimes(1)
+      expect(mockApp.get).toHaveBeenCalledTimes(2)
       expect(mockApp.get).toHaveBeenCalledWith('/users/:id', expect.any(Function))
+      expect(mockApp.get).toHaveBeenCalledWith('/users', expect.any(Function))
     })
 
     it('should bind controller context to route handlers', () => {

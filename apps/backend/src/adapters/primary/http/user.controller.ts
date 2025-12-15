@@ -1,14 +1,37 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { RegisterUserUseCase } from '../../../application/use-cases/register-user.use-case.js'
+import { GetAllUsersUseCase } from '../../../application/use-cases/get-all-users.use-case.js'
 import { RegisterUserDto } from '../../../application/dtos/register-user.dto.js'
 import { BaseException } from '../../../shared/exceptions/base.exception.js'
 
 export class UserController {
-  constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly getAllUsersUseCase: GetAllUsersUseCase
+  ) {}
 
   registerRoutes(app: FastifyInstance): void {
     app.post('/users/register', this.register.bind(this))
     app.get('/users/:id', this.getUser.bind(this))
+    app.get('/users', this.getAllUsers.bind(this))
+  }
+
+  async getAllUsers(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const users = await this.getAllUsersUseCase.execute()
+
+      reply.code(200).send({
+        success: true,
+        data: users,
+      })
+    } catch (error) {
+      const err = error as Error
+      const statusCode = err instanceof BaseException ? err.statusCode : 500
+      reply.code(statusCode).send({
+        success: false,
+        error: err.message,
+      })
+    }
   }
 
   async register(request: FastifyRequest, reply: FastifyReply): Promise<void> {

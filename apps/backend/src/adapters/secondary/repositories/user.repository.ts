@@ -32,6 +32,15 @@ export class PostgresUserRepository implements UserRepositoryPort {
     }
   }
 
+  async findAll(): Promise<User[]> {
+    try {
+      const result = await db.select().from(user)
+      return result.map((record) => this.toDomain(record))
+    } catch (error) {
+      throw new DatabaseException('Failed to find all users', { error })
+    }
+  }
+
   async findById(id: string): Promise<User | null> {
     try {
       const result = await db.select().from(user).where(eq(user.userId, id))
