@@ -3,7 +3,6 @@ import type { User } from '@/domain/user/user.js'
 import AdminClient from './AdminClient.js'
 import * as https from 'node:https'
 
-
 async function getUsers(): Promise<readonly User[]> {
   try {
     const apiUrl = process.env.BACKEND_AI_CALLBACK_URL
