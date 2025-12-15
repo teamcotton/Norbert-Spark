@@ -1,5 +1,5 @@
 import AdminClient from './AdminClient.js'
-
+import * as https from 'node:https';
 // User type based on database schema
 interface User {
   id: string
@@ -20,20 +20,20 @@ async function getUsers(): Promise<readonly User[]> {
     // eslint-disable-next-line no-console
     console.log('Fetching users from API:', `${apiUrl}/users`)
 
-    // Temporarily disable TLS verification for development with self-signed certs
-    const originalRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED
+    // Use custom HTTPS agent to allow self-signed certificates in development only
+    let fetchAgent;
     if (process.env.NODE_ENV !== 'production') {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+      fetchAgent = new https.Agent({ rejectUnauthorized: false });
     }
 
-    try {
-      const response = await fetch(`${apiUrl}/users`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store', // Don't cache, always fetch fresh data
-      })
+    const response = await fetch(`${apiUrl}/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store', // Don't cache, always fetch fresh data
+      ...(fetchAgent ? { agent: fetchAgent } : {}),
+    })
 
       if (!response.ok) {
         console.warn('Failed to fetch users from API')
@@ -60,14 +60,14 @@ async function getUsers(): Promise<readonly User[]> {
           createdAt: user.createdAt,
         })) || []
       )
-    } finally {
-      // Restore original value
-      if (originalRejectUnauthorized !== undefined) {
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = originalRejectUnauthorized
-      } else {
-        delete process.env.NODE_TLS_REJECT_UNAUTHORIZED
-      }
-    }
+    // No finally block needed: agent is request-local, not global
+
+
+
+
+
+
+
   } catch (error) {
     console.warn('Error fetching users, using empty array:', error)
     return []
