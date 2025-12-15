@@ -81,6 +81,7 @@ export class PostgresUserRepository implements UserRepositoryPort {
         })
         .where(eq(user.userId, userEntity.id))
     } catch (error) {
+      // TODO: remove this error check
       if (DatabaseUtil.isDuplicateKeyError(error)) {
         throw new ConflictException('User with this email already exists', {
           email: userEntity.getEmail(),

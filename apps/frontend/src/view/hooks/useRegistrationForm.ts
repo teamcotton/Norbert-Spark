@@ -1,8 +1,9 @@
+import { useMutation } from '@tanstack/react-query'
 import { obscured } from 'obscured'
 import { useState } from 'react'
 
-import { registerUser } from '@/application/actions/registerUser.js'
 import { EmailSchema, NameSchema, PasswordSchema } from '@/domain/auth/index.js'
+import { registerUserApi } from '@/infrastructure/api/registerUserApi.js'
 
 interface FormData extends Record<string, string> {
   email: string
@@ -34,6 +35,22 @@ export function useRegistrationForm() {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const registerMutation = useMutation({
+    mutationFn: registerUserApi,
+    onSuccess: (data) => {
+      // Handle successful registration
+      console.warn('Registration successful:', data.data)
+      // TODO: Redirect to success page or show success message
+    },
+    onError: (error: Error) => {
+      // Handle registration error
+      setErrors((prev) => ({
+        ...prev,
+        email: error.message || 'Registration failed',
+      }))
+    },
+  })
 
   const handleChange = (field: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [field]: event.target.value })
@@ -102,24 +119,13 @@ export function useRegistrationForm() {
       setIsSubmitting(true)
 
       try {
-        const result = await registerUser(formData)
-
-        if (result.success) {
-          // Handle successful registration
-          // TODO: Redirect to success page or show success message
-          console.warn('Registration successful:', result.data)
-        } else {
-          // Handle registration error
-          setErrors((prev) => ({
-            ...prev,
-            email: result.error || 'Registration failed',
-          }))
-        }
+        await registerMutation.mutateAsync({
+          email: formData.email,
+          name: formData.name,
+          password: formData.password,
+        })
       } catch {
-        setErrors((prev) => ({
-          ...prev,
-          email: 'An unexpected error occurred. Please try again.',
-        }))
+        // Error handling is done in onError callback
       } finally {
         setIsSubmitting(false)
       }

@@ -2,6 +2,11 @@
 
 import { obscured } from 'obscured'
 
+/**
+ * @deprecated Use registerUserApi from @/infrastructure/api/registerUserApi.ts with React Query instead
+ * This server action is kept for backward compatibility only
+ */
+
 interface RegisterUserData extends Record<string, string> {
   email: string
   name: string
