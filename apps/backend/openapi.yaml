@@ -222,7 +222,7 @@ components:
           example: John Doe
         role:
           type: string
-          enum: [user, admin]
+          enum: [user, admin, moderator]
           example: user
           description: User's role in the system
         createdAt:
