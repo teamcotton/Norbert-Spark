@@ -1,6 +1,7 @@
 'use server'
 
 import { obscured } from 'obscured'
+import { EmailSchema, NameSchema, PasswordSchema } from '@/domain/auth'
 
 interface RegisterUserData extends Record<string, string> {
   email: string
@@ -20,6 +21,31 @@ interface RegisterUserResponse {
 
 export async function registerUser(data: RegisterUserData): Promise<RegisterUserResponse> {
   try {
+    // Validate input using domain schemas before making API call
+    const emailValidation = EmailSchema.safeParse(data.email)
+    if (!emailValidation.success) {
+      return {
+        success: false,
+        error: emailValidation.error.issues[0]?.message || 'Invalid email',
+      }
+    }
+
+    const nameValidation = NameSchema.safeParse(data.name)
+    if (!nameValidation.success) {
+      return {
+        success: false,
+        error: nameValidation.error.issues[0]?.message || 'Invalid name',
+      }
+    }
+
+    const passwordValidation = PasswordSchema.safeParse(data.password)
+    if (!passwordValidation.success) {
+      return {
+        success: false,
+        error: passwordValidation.error.issues[0]?.message || 'Invalid password',
+      }
+    }
+
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
     // Obscure sensitive data in memory to prevent exposure in logs/debugging

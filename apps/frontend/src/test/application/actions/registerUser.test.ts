@@ -27,7 +27,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       const result = await registerUser(userData)
@@ -67,7 +67,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'user@example.com',
         name: 'Another User',
-        password: 'securepass',
+        password: 'securepass123',
       }
 
       await registerUser(userData)
@@ -82,6 +82,62 @@ describe('registerUser', () => {
   })
 
   describe('Failed Registration', () => {
+    it('should return error for invalid email', async () => {
+      const userData = {
+        email: 'invalid-email',
+        name: 'Test User',
+        password: 'validpassword',
+      }
+
+      const result = await registerUser(userData)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('Please enter a valid email address')
+      expect(global.fetch).not.toHaveBeenCalled()
+    })
+
+    it('should return error for name too short', async () => {
+      const userData = {
+        email: 'test@example.com',
+        name: 'A',
+        password: 'validpassword',
+      }
+
+      const result = await registerUser(userData)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('Name must be at least 2 characters')
+      expect(global.fetch).not.toHaveBeenCalled()
+    })
+
+    it('should return error for name too long', async () => {
+      const userData = {
+        email: 'test@example.com',
+        name: 'A'.repeat(101),
+        password: 'validpassword',
+      }
+
+      const result = await registerUser(userData)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('Name must not exceed 100 characters')
+      expect(global.fetch).not.toHaveBeenCalled()
+    })
+
+    it('should return error for password too short', async () => {
+      const userData = {
+        email: 'test@example.com',
+        name: 'Test User',
+        password: 'short',
+      }
+
+      const result = await registerUser(userData)
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('Password must be at least 12 characters')
+      expect(global.fetch).not.toHaveBeenCalled()
+    })
+
     it('should handle registration failure with error message from API', async () => {
       const mockErrorResponse = {
         success: false,
@@ -96,7 +152,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'existing@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       const result = await registerUser(userData)
@@ -116,7 +172,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       const result = await registerUser(userData)
@@ -133,7 +189,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       const result = await registerUser(userData)
@@ -150,7 +206,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       const result = await registerUser(userData)
@@ -181,7 +237,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       await registerUser(userData)
@@ -214,7 +270,7 @@ describe('registerUser', () => {
       const userData = {
         email: 'test@example.com',
         name: 'Test User',
-        password: 'password123',
+        password: 'password12345',
       }
 
       await registerUser(userData)
