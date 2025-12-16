@@ -151,10 +151,12 @@ describe('useAdminPage', () => {
 
       await waitFor(() => {
         expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 10,
-          offset: 0,
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 10,
+            offset: 0,
+          })
+        )
       })
     })
 
@@ -459,10 +461,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 10,
-          offset: 20, // page 2 * pageSize 10
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 10,
+            offset: 20, // page 2 * pageSize 10
+          })
+        )
       })
     })
 
@@ -484,10 +488,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 25,
-          offset: 0,
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 25,
+            offset: 0,
+          })
+        )
       })
     })
 
@@ -509,10 +515,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 15,
-          offset: 45, // page 3 * pageSize 15
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 15,
+            offset: 45, // page 3 * pageSize 15
+          })
+        )
       })
     })
 
@@ -792,10 +800,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 10,
-          offset: 0,
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 10,
+            offset: 0,
+          })
+        )
       })
     })
 
@@ -817,10 +827,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 1000,
-          offset: 0,
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 1000,
+            offset: 0,
+          })
+        )
       })
     })
 
@@ -842,10 +854,12 @@ describe('useAdminPage', () => {
       })
 
       await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledWith({
-          limit: 1,
-          offset: 0,
-        })
+        expect(mockFindAllUsers).toHaveBeenCalledWith(
+          expect.objectContaining({
+            limit: 1,
+            offset: 0,
+          })
+        )
       })
     })
 

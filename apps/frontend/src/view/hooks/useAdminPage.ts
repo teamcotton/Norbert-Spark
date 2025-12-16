@@ -1,5 +1,5 @@
 import type { GridPaginationModel } from '@mui/x-data-grid'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { findAllUsers } from '@/application/actions/findAllUsers.js'
 import type { User } from '@/domain/user/user.js'
@@ -34,14 +34,23 @@ export function useAdminPage(): UseAdminPageReturn {
   // TODO: Replace with actual user role from authentication
   const currentUserRole = 'admin' as 'admin' | 'moderator' | 'user'
 
+  const abortControllerRef = useRef<AbortController | null>(null)
+
   useEffect(() => {
     async function fetchUsers() {
       setLoading(true)
 
+      abortControllerRef.current?.abort()
+      abortControllerRef.current = new AbortController()
+
       const limit = paginationModel.pageSize
       const offset = paginationModel.page * paginationModel.pageSize
 
-      const result = await findAllUsers({ limit, offset })
+      const result = await findAllUsers({
+        limit,
+        offset,
+        signal: abortControllerRef.current.signal,
+      })
 
       if (result.success) {
         setUsers(result.users)
