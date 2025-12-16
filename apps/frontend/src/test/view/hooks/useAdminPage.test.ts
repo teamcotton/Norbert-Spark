@@ -13,6 +13,13 @@ vi.mock('@/application/actions/findAllUsers.js', () => ({
 
 const mockFindAllUsers = findAllUsersModule.findAllUsers as ReturnType<typeof vi.fn>
 
+// Helper function to create AbortError
+function createAbortError(): Error {
+  const error = new Error('The operation was aborted')
+  error.name = 'AbortError'
+  return error
+}
+
 describe('useAdminPage', () => {
   const mockUsers: readonly User[] = [
     {
@@ -982,16 +989,26 @@ describe('useAdminPage', () => {
     it('should not update state if request is aborted', async () => {
       mockFindAllUsers
         .mockImplementationOnce(async (params) => {
-          // Simulate slow request that gets aborted
-          await new Promise((resolve) => setTimeout(resolve, 100))
+          // Check if signal is already aborted (real fetch throws immediately)
           if (params.signal?.aborted) {
-            return {
-              success: false,
-              users: [],
-              total: 0,
-              error: 'Request aborted',
-            }
+            throw createAbortError()
           }
+
+          // Simulate slow request that can be aborted
+          await new Promise<void>((resolve, reject) => {
+            const timeout = setTimeout(resolve, 100)
+
+            // Listen for abort event during request (real fetch behavior)
+            params.signal?.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout)
+                reject(createAbortError())
+              },
+              { once: true }
+            )
+          })
+
           return {
             success: true,
             users: [mockUsers[0]!],
