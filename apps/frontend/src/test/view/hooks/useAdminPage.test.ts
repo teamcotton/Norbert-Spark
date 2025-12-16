@@ -209,7 +209,7 @@ describe('useAdminPage', () => {
         error: 'Network error',
       })
 
-      const { rerender, result } = renderHook(() => useAdminPage())
+      const { result } = renderHook(() => useAdminPage())
 
       await waitFor(() => {
         expect(result.current.error).toBe('Network error')

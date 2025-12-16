@@ -56,7 +56,7 @@ export function useAdminPage(): UseAdminPageReturn {
       setLoading(false)
     }
 
-    fetchUsers()
+    fetchUsers().catch(console.error)
   }, [paginationModel])
 
   const handleSearchChange = (query: string) => {
@@ -68,14 +68,14 @@ export function useAdminPage(): UseAdminPageReturn {
   }
 
   return {
-    users,
+    currentUserRole,
     error,
+    handlePaginationChange,
+    handleSearchChange,
     loading,
-    searchQuery,
     paginationModel,
     rowCount,
-    currentUserRole,
-    handleSearchChange,
-    handlePaginationChange,
+    searchQuery,
+    users,
   }
 }

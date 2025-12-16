@@ -1,3 +1,4 @@
+'use client'
 import { Alert, Box, Container, TextField, Typography } from '@mui/material'
 import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid'
 
