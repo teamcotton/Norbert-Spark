@@ -3,6 +3,7 @@ import type { PaginatedUsersResponse, User } from '@/domain/user/user.js'
 export interface FindAllUsersParams {
   limit: number
   offset: number
+  signal?: AbortSignal
 }
 
 export interface FindAllUsersResult {
@@ -19,7 +20,7 @@ export interface FindAllUsersResult {
 export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllUsersResult> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:4321'
-    const { limit, offset } = params
+    const { limit, offset, signal } = params
 
     const response = await fetch(`${baseUrl}/api/users?limit=${limit}&offset=${offset}`, {
       method: 'GET',
@@ -27,6 +28,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
         'Content-Type': 'application/json',
       },
       cache: 'no-store',
+      signal,
     })
 
     if (!response.ok) {
@@ -56,6 +58,9 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
       total: data.pagination?.total ?? 0,
     }
   } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error
+    }
     console.warn('Error fetching users:', error)
     return {
       success: false,
