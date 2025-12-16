@@ -3,7 +3,7 @@ import pino from 'pino'
 import type { LoggerPort } from '../ports/logger.port.js'
 
 export class PinoLoggerService implements LoggerPort {
-  private logger: pino.Logger
+  private readonly logger: pino.Logger
 
   constructor() {
     const isDevelopment = process.env.NODE_ENV !== 'production'
