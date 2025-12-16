@@ -1,25 +1,65 @@
 #!/usr/bin/env tsx
 /**
- * Seed script to populate the users table with 58 different accounts
+ * Seed script to populate the users table with a configurable number of accounts
  *
  * Usage:
- *   pnpm seed:users
+ *   pnpm seed:users [count]
+ *   pnpm seed:users 100
  *
+ * Or set via environment variable:
+ *   SEED_USER_COUNT=100 pnpm seed:users
+ *
+ * Default count: 58
  * This will create:
  * - 1 admin account
  * - 2 moderator accounts
- * - 55 regular user accounts
+ * - Remaining accounts as regular users
  *
- * All accounts use the password: Password123!
- */
-/*
- * All accounts use the password specified by the SEED_PASSWORD environment variable,
+ * All accounts use the password specified by SEED_PASSWORD env var,
  * or 'Password123!' if SEED_PASSWORD is not set.
  */
 import { db } from '../src/infrastructure/database/index.js'
 import { user } from '../src/infrastructure/database/schema.js'
 import { Password } from '../src/domain/value-objects/password.js'
+
+// Get the number of users to create from:
+// 1. Command line argument (highest priority)
+// 2. Environment variable SEED_USER_COUNT
+// 3. Default value of 58
+const getUserCount = (): number => {
+  // Check command line argument
+  const cliArg = process.argv[2]
+  if (cliArg) {
+    const count = parseInt(cliArg, 10)
+    if (isNaN(count) || count < 3) {
+      console.error(
+        '❌ Error: User count must be a number >= 3 (need at least 1 admin + 2 moderators)'
+      )
+      process.exit(1)
+    }
+    return count
+  }
+
+  // Check environment variable
+  const envCount = process.env.SEED_USER_COUNT
+  if (envCount) {
+    const count = parseInt(envCount, 10)
+    if (isNaN(count) || count < 3) {
+      console.error(
+        '❌ Error: SEED_USER_COUNT must be a number >= 3 (need at least 1 admin + 2 moderators)'
+      )
+      process.exit(1)
+    }
+    return count
+  }
+
+  // Default
+  return 58
+}
+
+const TOTAL_USERS = getUserCount()
 const DEFAULT_PASSWORD = process.env.SEED_PASSWORD || 'Password123!'
+
 if (!process.env.SEED_PASSWORD) {
   console.warn(
     '[seed-users] Warning: SEED_PASSWORD environment variable not set. Using default password "Password123!".'

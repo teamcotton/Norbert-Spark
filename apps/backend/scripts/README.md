@@ -1,27 +1,63 @@
 # User Seed Script - Quick Reference
 
-## Created Successfully ✅
+## Overview
 
-The database now contains **58 unique user accounts** with the following distribution:
+This script populates the database with a configurable number of user accounts for testing and development.
 
-### Account Breakdown
+### Features
 
-- **1 Admin** - `james.smith@gmail.com`
-- **2 Moderators** - `mary.smith@yahoo.com`, `john.smith@outlook.com`
-- **55 Regular Users** - Various email addresses
-
-### Common Password
-
-All accounts use: **`Password123!`**
+- **Dynamic user count** - Specify how many users to create (default: 58)
+- **Automatic role assignment**:
+  - 1 Admin account
+  - 2 Moderator accounts
+  - Remaining accounts as regular users
+- **Unique email addresses** - All generated emails are unique
+- **Configurable password** - Set via environment variable or use default
 
 ## Usage
 
-### Seed the Database
+### Basic Usage (Default: 58 users)
 
 ```bash
 cd apps/backend
 pnpm seed:users
 ```
+
+### Specify User Count via Command Line
+
+```bash
+# Create 10 users
+pnpm seed:users 10
+
+# Create 100 users
+pnpm seed:users 100
+
+# Create 500 users
+pnpm seed:users 500
+```
+
+### Specify User Count via Environment Variable
+
+```bash
+# Create 25 users
+SEED_USER_COUNT=25 pnpm seed:users
+
+# With custom password
+SEED_USER_COUNT=50 SEED_PASSWORD="MySecret123!" pnpm seed:users
+```
+
+### Minimum Requirement
+
+The script requires at least **3 users** (1 admin + 2 moderators).
+
+### Custom Password
+
+```bash
+# Set custom password for all accounts
+SEED_PASSWORD="MyCustomPass123!" pnpm seed:users 20
+```
+
+Default password: **`Password123!`**
 
 ### Reset and Re-seed
 
