@@ -1,4 +1,3 @@
-import { join } from 'node:path'
 import { FileUtil } from '../../../shared/utils/file.util.js'
 
 //const textPath = join(import.meta.dirname, '..', 'data', 'heart-of-darkness.txt')
@@ -7,8 +6,8 @@ import { FileUtil } from '../../../shared/utils/file.util.js'
  * Class for managing text file retrieval with state management
  */
 export class GetText {
-  private fileUtil: FileUtil
-  private fileContents: Map<string, string>
+  private readonly fileUtil: FileUtil
+  private readonly fileContents: Map<string, string>
 
   /**
    * Create a new GetText instance
