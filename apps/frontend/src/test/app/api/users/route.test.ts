@@ -441,32 +441,99 @@ describe('GET /api/users', () => {
     it('should detect localhost HTTPS as local development', async () => {
       process.env.BACKEND_AI_CALLBACK_URL = 'https://localhost:3001'
 
+      const mockBackendResponse = {
+        success: true,
+        data: [],
+        pagination: {
+          total: 0,
+          limit: 10,
+          offset: 0,
+        },
+      }
+
+      // Mock node-fetch for local HTTPS
+      const mockNodeFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => mockBackendResponse,
+      })
+
+      const mockHttpsAgent = vi.fn()
+
+      // Mock dynamic imports
+      vi.doMock('node-fetch', () => ({
+        default: mockNodeFetch,
+      }))
+
+      vi.doMock('https', () => ({
+        Agent: mockHttpsAgent,
+      }))
+
       const request = new Request('http://localhost:4321/api/users', {
         method: 'GET',
       })
 
-      // The route will attempt to use node-fetch with custom agent
-      // Since we can't easily mock dynamic imports, we verify the URL is recognized as local
-      // and that the route handles the request (even if node-fetch isn't actually available in test)
       const response = await GET(request)
 
-      // Should either succeed or fail gracefully (500 with error message)
-      expect([200, 500]).toContain(response.status)
+      expect(response.status).toBe(200)
+      expect(mockNodeFetch).toHaveBeenCalledWith(
+        'https://localhost:3001/users',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      )
     })
 
     it('should detect 127.0.0.1 HTTPS as local development', async () => {
       process.env.BACKEND_AI_CALLBACK_URL = 'https://127.0.0.1:3001'
 
+      const mockBackendResponse = {
+        success: true,
+        data: [],
+        pagination: {
+          total: 0,
+          limit: 10,
+          offset: 0,
+        },
+      }
+
+      // Mock node-fetch for local HTTPS
+      const mockNodeFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => mockBackendResponse,
+      })
+
+      const mockHttpsAgent = vi.fn()
+
+      // Mock dynamic imports
+      vi.doMock('node-fetch', () => ({
+        default: mockNodeFetch,
+      }))
+
+      vi.doMock('https', () => ({
+        Agent: mockHttpsAgent,
+      }))
+
       const request = new Request('http://localhost:4321/api/users', {
         method: 'GET',
       })
 
-      // The route will attempt to use node-fetch with custom agent
-      // Since we can't easily mock dynamic imports, we verify the URL is recognized as local
       const response = await GET(request)
 
-      // Should either succeed or fail gracefully (500 with error message)
-      expect([200, 500]).toContain(response.status)
+      expect(response.status).toBe(200)
+      expect(mockNodeFetch).toHaveBeenCalledWith(
+        'https://127.0.0.1:3001/users',
+        expect.objectContaining({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      )
     })
 
     it('should use regular fetch for non-local HTTPS URLs', async () => {

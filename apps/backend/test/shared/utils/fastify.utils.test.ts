@@ -7,86 +7,86 @@ describe('FastifyUtil', () => {
   describe('createResponse', () => {
     describe('Basic Response Creation', () => {
       it('should create a response with default status 200', async () => {
-        const body = { message: 'success' }
-        const response = FastifyUtil.createResponse(body)
+        const message = 'success'
+        const response = FastifyUtil.createResponse(message)
 
         expect(response.status).toBe(200)
         expect(response.headers.get('content-type')).toBe('application/json')
-        const data = await response.json()
-        expect(data).toEqual(body)
+        const text = await response.text()
+        expect(text).toBe(message)
       })
 
       it('should create a response with custom status code', async () => {
-        const body = { error: 'Not Found' }
-        const response = FastifyUtil.createResponse(body, 404)
+        const message = 'Not Found'
+        const response = FastifyUtil.createResponse(message, 404)
 
         expect(response.status).toBe(404)
-        const data = await response.json()
-        expect(data).toEqual(body)
+        const text = await response.text()
+        expect(text).toBe(message)
       })
 
       it('should create a response with status 201 (Created)', async () => {
-        const body = { id: '123', created: true }
-        const response = FastifyUtil.createResponse(body, 201)
+        const message = 'Created'
+        const response = FastifyUtil.createResponse(message, 201)
 
         expect(response.status).toBe(201)
-        const data = await response.json()
-        expect(data).toEqual(body)
+        const text = await response.text()
+        expect(text).toBe(message)
       })
 
       it('should create a response with status 500 (Server Error)', async () => {
-        const body = { error: 'Internal Server Error' }
-        const response = FastifyUtil.createResponse(body, 500)
+        const message = 'Internal Server Error'
+        const response = FastifyUtil.createResponse(message, 500)
 
         expect(response.status).toBe(500)
-        const data = await response.json()
-        expect(data).toEqual(body)
+        const text = await response.text()
+        expect(text).toBe(message)
       })
     })
 
     describe('Body Serialization', () => {
-      it('should serialize string body to JSON', async () => {
-        const body = 'simple string'
-        const response = FastifyUtil.createResponse(body)
+      it('should handle simple string message', async () => {
+        const message = 'simple string'
+        const response = FastifyUtil.createResponse(message)
 
-        const data = await response.json()
-        expect(data).toBe('simple string')
+        const text = await response.text()
+        expect(text).toBe('simple string')
       })
 
-      it('should serialize number body to JSON', async () => {
-        const body = 42
-        const response = FastifyUtil.createResponse(body)
+      it('should handle JSON stringified object', async () => {
+        const message = JSON.stringify({ value: 42 })
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
-        expect(data).toBe(42)
+        expect(data).toEqual({ value: 42 })
       })
 
-      it('should serialize boolean body to JSON', async () => {
-        const body = true
-        const response = FastifyUtil.createResponse(body)
+      it('should handle JSON stringified boolean', async () => {
+        const message = JSON.stringify(true)
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
         expect(data).toBe(true)
       })
 
-      it('should serialize null body to JSON', async () => {
-        const body = null
-        const response = FastifyUtil.createResponse(body)
+      it('should handle JSON stringified null', async () => {
+        const message = JSON.stringify(null)
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
         expect(data).toBeNull()
       })
 
-      it('should serialize array body to JSON', async () => {
-        const body = [1, 2, 3, 4, 5]
-        const response = FastifyUtil.createResponse(body)
+      it('should handle JSON stringified array', async () => {
+        const message = JSON.stringify([1, 2, 3, 4, 5])
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
         expect(data).toEqual([1, 2, 3, 4, 5])
       })
 
-      it('should serialize nested object body to JSON', async () => {
-        const body = {
+      it('should handle JSON stringified nested object', async () => {
+        const obj = {
           user: {
             name: 'John',
             address: {
@@ -95,23 +95,24 @@ describe('FastifyUtil', () => {
             },
           },
         }
-        const response = FastifyUtil.createResponse(body)
+        const message = JSON.stringify(obj)
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
-        expect(data).toEqual(body)
+        expect(data).toEqual(obj)
       })
 
-      it('should handle empty object body', async () => {
-        const body = {}
-        const response = FastifyUtil.createResponse(body)
+      it('should handle empty string', async () => {
+        const message = ''
+        const response = FastifyUtil.createResponse(message)
 
-        const data = await response.json()
-        expect(data).toEqual({})
+        const text = await response.text()
+        expect(text).toBe('')
       })
 
-      it('should handle empty array body', async () => {
-        const body: unknown[] = []
-        const response = FastifyUtil.createResponse(body)
+      it('should handle JSON stringified empty array', async () => {
+        const message = JSON.stringify([])
+        const response = FastifyUtil.createResponse(message)
 
         const data = await response.json()
         expect(data).toEqual([])
@@ -119,59 +120,50 @@ describe('FastifyUtil', () => {
     })
 
     describe('Edge Cases', () => {
-      it('should handle undefined body', async () => {
-        const response = FastifyUtil.createResponse(undefined)
+      it('should handle message with special characters', async () => {
+        const message = 'Hello "World" & <Test>'
+        const response = FastifyUtil.createResponse(message)
 
         const text = await response.text()
-        // JSON.stringify(undefined) returns undefined (not a string),
-        // which becomes empty string when passed to Response constructor
-        expect(text).toBe('')
+        expect(text).toBe(message)
       })
 
-      it('should handle body with special characters', async () => {
-        const body = { message: 'Hello "World" & <Test>' }
-        const response = FastifyUtil.createResponse(body)
+      it('should handle message with unicode characters', async () => {
+        const message = '你好世界 🌍'
+        const response = FastifyUtil.createResponse(message)
 
-        const data = await response.json()
-        expect(data).toEqual(body)
-      })
-
-      it('should handle body with unicode characters', async () => {
-        const body = { message: '你好世界 🌍' }
-        const response = FastifyUtil.createResponse(body)
-
-        const data = await response.json()
-        expect(data).toEqual(body)
+        const text = await response.text()
+        expect(text).toBe(message)
       })
 
       it('should create multiple independent responses', async () => {
-        const response1 = FastifyUtil.createResponse({ id: 1 }, 200)
-        const response2 = FastifyUtil.createResponse({ id: 2 }, 201)
+        const response1 = FastifyUtil.createResponse('First message', 200)
+        const response2 = FastifyUtil.createResponse('Second message', 201)
 
         expect(response1.status).toBe(200)
         expect(response2.status).toBe(201)
 
-        const data1 = await response1.json()
-        const data2 = await response2.json()
+        const text1 = await response1.text()
+        const text2 = await response2.text()
 
-        expect(data1).toEqual({ id: 1 })
-        expect(data2).toEqual({ id: 2 })
+        expect(text1).toBe('First message')
+        expect(text2).toBe('Second message')
       })
     })
 
     describe('Status Code Edge Cases', () => {
       it('should handle status code 200', async () => {
-        const response = FastifyUtil.createResponse({ data: 'test' }, 200)
+        const response = FastifyUtil.createResponse('test message', 200)
         expect(response.status).toBe(200)
       })
 
       it('should handle large status code', async () => {
-        const response = FastifyUtil.createResponse({ data: 'test' }, 599)
+        const response = FastifyUtil.createResponse('test message', 599)
         expect(response.status).toBe(599)
       })
 
       it('should handle status code 400', async () => {
-        const response = FastifyUtil.createResponse({ data: 'test' }, 400)
+        const response = FastifyUtil.createResponse('test message', 400)
         expect(response.status).toBe(400)
       })
     })

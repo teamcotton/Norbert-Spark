@@ -35,17 +35,20 @@ export const GET = async (req: FastifyRequest): Promise<Response> => {
     return new Response(`No chat data for ${chatId}`, { status: 400 })
   }
 
-  return FastifyUtil.createResponse({ id: chatId, messages: chat.messages as UIMessage[] })
+  return FastifyUtil.createResponse(
+    JSON.stringify({ id: chatId, messages: chat.messages as UIMessage[] })
+  )
 }
 
 export const POST = async (req: Request): Promise<Response> => {
+  console.log('POST')
   const UIMessageSchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     role: z.string(),
-    content: z.string(),
+    content: z.string().optional(),
     name: z.string().optional(),
     parts: z.array(z.any()).optional(),
-    // Add other fields as needed based on UIMessage definition
+    trigger: z.string().optional(),
   })
   const RequestBodySchema = z.object({
     messages: z.array(UIMessageSchema),
@@ -79,8 +82,7 @@ export const POST = async (req: Request): Promise<Response> => {
   }
 
   if (!chat) {
-    const newChat = await createChat(id, messages as UIMessage[])
-    chat = newChat
+    await createChat(id, messages as UIMessage[])
   } else {
     await appendToChatMessages(id, [mostRecentMessage as UIMessage])
   }

@@ -93,8 +93,8 @@ export class FastifyUtil {
       })
     }
   }
-  static createResponse(body: unknown, status: number = 200): Response {
-    return new Response(JSON.stringify(body), {
+  static createResponse(message: string, status: number = 200): Response {
+    return new Response(message, {
       status,
       headers: { 'Content-Type': 'application/json' },
     })
