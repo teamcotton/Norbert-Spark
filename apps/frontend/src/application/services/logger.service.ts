@@ -9,7 +9,7 @@ export class PinoLoggerService implements LoggerPort {
     const isDevelopment = process.env.NODE_ENV !== 'production'
 
     this.logger = pino({
-      level: process.env.LOG_LEVEL,
+      level: process.env.LOG_LEVEL ?? 'info',
       ...(isDevelopment && {
         transport: {
           target: 'pino-pretty',
