@@ -1,5 +1,4 @@
 import * as fs from 'node:fs/promises'
-import * as fsSync from 'node:fs'
 import path from 'node:path'
 import {z} from 'zod'
 
@@ -42,12 +41,7 @@ export class GetText {
    */
   public async getText(): Promise<string | undefined> {
     try {
-      // Check if file exists
-      if (!fsSync.existsSync(this.filePath)) {
-        throw new Error(`Error reading file "${this.filePath}": File not found: ${this.file}`)
-      }
-
-      // Read file content
+      // Read file content - will throw ENOENT if file doesn't exist
       const content = await fs.readFile(this.filePath, 'utf8')
 
       // Return undefined if content is empty
@@ -59,9 +53,11 @@ export class GetText {
       this.fileContents.set(this.filePath, content)
       return content
     } catch (error) {
-      if (error instanceof Error && error.message.includes('Error reading file')) {
-        throw error
+      // Handle file not found error
+      if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+        throw new Error(`Error reading file "${this.filePath}": File not found: ${this.file}`)
       }
+      // Handle other errors
       throw new Error(
         `Error reading file "${this.filePath}": ${error instanceof Error ? error.message : 'Unknown error'}`
       )
