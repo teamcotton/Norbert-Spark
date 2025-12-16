@@ -1,7 +1,6 @@
 'use client'
 import { useChat } from '@ai-sdk/react'
 import AddIcon from '@mui/icons-material/Add'
-// import ChatIcon from '@mui/icons-material/Chat'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
@@ -28,6 +27,7 @@ import React, { use, useEffect, useRef, useState } from 'react'
 import { uuidv7 } from 'uuidv7'
 
 import { fileToDataURL } from '@/application/services/fileToDataURL.service.js'
+import { logger } from '@/application/services/logger.service.js'
 import { ChatInput } from '@/view/components/ChatInputComponent.js'
 import { IntroComponent } from '@/view/components/IntroComponent.js'
 import { Message } from '@/view/components/MessageComponent.js'
@@ -45,7 +45,9 @@ export default function AIChatPage({ params }: { params: Promise<{ id: string }>
     transport: new DefaultChatTransport({
       api: process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL,
     }),
-    onError: console.error,
+    onError: (error) => {
+      logger.error('Chat error:', error)
+    },
   })
 
   const [input, setInput] = useState('')

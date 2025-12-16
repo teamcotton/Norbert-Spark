@@ -37,3 +37,6 @@ export class PinoLoggerService implements LoggerPort {
     this.logger.debug(context, message)
   }
 }
+
+// exported singleton instance — import `logger` everywhere
+export const logger = new PinoLoggerService()
