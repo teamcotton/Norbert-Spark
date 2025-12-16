@@ -992,14 +992,14 @@ describe('useAdminPage', () => {
           // Simulate slow request that can be aborted
           await new Promise<void>((resolve, reject) => {
             const timeout = setTimeout(resolve, 100)
-            
+
             // Listen for abort event during request (real fetch behavior)
             params.signal?.addEventListener('abort', () => {
               clearTimeout(timeout)
               const error = new Error('The operation was aborted')
               error.name = 'AbortError'
               reject(error)
-            })
+            }, { once: true })
           })
 
           return {
