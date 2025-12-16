@@ -3,7 +3,7 @@ import { convertToModelMessages, stepCountIs, streamText, tool, type UIMessage }
 import { z } from 'zod'
 import type { FastifyRequest } from 'fastify'
 
-import { GetText } from '../src/infrastructure/ai/tools/getText.js'
+import { GetText } from './infrastructure/ai/tools/getText.js'
 
 import { appendToChatMessages, createChat, getChat } from './shared/persistance-layer.js'
 
