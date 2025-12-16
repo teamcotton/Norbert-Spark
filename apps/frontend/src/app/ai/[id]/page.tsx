@@ -27,7 +27,7 @@ import React, { use, useEffect, useRef, useState } from 'react'
 import { uuidv7 } from 'uuidv7'
 
 import { fileToDataURL } from '@/application/services/fileToDataURL.service.js'
-import { logger } from '@/application/services/logger.service.js'
+import { logger } from '@/application/services/log-layer.client.js'
 import { ChatInput } from '@/view/components/ChatInputComponent.js'
 import { IntroComponent } from '@/view/components/IntroComponent.js'
 import { Message } from '@/view/components/MessageComponent.js'
@@ -46,7 +46,7 @@ export default function AIChatPage({ params }: { params: Promise<{ id: string }>
       api: process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL,
     }),
     onError: (error) => {
-      logger.error('Chat error:', error)
+      logger.withPrefix('[AIChatPage]').errorOnly(error)
     },
   })
 
