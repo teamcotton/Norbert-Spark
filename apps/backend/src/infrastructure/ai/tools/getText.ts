@@ -26,7 +26,7 @@ export class GetText {
    * @throws Error if file cannot be read
    */
   public async getText(textPath: string): Promise<string | undefined> {
-    const fileExists = this.fileUtil.readFile(textPath)
+    const fileExists = await this.fileUtil.readFile(textPath)
     if (fileExists.success && fileExists.content) {
       // Save the successfully retrieved content to state
       this.fileContents.set(textPath, fileExists.content)

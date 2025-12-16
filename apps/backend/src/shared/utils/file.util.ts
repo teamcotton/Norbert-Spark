@@ -1,5 +1,5 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 import { ValidationException } from '../exceptions/validation.exception.js'
 
 /**
@@ -69,10 +69,10 @@ export class FileUtil {
   /**
    * Write content to a file
    */
-  public writeFile(
+  public async writeFile(
     filePath: string,
     content: string
-  ): { success: boolean; message: string; path: string } {
+  ): Promise<{ success: boolean; message: string; path: string }> {
     try {
       this.ensureBaseDir()
       const fullPath = this.validatePath(filePath)
@@ -83,7 +83,8 @@ export class FileUtil {
         fs.mkdirSync(dir, { recursive: true })
       }
 
-      fs.writeFileSync(fullPath, content, 'utf8')
+      const { writeFile } = await import('node:fs/promises')
+      await writeFile(fullPath, content, 'utf8')
 
       return {
         success: true,
@@ -98,12 +99,12 @@ export class FileUtil {
   /**
    * Read content from a file
    */
-  public readFile(filePath: string): {
+  public async readFile(filePath: string): Promise<{
     success: boolean
     content?: string
     message: string
     path: string
-  } {
+  }> {
     try {
       this.ensureBaseDir()
       const fullPath = this.validatePath(filePath)
@@ -116,7 +117,9 @@ export class FileUtil {
         }
       }
 
-      const content = fs.readFileSync(fullPath, 'utf8')
+      const { readFile } = await import('node:fs/promises')
+      const data = readFile(fullPath, 'utf8')
+      const content = await data
 
       return {
         success: true,
