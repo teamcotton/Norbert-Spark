@@ -66,6 +66,10 @@ export function useAdminPage(): UseAdminPageReturn {
     }
 
     fetchUsers().catch(console.error)
+
+    return () => {
+      abortControllerRef.current?.abort()
+    }
   }, [paginationModel])
 
   const handleSearchChange = (query: string) => {
