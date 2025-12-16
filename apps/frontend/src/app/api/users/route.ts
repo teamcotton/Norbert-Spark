@@ -32,6 +32,7 @@ export async function GET(request: Request) {
 
     if (isLocalDevelopment && apiUrl.startsWith('https')) {
       // Use dynamic import to avoid issues in production builds
+      // TODO: only used node-fetch for local development with self-signed certs
       const https = await import('https')
       const nodeFetch = (await import('node-fetch')).default
 
