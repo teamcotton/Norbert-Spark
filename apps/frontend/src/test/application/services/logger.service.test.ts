@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { PinoLoggerService } from '@/application/services/logger.service.js'
 
@@ -19,6 +19,7 @@ vi.mock('pino', () => {
 })
 
 describe('PinoLoggerService', () => {
+  let originalEnv: typeof process.env
   let loggerService: PinoLoggerService
   let mockPinoInstance: {
     info: ReturnType<typeof vi.fn>
@@ -28,6 +29,9 @@ describe('PinoLoggerService', () => {
   }
 
   beforeEach(async () => {
+    // Save original environment
+    originalEnv = { ...process.env }
+
     vi.clearAllMocks()
 
     // Get the mocked pino function
@@ -39,6 +43,12 @@ describe('PinoLoggerService', () => {
     mockPinoInstance = (pino.default as any).mock.results[0]?.value
   })
 
+  afterEach(() => {
+    // Restore original environment
+    process.env = originalEnv
+    vi.unstubAllEnvs()
+  })
+
   describe('Constructor', () => {
     it('should create logger instance with default configuration', async () => {
       const pino = await import('pino')
@@ -46,7 +56,6 @@ describe('PinoLoggerService', () => {
     })
 
     it('should configure logger with LOG_LEVEL from environment', async () => {
-      const originalLogLevel = process.env.LOG_LEVEL
       process.env.LOG_LEVEL = 'debug'
 
       new PinoLoggerService()
@@ -55,14 +64,10 @@ describe('PinoLoggerService', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const lastCall = (pino.default as any).mock.calls[(pino.default as any).mock.calls.length - 1]
       expect(lastCall[0]).toHaveProperty('level', 'debug')
-
-      process.env.LOG_LEVEL = originalLogLevel
     })
 
     it('should configure pino-pretty transport in development mode', async () => {
-      const originalNodeEnv = process.env.NODE_ENV
-      // @ts-expect-error - Testing environment variable modification
-      process.env.NODE_ENV = 'development'
+      vi.stubEnv('NODE_ENV', 'development')
 
       new PinoLoggerService()
 
@@ -76,15 +81,10 @@ describe('PinoLoggerService', () => {
           colorize: true,
         },
       })
-
-      // @ts-expect-error - Restoring environment variable
-      process.env.NODE_ENV = originalNodeEnv
     })
 
     it('should not configure pino-pretty transport in production mode', async () => {
-      const originalNodeEnv = process.env.NODE_ENV
-      // @ts-expect-error - Testing environment variable modification
-      process.env.NODE_ENV = 'production'
+      vi.stubEnv('NODE_ENV', 'production')
 
       new PinoLoggerService()
 
@@ -92,9 +92,6 @@ describe('PinoLoggerService', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const lastCall = (pino.default as any).mock.calls[(pino.default as any).mock.calls.length - 1]
       expect(lastCall[0]).not.toHaveProperty('transport')
-
-      // @ts-expect-error - Restoring environment variable
-      process.env.NODE_ENV = originalNodeEnv
     })
   })
 
