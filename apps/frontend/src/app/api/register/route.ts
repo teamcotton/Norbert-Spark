@@ -1,3 +1,4 @@
+import { logger } from '@/application/services/log-layer.server.js'
 import type { RegisterUserData, RegisterUserResponse } from '@/domain/auth/index.js'
 
 export async function POST(request: Request) {
@@ -31,6 +32,16 @@ export async function POST(request: Request) {
 
     const result = (await response.json()) as RegisterUserResponse
 
+    if (response.status === 409) {
+      return Response.json(
+        {
+          success: false,
+          error: result.error || 'Email already in use',
+        },
+        { status: response.status }
+      )
+    }
+
     if (!response.ok) {
       return Response.json(
         {
@@ -44,9 +55,9 @@ export async function POST(request: Request) {
     return Response.json(result, { status: 200 })
   } catch (error) {
     if (error instanceof Error) {
-      console.error('Registration API error:', error.message, error.stack)
+      logger.withPrefix('[registration-route]').errorOnly(error)
     } else {
-      console.error('Registration API error: An unexpected error occurred')
+      logger.withPrefix('[registration-route]').errorOnly(error)
     }
     return Response.json(
       {
