@@ -1,0 +1,42 @@
+import { beforeAll } from 'vitest'
+
+/**
+ * Global test setup for Vitest
+ *
+ * Sets default environment variables required for tests to run successfully.
+ * These values are used when the actual .env file is not available (e.g., in CI).
+ */
+beforeAll(() => {
+  // Set default environment variables for testing if not already set
+  if (!process.env.JWT_SECRET) {
+    process.env.JWT_SECRET = 'test-secret-key-for-jwt-signing-minimum-256-bits-required'
+  }
+
+  if (!process.env.JWT_ISSUER) {
+    process.env.JWT_ISSUER = 'test-issuer'
+  }
+
+  if (!process.env.JWT_EXPIRATION) {
+    process.env.JWT_EXPIRATION = '3600' // 1 hour in seconds for tests
+  }
+
+  if (!process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb'
+  }
+
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY = 'test-google-api-key'
+  }
+
+  if (!process.env.MODEL_NAME) {
+    process.env.MODEL_NAME = 'gemini-pro'
+  }
+
+  if (!process.env.RESEND_API_KEY) {
+    process.env.RESEND_API_KEY = 'test-resend-api-key'
+  }
+
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'test'
+  }
+})
