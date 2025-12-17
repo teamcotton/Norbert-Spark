@@ -12,11 +12,11 @@ export class JwtUtil {
       subject: sub,
     }
 
-    return jwt.sign(restClaims, EnvConfig.JWT_SECRET, options)
+    return jwt.sign(restClaims, EnvConfig.JWT_SECRET as string, options)
   }
 
   static verifyToken(token: string): { sub: string; email: string; roles?: string[] } {
-    const decoded = jwt.verify(token, EnvConfig.JWT_SECRET, {
+    const decoded = jwt.verify(token, EnvConfig.JWT_SECRET as string, {
       issuer: EnvConfig.JWT_ISSUER,
     })
 

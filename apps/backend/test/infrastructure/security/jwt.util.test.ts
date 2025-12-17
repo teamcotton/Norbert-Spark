@@ -84,7 +84,7 @@ describe('JwtUtil', () => {
       const token = JwtUtil.generateToken(validClaims)
 
       // Verify the token can be decoded with the secret
-      expect(() => jwt.verify(token, EnvConfig.JWT_SECRET)).not.toThrow()
+      expect(() => jwt.verify(token, EnvConfig.JWT_SECRET as string)).not.toThrow()
     })
   })
 
@@ -123,7 +123,7 @@ describe('JwtUtil', () => {
     })
 
     it('should throw error for token with wrong issuer', () => {
-      const tokenWithWrongIssuer = jwt.sign(validClaims, EnvConfig.JWT_SECRET, {
+      const tokenWithWrongIssuer = jwt.sign(validClaims, EnvConfig.JWT_SECRET as string, {
         issuer: 'wrong-issuer',
         expiresIn: 3600,
       })
@@ -132,7 +132,7 @@ describe('JwtUtil', () => {
     })
 
     it('should throw error for expired token', () => {
-      const expiredToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET, {
+      const expiredToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET as string, {
         issuer: EnvConfig.JWT_ISSUER,
         expiresIn: -1,
       })
@@ -147,16 +147,20 @@ describe('JwtUtil', () => {
     })
 
     it('should throw error for token missing sub claim', () => {
-      const tokenWithoutSub = jwt.sign({ email: 'test@example.com' }, EnvConfig.JWT_SECRET, {
-        issuer: EnvConfig.JWT_ISSUER,
-        expiresIn: 3600,
-      })
+      const tokenWithoutSub = jwt.sign(
+        { email: 'test@example.com' },
+        EnvConfig.JWT_SECRET as string,
+        {
+          issuer: EnvConfig.JWT_ISSUER,
+          expiresIn: 3600,
+        }
+      )
 
       expect(() => JwtUtil.verifyToken(tokenWithoutSub)).toThrow('Token missing required claims')
     })
 
     it('should throw error for token missing email claim', () => {
-      const tokenWithoutEmail = jwt.sign({ sub: 'user-123' }, EnvConfig.JWT_SECRET, {
+      const tokenWithoutEmail = jwt.sign({ sub: 'user-123' }, EnvConfig.JWT_SECRET as string, {
         issuer: EnvConfig.JWT_ISSUER,
         expiresIn: 3600,
       })
@@ -186,7 +190,7 @@ describe('JwtUtil', () => {
         extraClaim: 'extra-value',
         anotherField: 123,
       }
-      const token = jwt.sign(claimsWithExtra, EnvConfig.JWT_SECRET, {
+      const token = jwt.sign(claimsWithExtra, EnvConfig.JWT_SECRET as string, {
         issuer: EnvConfig.JWT_ISSUER,
         expiresIn: 3600,
       })
@@ -226,7 +230,7 @@ describe('JwtUtil', () => {
     })
 
     it('should decode expired token', () => {
-      const expiredToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET, {
+      const expiredToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET as string, {
         issuer: EnvConfig.JWT_ISSUER,
         expiresIn: -1,
       })
@@ -350,7 +354,7 @@ describe('JwtUtil', () => {
     })
 
     it('should validate token expiration', () => {
-      const shortLivedToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET, {
+      const shortLivedToken = jwt.sign(validClaims, EnvConfig.JWT_SECRET as string, {
         issuer: EnvConfig.JWT_ISSUER,
         expiresIn: 1,
       })
@@ -360,7 +364,9 @@ describe('JwtUtil', () => {
     })
 
     it('should require issuer to match', () => {
-      const tokenWithoutIssuer = jwt.sign(validClaims, EnvConfig.JWT_SECRET, { expiresIn: 3600 })
+      const tokenWithoutIssuer = jwt.sign(validClaims, EnvConfig.JWT_SECRET as string, {
+        expiresIn: 3600,
+      })
 
       expect(() => JwtUtil.verifyToken(tokenWithoutIssuer)).toThrow()
     })
