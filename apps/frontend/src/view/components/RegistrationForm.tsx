@@ -63,14 +63,17 @@ export function RegistrationForm({
     setShowConfirmPassword((prev) => !prev)
   }
 
+  // Error messages that should be displayed at alert level
+  const ALERT_LEVEL_ERROR_MESSAGES = [
+    'already registered',
+    'Registration failed',
+    'unexpected error',
+  ] as const
+
   // Helper function to check if error should be displayed at alert level
   const isAlertLevelEmailError = (errorMessage: string | undefined): boolean => {
     if (!errorMessage) return false
-    return (
-      errorMessage.includes('already registered') ||
-      errorMessage.includes('Registration failed') ||
-      errorMessage.includes('unexpected error')
-    )
+    return ALERT_LEVEL_ERROR_MESSAGES.some((msg) => errorMessage.includes(msg))
   }
 
   // Helper function to check if error should be displayed at field level
