@@ -84,6 +84,9 @@ async function globalSetup() {
         JWT_SECRET: 'test-jwt-secret-for-e2e-tests-minimum-256-bits',
         JWT_ISSUER: 'level2gym-test',
         JWT_EXPIRATION: '1h',
+        GOOGLE_GENERATIVE_AI_API_KEY: 'test-google-api-key-for-e2e',
+        MODEL_NAME: 'gemini-1.5-flash',
+        RESEND_API_KEY: 'test-resend-api-key-for-e2e',
       },
       stdio: ['ignore', 'pipe', 'pipe'],
     })
