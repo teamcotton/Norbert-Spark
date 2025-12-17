@@ -1,4 +1,3 @@
-import { logger } from '@/application/services/log-layer.server.js'
 import type { RegisterUserData, RegisterUserResponse } from '@/domain/auth/index.js'
 
 export async function POST(request: Request) {
@@ -18,7 +17,19 @@ export async function POST(request: Request) {
     }
 
     // Parse URL to check hostname precisely
-    const url = new URL(apiUrl)
+    let url: URL
+    try {
+      url = new URL(apiUrl)
+    } catch (parseError) {
+      console.error('[registration-route] Failed to parse Backend API URL:', parseError)
+      return Response.json(
+        {
+          success: false,
+          error: 'Invalid Backend API URL configuration',
+        },
+        { status: 500 }
+      )
+    }
     const isLocalDevelopment =
       url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1'
 
@@ -96,11 +107,7 @@ export async function POST(request: Request) {
 
     return Response.json(result, { status: 200 })
   } catch (error) {
-    if (error instanceof Error) {
-      logger.withPrefix('[registration-route]').errorOnly(error)
-    } else {
-      logger.withPrefix('[registration-route]').errorOnly(error)
-    }
+    console.error('[registration-route] Registration error:', error)
     return Response.json(
       {
         success: false,
