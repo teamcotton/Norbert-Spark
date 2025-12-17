@@ -1,3 +1,4 @@
+import { logger } from '@/application/services/log-layer.server.js'
 import type { RegisterUserData, RegisterUserResponse } from '@/domain/auth/index.js'
 
 export async function POST(request: Request) {
@@ -16,20 +17,72 @@ export async function POST(request: Request) {
       )
     }
 
-    const response = await fetch(`${apiUrl}/users/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Extract the actual password value for API transmission
-      body: JSON.stringify({
-        email: body.email,
-        name: body.name,
-        password: body.password,
-      }),
-    })
+    // Parse URL to check hostname precisely
+    const url = new URL(apiUrl)
+    const isLocalDevelopment =
+      url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1'
 
-    const result = (await response.json()) as RegisterUserResponse
+    let response: Response
+    let result: RegisterUserResponse
+
+    if (isLocalDevelopment && apiUrl.startsWith('https')) {
+      // Use dynamic import to avoid issues in production builds
+      // TODO: This code uses node-fetch exclusively for local development with self-signed certificates
+      const https = await import('https')
+      const nodeFetch = (await import('node-fetch')).default
+
+      const agent = new https.Agent({
+        rejectUnauthorized: false,
+      })
+
+      const nodeFetchResponse = await nodeFetch(`${apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: body.email,
+          name: body.name,
+          password: body.password,
+        }),
+        agent,
+      })
+
+      // Parse the response from node-fetch
+      result = (await nodeFetchResponse.json()) as RegisterUserResponse
+
+      // Convert node-fetch response to native Response for consistent handling
+      response = new Response(JSON.stringify(result), {
+        status: nodeFetchResponse.status,
+        statusText: nodeFetchResponse.statusText,
+        headers: nodeFetchResponse.headers as unknown as HeadersInit,
+      })
+    } else {
+      response = await fetch(`${apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Extract the actual password value for API transmission
+        body: JSON.stringify({
+          email: body.email,
+          name: body.name,
+          password: body.password,
+        }),
+      })
+
+      result = (await response.json()) as RegisterUserResponse
+    }
+
+    if (response.status === 409) {
+      return Response.json(
+        {
+          success: false,
+          error: result.error || 'Email already in use',
+        },
+        { status: response.status }
+      )
+    }
 
     if (!response.ok) {
       return Response.json(
@@ -44,9 +97,9 @@ export async function POST(request: Request) {
     return Response.json(result, { status: 200 })
   } catch (error) {
     if (error instanceof Error) {
-      console.error('Registration API error:', error.message, error.stack)
+      logger.withPrefix('[registration-route]').errorOnly(error)
     } else {
-      console.error('Registration API error: An unexpected error occurred')
+      logger.withPrefix('[registration-route]').errorOnly(error)
     }
     return Response.json(
       {

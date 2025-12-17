@@ -7,6 +7,7 @@ import {
   VisibilityOff,
 } from '@mui/icons-material'
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -62,6 +63,24 @@ export function RegistrationForm({
     setShowConfirmPassword((prev) => !prev)
   }
 
+  // Error messages that should be displayed at alert level
+  const ALERT_LEVEL_ERROR_MESSAGES = [
+    'already registered',
+    'Registration failed',
+    'unexpected error',
+  ] as const
+
+  // Helper function to check if error should be displayed at alert level
+  const isAlertLevelEmailError = (errorMessage: string | undefined): boolean => {
+    if (!errorMessage) return false
+    return ALERT_LEVEL_ERROR_MESSAGES.some((msg) => errorMessage.includes(msg))
+  }
+
+  // Helper function to check if error should be displayed at field level
+  const isFieldLevelEmailError = (errorMessage: string | undefined): boolean => {
+    return !!errorMessage && !isAlertLevelEmailError(errorMessage)
+  }
+
   return (
     <Container maxWidth="sm">
       <Box
@@ -77,6 +96,12 @@ export function RegistrationForm({
           <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, fontWeight: 600 }}>
             Create your account
           </Typography>
+
+          {isAlertLevelEmailError(errors.email) && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {errors.email}
+            </Alert>
+          )}
 
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Sign up with
@@ -132,8 +157,8 @@ export function RegistrationForm({
               type="email"
               value={formData.email}
               onChange={onFieldChange('email')}
-              error={!!errors.email}
-              helperText={errors.email}
+              error={isFieldLevelEmailError(errors.email)}
+              helperText={isFieldLevelEmailError(errors.email) ? errors.email : ''}
               margin="normal"
               required
               autoComplete="email"

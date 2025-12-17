@@ -1,6 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { POST } from '@/app/api/register/route.js'
+import { POST } from '../../../../../src/app/api/register/route.js'
+
+vi.mock('@/application/services/log-layer.server.js', () => ({
+  logger: {
+    error: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    debug: vi.fn(),
+    withPrefix: vi.fn(() => ({
+      errorOnly: vi.fn(),
+      error: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn(),
+    })),
+  },
+}))
 
 describe('POST /api/register', () => {
   const mockEnv = {
