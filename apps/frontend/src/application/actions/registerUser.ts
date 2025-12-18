@@ -29,7 +29,10 @@ export async function registerUser(data: RegisterUserData): Promise<RegisterUser
       }
     }
 
-    return result
+    return {
+      ...result,
+      status: response.status,
+    }
   } catch (error) {
     return {
       status: 500,
