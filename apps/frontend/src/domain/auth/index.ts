@@ -40,5 +40,5 @@ export interface RegisterUserResponse {
     name: string
   }
   error?: string
-  status?: number
+  status: number
 }
