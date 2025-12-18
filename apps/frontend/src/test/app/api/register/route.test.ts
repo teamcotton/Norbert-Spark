@@ -217,7 +217,7 @@ describe('POST /api/register', () => {
       expect(response.status).toBe(500)
       expect(result).toEqual({
         success: false,
-        error: 'Registration failed',
+        error: 'An unexpected error occurred',
       })
     })
 
@@ -239,7 +239,87 @@ describe('POST /api/register', () => {
       expect(response.status).toBe(500)
       expect(result).toEqual({
         success: false,
-        error: 'Network error',
+        error: 'An unexpected error occurred',
+      })
+    })
+
+    it('should handle backend connection refused with 503 status', async () => {
+      const connectionError = new Error('fetch failed')
+      Object.assign(connectionError, {
+        cause: {
+          code: 'ECONNREFUSED',
+        },
+      })
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(connectionError)
+
+      const request = new Request('http://localhost:4321/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: 'test@example.com',
+          name: 'Test User',
+          password: 'password123',
+        }),
+      })
+
+      const response = await POST(request)
+      const result = await response.json()
+
+      expect(response.status).toBe(503)
+      expect(result).toEqual({
+        success: false,
+        error: 'Unable to connect to backend service. Please ensure the backend server is running.',
+      })
+    })
+
+    it('should handle ECONNREFUSED error in cause property', async () => {
+      const connectionError = new Error('connect ECONNREFUSED 127.0.0.1:3000')
+      Object.assign(connectionError, {
+        cause: {
+          code: 'ECONNREFUSED',
+          errno: -61,
+          syscall: 'connect',
+        },
+      })
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(connectionError)
+
+      const request = new Request('http://localhost:4321/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: 'test@example.com',
+          name: 'Test User',
+          password: 'password123',
+        }),
+      })
+
+      const response = await POST(request)
+      const result = await response.json()
+
+      expect(response.status).toBe(503)
+      expect(result).toEqual({
+        success: false,
+        error: 'Unable to connect to backend service. Please ensure the backend server is running.',
+      })
+    })
+
+    it('should handle fetch failed error message', async () => {
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('fetch failed'))
+
+      const request = new Request('http://localhost:4321/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: 'test@example.com',
+          name: 'Test User',
+          password: 'password123',
+        }),
+      })
+
+      const response = await POST(request)
+      const result = await response.json()
+
+      expect(response.status).toBe(503)
+      expect(result).toEqual({
+        success: false,
+        error: 'Unable to connect to backend service. Please ensure the backend server is running.',
       })
     })
 
