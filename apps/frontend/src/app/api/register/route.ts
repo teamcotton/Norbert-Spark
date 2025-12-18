@@ -1,4 +1,7 @@
+import { createLogger } from '@/application/services/logger.service.js'
 import type { RegisterUserData, RegisterUserResponse } from '@/domain/auth/index.js'
+
+const loggerError = createLogger({ level: 'error', prefix: '[register:route]' })
 
 export async function POST(request: Request) {
   try {
@@ -107,7 +110,7 @@ export async function POST(request: Request) {
 
     return Response.json(result, { status: 200 })
   } catch (error) {
-    console.error('[registration-route] Registration error:', error)
+    loggerError.error('[registration-route] Registration error:', error)
 
     // Handle backend connection failures specifically
     if (error instanceof Error) {
