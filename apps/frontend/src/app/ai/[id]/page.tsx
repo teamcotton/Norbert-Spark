@@ -48,7 +48,7 @@ export default function AIChatPage({ params }: { params: Promise<{ id: string }>
       api: process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL,
     }),
     onError: (error) => {
-      logger.error('AIChatPage error', error)
+      logger.error('Chat transport error', error)
     },
   })
 
