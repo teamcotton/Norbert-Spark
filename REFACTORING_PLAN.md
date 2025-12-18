@@ -594,26 +594,31 @@ const result = await registerUserAction(formData) // Direct call
 1. **Do we have any external consumers of the `/api/register` or `/api/users` endpoints?**
    - If yes → Use Hybrid Approach
    - If no → Full Server Actions migration
+
 - The answer to question is **no**
 
 2. **Is authentication/authorization required for backend API calls?**
    - If yes → Plan for JWT/session handling in Server Actions
    - If no → Current plan is sufficient
+
 - The answer to this question is **yes**
 
 3. **Do we need real-time updates or subscriptions?**
    - If yes → Consider WebSocket or Server-Sent Events
    - If no → Server Actions are sufficient
+
 - The answer to this question is **yes**
 
 4. **What is our deployment environment?**
    - Vercel/Netlify → Server Actions work seamlessly
    - Self-hosted/Docker → Ensure Node.js runtime support
+
 - The answer to this question is **Vercel** but I may want to host on AWS in the future
 
 5. **Do we have rate limiting or caching requirements?**
    - If yes → Plan for middleware or infrastructure layer enhancements
    - If no → Basic implementation is sufficient
+
 - The answer so this question is **yes**
 
 ---
@@ -664,19 +669,19 @@ export async function requireAuth(): Promise<string> {
 }
 
 // Usage in Server Action
-'use server'
+;('use server')
 
 import { requireAuth } from './auth/withAuth'
 
 export async function getAllUsers() {
   const token = await requireAuth() // Redirects if not authenticated
-  
+
   const response = await fetch(`${process.env.BACKEND_URL}/users`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
-  
+
   // ... rest of logic
 }
 ```
@@ -709,26 +714,26 @@ WebSocket/Server-Sent Events (real-time updates)
 export async function GET(request: Request) {
   const encoder = new TextEncoder()
   const token = request.headers.get('authorization')
-  
+
   const stream = new ReadableStream({
     async start(controller) {
       // Connect to backend WebSocket/SSE
       const ws = new WebSocket(`${process.env.BACKEND_WS_URL}/stream?token=${token}`)
-      
+
       ws.onmessage = (event) => {
         const data = `data: ${event.data}\n\n`
         controller.enqueue(encoder.encode(data))
       }
-      
+
       ws.onerror = () => controller.close()
     },
   })
-  
+
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
     },
   })
 }
@@ -819,11 +824,11 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/api')) {
     const ip = request.ip ?? '127.0.0.1'
     const { success, limit, reset, remaining } = await ratelimit.limit(ip)
-    
+
     if (!success) {
       return NextResponse.json(
         { error: 'Too many requests' },
-        { 
+        {
           status: 429,
           headers: {
             'X-RateLimit-Limit': limit.toString(),
@@ -834,7 +839,7 @@ export async function middleware(request: NextRequest) {
       )
     }
   }
-  
+
   return NextResponse.next()
 }
 
