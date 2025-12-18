@@ -359,4 +359,61 @@ test.describe('Registration Page', () => {
       page.getByText(/this email is already registered\. please use a different email\./i)
     ).toBeVisible({ timeout: 10000 })
   })
+
+  test('should display backend connection error when API is unavailable', async ({ page }) => {
+    // Intercept the registration API call and return a 503 Service Unavailable error
+    // Note: We use route.fulfill() instead of route.abort() because:
+    // - The API route catches real network failures and returns a 503 with a specific message
+    // - This simulates what users actually see when the backend is down
+    // - route.abort() would just throw a generic "Failed to fetch" error
+    await page.route('**/api/register', (route) => {
+      route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: false,
+          error:
+            'Unable to connect to backend service. Please ensure the backend server is running.',
+        }),
+      })
+    })
+
+    const uniqueEmail = `test-network-failure-${Date.now()}@example.com`
+    const name = 'Test User'
+    const password = 'securepassword123'
+
+    // Fill in the registration form
+    await page.getByLabel(/email address/i).fill(uniqueEmail)
+    await page.getByLabel(/^name/i).fill(name)
+    await page
+      .getByLabel(/^password/i, { exact: false })
+      .first()
+      .fill(password)
+    await page.locator('input[autocomplete="new-password"]').nth(1).fill(password)
+
+    // Submit the form
+    const submitButton = page.getByRole('button', { name: /create account/i })
+    await submitButton.click()
+
+    // Wait for and verify the backend connection error appears in the Alert
+    await expect(
+      page.getByText(
+        /unable to connect to backend service\. please ensure the backend server is running\./i
+      )
+    ).toBeVisible({ timeout: 10000 })
+
+    // Verify the error is displayed in an Alert component (not a field error)
+    // Filter for the specific alert containing our error message (not the Next.js route announcer)
+    const alert = page.getByRole('alert').filter({
+      hasText: /unable to connect to backend service/i,
+    })
+    await expect(alert).toBeVisible()
+    await expect(alert).toContainText(
+      /unable to connect to backend service\. please ensure the backend server is running\./i
+    )
+
+    // Verify the email field does NOT have an error (error should be in Alert only)
+    const emailInput = page.getByLabel(/email address/i)
+    await expect(emailInput).not.toHaveAttribute('aria-invalid', 'true')
+  })
 })
