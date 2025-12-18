@@ -18,7 +18,7 @@ export class UnifiedLogger {
     LogLevel.INFO,
     LogLevel.WARN,
     LogLevel.ERROR,
-  ] as const
+  ]
 
   private level: LogLevelType
   private readonly prefix: string
@@ -29,9 +29,7 @@ export class UnifiedLogger {
   }
 
   private shouldLog(level: LogLevelType): boolean {
-    return (
-      UnifiedLogger.LOG_LEVELS.indexOf(level) >= UnifiedLogger.LOG_LEVELS.indexOf(this.level)
-    )
+    return UnifiedLogger.LOG_LEVELS.indexOf(level) >= UnifiedLogger.LOG_LEVELS.indexOf(this.level)
   }
 
   private formatMessage(level: LogLevelType, message: string, ..._args: unknown[]): string {
