@@ -65,24 +65,6 @@ export class RegisterUserUseCase {
       roles: [dto.role],
     })
 
-    /**
-     *  "access_token": {
-     *                 "type": "string",
-     *                 "description": "JWT access token",
-     *                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-     *               },
-     *               "token_type": {
-     *                 "type": "string",
-     *                 "description": "Type of the token",
-     *                 "example": "Bearer"
-     *               },
-     *               "expires_in": {
-     *                 "type": "integer",
-     *                 "description": "How long the user token lasts for",
-     *                 "example": 3600
-     *               }
-     */
-
     return { userId, access_token: accessToken }
   }
 
