@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
   // Optimize for production
-  poweredByHeader: false,
+  poweredByHeader: process.env.NODE_ENV !== 'development',
   // Configure image optimization if needed
   images: {
     remotePatterns: [],
@@ -15,10 +15,18 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    // Enable filesystem caching for `next dev`
+    turbopackFileSystemCacheForDev: true,
+    // Enable filesystem caching for `next build`
+    turbopackFileSystemCacheForBuild: true,
   },
   // Set the workspace root for turbopack
   turbopack: {
     root: path.resolve(__dirname, '../../'),
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+    tsconfigPath: 'tsconfig.json',
   },
 }
 
