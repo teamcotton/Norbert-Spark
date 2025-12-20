@@ -1,4 +1,5 @@
 import nextPlugin from '@next/eslint-plugin-next'
+import queryPlugin from '@tanstack/eslint-plugin-query'
 import vitestPlugin from '@vitest/eslint-plugin'
 import type { Linter } from 'eslint'
 import drizzlePlugin from 'eslint-plugin-drizzle'
@@ -18,6 +19,7 @@ const config: Linter.Config[] = [
     // Register plugins globally for all files
     plugins: {
       '@next/next': nextPlugin,
+      '@tanstack/query': queryPlugin,
       vitest: vitestPlugin,
       drizzle: drizzlePlugin,
       jsdoc,
@@ -25,6 +27,7 @@ const config: Linter.Config[] = [
     },
   },
   ...tseslint.configs.recommended,
+  ...queryPlugin.configs['flat/recommended'],
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
   jsxA11yPlugin.flatConfigs.recommended,
