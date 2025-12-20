@@ -12,7 +12,6 @@ import { PinoLoggerService } from '../../adapters/secondary/services/logger.serv
 import { UserController } from '../../adapters/primary/http/user.controller.js'
 
 import { EnvConfig } from '../config/env.config.js'
-import { JwtUtil } from '../security/jwt.util.js'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { readFileSync } from 'node:fs'
