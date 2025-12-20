@@ -222,7 +222,7 @@ describe('findAllUsers', () => {
       expect(result.success).toBe(false)
       expect(result.users).toEqual([])
       expect(result.total).toBe(0)
-      expect(result.error).toContain('Failed find users')
+      expect(result.error).toContain('Failed to find users')
       expect(result.error).toContain('404')
       expect(result.error).toContain('Not Found')
       expect(result.error).toContain('Please check your API URL in the .env file')

@@ -39,7 +39,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
         success: false,
         users: [],
         total: 0,
-        error: `Failed find users: Server returned ${response.status} ${response.statusText}. Please check your API URL in the .env file.`,
+        error: `Failed to find users: Server returned ${response.status} ${response.statusText}. Please check your API URL in the .env file.`,
       }
     }
 
