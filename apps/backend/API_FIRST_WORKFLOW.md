@@ -283,9 +283,6 @@ spectral lint openapi.json
 
 # Generate types (optional)
 openapi-typescript openapi.json -o src/types/api.ts
-
-# Convert YAML to JSON
-yq eval -o=json openapi.json > openapi.json
 ```
 
 ## Resources

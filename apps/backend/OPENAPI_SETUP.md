@@ -25,7 +25,7 @@
 
 - **@fastify/swagger**: Loads OpenAPI spec
 - **@fastify/swagger-ui**: Interactive documentation at `/docs`
-- **YAML Parser**: Parses `openapi.json` at startup
+- **JSON Parser**: Parses `openapi.json` at startup
 
 ### 4. NPM Scripts
 
