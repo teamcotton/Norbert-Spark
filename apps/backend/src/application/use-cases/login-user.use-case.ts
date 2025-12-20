@@ -19,21 +19,17 @@ export class LoginUserUseCase {
   }> {
     this.logger.info('User login attempt', { email: dto.email })
 
-    // Find user by email
     const user = await this.userRepository.findByEmail(dto.email)
 
     if (!user) {
       this.logger.warn('Login failed: User not found', { email: dto.email })
-      // Use generic error message to prevent user enumeration attacks
       throw new UnauthorizedException('Invalid email or password')
     }
 
-    // Verify password using public method
     const isPasswordValid = await user.verifyPassword(dto.password)
 
     if (!isPasswordValid) {
       this.logger.warn('Login failed: Invalid password', { email: dto.email, userId: user.id })
-      // Use generic error message to prevent user enumeration attacks
       throw new UnauthorizedException('Invalid email or password')
     }
 

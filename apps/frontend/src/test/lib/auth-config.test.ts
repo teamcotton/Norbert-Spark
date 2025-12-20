@@ -150,8 +150,8 @@ describe('authOptions Configuration', () => {
 
     it('should use NEXT_PUBLIC_BACKEND_URL environment variable', async () => {
       const customBackendUrl = 'https://api.example.com'
-      const originalEnv = process.env.NEXT_PUBLIC_BACKEND_URL
-      process.env.NEXT_PUBLIC_BACKEND_URL = customBackendUrl
+      const originalEnv = process.env.BACKEND_AI_CALLBACK_URL_DEV
+      process.env.BACKEND_AI_CALLBACK_URL_DEV = customBackendUrl
 
       // Re-import with new env var
       vi.resetModules()
@@ -188,7 +188,7 @@ describe('authOptions Configuration', () => {
         expect.any(Object)
       )
 
-      process.env.NEXT_PUBLIC_BACKEND_URL = originalEnv
+      process.env.BACKEND_AI_CALLBACK_URL_DEV = originalEnv
     })
 
     it('should throw error when backend returns error', async () => {
@@ -306,7 +306,14 @@ describe('authOptions Configuration', () => {
         )
       ).rejects.toThrow('Network error')
 
-      expect(console.error).toHaveBeenCalledWith('Authentication error:', expect.any(Error))
+      expect(console.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Authentication error:',
+          method: 'ERROR',
+          prefix: '[[auth-config]] ',
+        }),
+        expect.any(Error)
+      )
     })
 
     it('should handle multiple roles from backend', async () => {

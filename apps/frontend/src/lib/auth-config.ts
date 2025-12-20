@@ -1,8 +1,14 @@
 import { type NextAuthOptions, type User } from 'next-auth'
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const CredentialsProvider = require('next-auth/providers/credentials').default
+import CredentialsProvider from 'next-auth/providers/credentials'
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://localhost:3001'
+import { createLogger } from '@/application/services/logger.service.js'
+
+const logger = createLogger({ prefix: '[auth-config]' })
+
+const backendUrl =
+  process.env.NODE_ENV === 'production'
+    ? process.env.BACKEND_AI_CALLBACK_URL_PROD
+    : process.env.BACKEND_AI_CALLBACK_URL_DEV
 
 interface BackendLoginResponse {
   success: boolean
@@ -20,8 +26,41 @@ interface CredentialsInput {
   password: string
 }
 
+/**
+ * NextAuth configuration options for authentication
+ *
+ * Configures authentication using credentials provider with backend API integration.
+ * Uses JWT strategy for session management with 30-day expiration.
+ *
+ * @property {Array} providers - Authentication providers (Credentials)
+ * @property {object} callbacks - Custom callbacks for JWT and session handling
+ * @property {Function} callbacks.jwt - JWT callback to add custom properties (accessToken, id, roles)
+ * @property {Function} callbacks.session - Session callback to expose JWT properties to client
+ * @property {object} pages - Custom authentication page routes
+ * @property {string} pages.signIn - Sign-in page route (/login)
+ * @property {string} pages.error - Error page route (/login)
+ * @property {object} session - Session configuration
+ * @property {string} session.strategy - Session strategy ('jwt')
+ * @property {number} session.maxAge - Session max age in seconds (30 days)
+ * @property {object} jwt - JWT configuration
+ * @property {number} jwt.maxAge - JWT max age in seconds (30 days)
+ * @property {string} secret - Secret key for JWT signing from NEXTAUTH_SECRET env var
+ * @property {boolean} debug - Enable debug mode in development
+ *
+ * @example
+ * ```tsx
+ * // In your app layout or provider
+ * import { authOptions } from '@/lib/auth-config'
+ * import { getServerSession } from 'next-auth'
+ *
+ * const session = await getServerSession(authOptions)
+ * ```
+ *
+ * @see {@link https://next-auth.js.org/configuration/options|NextAuth Options}
+ */
 export const authOptions: NextAuthOptions = {
   providers: [
+    // @ts-expect-error - NextAuth v4 ESM/CommonJS interop issue with credentials provider
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -66,7 +105,7 @@ export const authOptions: NextAuthOptions = {
 
           return null
         } catch (error) {
-          console.error('Authentication error:', error)
+          logger.error('Authentication error:', error)
           throw error
         }
       },
