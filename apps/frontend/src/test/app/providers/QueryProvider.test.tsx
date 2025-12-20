@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -153,8 +153,6 @@ describe('QueryProvider', () => {
     })
 
     it('should configure mutations with retry attempts', async () => {
-      const { useMutation } = await import('@tanstack/react-query')
-
       let attemptCount = 0
       const mockMutationFn = vi.fn().mockImplementation(async () => {
         attemptCount++
@@ -337,8 +335,6 @@ describe('QueryProvider', () => {
     })
 
     it('should handle mutation errors gracefully', async () => {
-      const { useMutation } = await import('@tanstack/react-query')
-
       const mockMutationFn = vi.fn().mockRejectedValue(new Error('Mutation failed'))
 
       const TestComponent = () => {
