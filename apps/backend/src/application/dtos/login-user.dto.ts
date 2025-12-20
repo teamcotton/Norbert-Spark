@@ -1,0 +1,24 @@
+import { TypeException } from '../../shared/exceptions/type.exception.js'
+import { ValidationException } from '../../shared/exceptions/validation.exception.js'
+import { isString } from '../../shared/guards/type.guards.js'
+
+export class LoginUserDto {
+  constructor(
+    public readonly email: string,
+    public readonly password: string
+  ) {}
+
+  static validate(data: any): LoginUserDto {
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      throw new TypeException('Data must be a valid object')
+    }
+    if (!data.email || !isString(data.email)) {
+      throw new ValidationException('Email is required and must be a string')
+    }
+    if (!data.password || !isString(data.password)) {
+      throw new ValidationException('Password is required and must be a string')
+    }
+
+    return new LoginUserDto(data.email, data.password)
+  }
+}
