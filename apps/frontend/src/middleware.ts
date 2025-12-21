@@ -95,12 +95,13 @@ export function nowSeconds() {
  * Securely extract the client IP address from request headers.
  *
  * Security considerations:
- * - Only trusts X-Forwarded-For header when the request comes from a trusted proxy
- * - Uses the rightmost IP from X-Forwarded-For that isn't in the trusted proxy list
+ * - Searches the X-Forwarded-For header chain for the rightmost IP that isn't in the trusted proxy list
  * - Falls back to X-Real-IP, then 'unknown' if no trusted source is available
  *
  * This prevents attackers from spoofing the X-Forwarded-For header to bypass
  * rate limiting when the application is accessed directly (not through a proxy).
+ * When behind trusted proxies, this function identifies the real client IP by
+ * finding the rightmost IP in the chain that isn't a known proxy.
  *
  * @param {Request} request - The incoming request object
  * @returns {string} The client IP address or 'unknown'
@@ -120,7 +121,8 @@ export function extractClientIp(request: Request): string {
     // This represents the real client IP when behind trusted proxies
     // Iterate from right to left
     for (let i = ips.length - 1; i >= 0; i--) {
-      const ip = ips.at(i)
+      // eslint-disable-next-line security/detect-object-injection
+      const ip = ips[i]
       if (ip && !TRUSTED_PROXIES.includes(ip)) {
         return ip
       }
