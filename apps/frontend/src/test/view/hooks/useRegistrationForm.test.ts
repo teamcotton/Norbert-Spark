@@ -1,4 +1,8 @@
-import { act, renderHook } from '@testing-library/react'
+// use react-dom's act for hook tests to reliably wrap state updates
+// (avoids intermittent "not wrapped in act(...)" warnings seen
+// when importing act from @testing-library/react)
+import { renderHook } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { registerUser } from '@/application/actions/registerUser.js'

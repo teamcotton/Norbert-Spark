@@ -1,4 +1,5 @@
-import { act, renderHook } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 import { describe, expect, it } from 'vitest'
 
 import { useSignInForm } from '@/view/hooks/useSignInForm.js'
