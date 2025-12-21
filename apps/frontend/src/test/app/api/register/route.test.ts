@@ -2,6 +2,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { POST } from '../../../../../src/app/api/register/route.js'
 
+vi.mock('../../../application/services/logger.service.test.js', () => ({
+  PinoLoggerService: vi.fn().mockImplementation(() => ({
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    debug: vi.fn(),
+  })),
+}))
+
 describe('POST /api/register', () => {
   const mockEnv = {
     BACKEND_AI_CALLBACK_URL_DEV: 'https://api.example.com',

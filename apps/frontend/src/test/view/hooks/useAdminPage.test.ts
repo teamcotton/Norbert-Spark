@@ -1,5 +1,6 @@
 import type { GridPaginationModel } from '@mui/x-data-grid'
-import { act, renderHook, waitFor } from '@testing-library/react'
+import { renderHook, waitFor } from '@testing-library/react'
+import { act } from 'react-dom/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import * as findAllUsersModule from '@/application/actions/findAllUsers.js'
