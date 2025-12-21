@@ -69,11 +69,14 @@ export class RegisterUserUseCase {
       roles: [dto.role],
     })
 
+    const expiresIn = Number.parseInt(EnvConfig.JWT_EXPIRATION, 10)
+    const safeExpiresIn = Number.isNaN(expiresIn) ? 3600 : expiresIn
+
     return {
       userId,
       access_token: accessToken,
       token_type: 'Bearer',
-      expires_in: Number.parseInt(EnvConfig.JWT_EXPIRATION),
+      expires_in: safeExpiresIn,
     }
   }
 

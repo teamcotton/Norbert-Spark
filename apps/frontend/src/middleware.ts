@@ -33,6 +33,7 @@ const RATE_LIMIT_CLEANUP_INTERVAL_SECONDS = RATE_LIMIT_WINDOW * 2
 // serverless/edge runtimes.
 // Avoid casting to `any` to satisfy `@typescript-eslint/no-explicit-any`.
 type TimerWithUnref = { unref?: () => void }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let rateMapCleanupTimer: TimerWithUnref | undefined
 
 export function scheduleRateMapCleanup() {
