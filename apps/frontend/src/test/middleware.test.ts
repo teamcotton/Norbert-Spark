@@ -314,11 +314,11 @@ describe('Middleware', () => {
       vi.mocked(getToken).mockResolvedValue(null)
       const request = createRequest('/administrators')
 
-      // /administrators starts with /admin, so it's treated as protected
+      // /administrators should NOT be treated as /admin (no trailing slash),
+      // so it remains public and should be allowed through.
       const response = await middleware(request)
 
-      expect(response.status).toBe(302)
-      expect(response.headers.get('location')).toContain('login')
+      expect(response.status).toBe(200)
     })
 
     it('should handle empty token object', async () => {
