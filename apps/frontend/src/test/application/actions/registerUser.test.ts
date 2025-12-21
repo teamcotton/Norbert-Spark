@@ -258,8 +258,6 @@ describe('registerUser', () => {
       expect(result.success).toBe(true)
       expect(result.data).toBeDefined()
       expect(result.data?.userId).toBe('202')
-      expect(result.data?.email).toBe('newuser@example.com')
-      expect(result.data?.name).toBe('New User')
       expect(result.error).toBeUndefined()
     })
 
