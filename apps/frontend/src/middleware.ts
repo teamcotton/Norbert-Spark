@@ -53,11 +53,11 @@ export async function middleware(request: Request) {
   const protectedRoutes = ['/admin', '/dashboard', '/profile']
   const authRoutes = ['/login', '/register']
 
+  const pathMatchesRoute = (route: string) => pathname === route || pathname.startsWith(`${route}/`)
   // Check if current path is a protected route
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-
+  const isProtectedRoute = protectedRoutes.some(pathMatchesRoute)
   // Check if current path is an auth route
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
+  const isAuthRoute = authRoutes.some(pathMatchesRoute)
 
   // Redirect unauthenticated users from protected routes to login
   if (isProtectedRoute && !isAuthenticated) {

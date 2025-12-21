@@ -20,7 +20,7 @@ export interface MockTokenOptions {
  */
 export function createMockToken(overrides: MockTokenOptions = {}) {
   const now = Math.floor(Date.now() / 1000)
-  
+
   return {
     sub: '123',
     name: 'Test User',
