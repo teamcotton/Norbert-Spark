@@ -36,11 +36,7 @@ export interface RegisterUserResponse {
   success: boolean
   data?: {
     userId: string
-    email: string
-    name: string
     access_token: string
-    token_type: string
-    expires_in: number
   }
   error?: string
   status: number
