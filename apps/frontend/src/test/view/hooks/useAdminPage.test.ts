@@ -82,7 +82,7 @@ describe('useAdminPage', () => {
       })
     })
 
-    it('should initialize with empty search query', async () => {
+    it('should initialize with empty search query', () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -91,9 +91,7 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(result.current.searchQuery).toBe('')
-      })
+      expect(result.current.searchQuery).toBe('')
     })
 
     it('should initialize with default pagination model', () => {
