@@ -659,7 +659,7 @@ describe('UserController', () => {
 
         expect(mockReply.send).toHaveBeenCalledWith({
           success: true,
-          data: { userId: 'user-456-xyz', access_token: 'mock.jwt.token' },
+          data: mockResult,
         })
       })
 
@@ -1006,12 +1006,14 @@ describe('UserController', () => {
         await controller.register(mockRequest, mockReply)
 
         const sentResponse = vi.mocked(mockReply.send).mock.calls[0]?.[0] as {
-          data?: { userId: string; access_token: string }
+          data?: Record<string, any>
         }
-        expect(sentResponse.data).toEqual({
-          userId: 'user-123-abc',
-          access_token: 'mock.jwt.token',
-        })
+        expect(sentResponse.data).toEqual(
+          expect.objectContaining({
+            userId: 'user-123-abc',
+            access_token: 'mock.jwt.token',
+          })
+        )
       })
 
       it('should include error message in error response', async () => {

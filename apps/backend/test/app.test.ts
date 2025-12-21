@@ -17,8 +17,10 @@ const certificatesExist =
 describe('Fastify API Server', () => {
   let app: FastifyInstance
 
-  beforeEach(() => {
+  beforeEach(async () => {
     app = buildApp()
+    // Ensure plugins are ready before injecting requests
+    if (typeof app.ready === 'function') await app.ready()
   })
 
   afterEach(async () => {

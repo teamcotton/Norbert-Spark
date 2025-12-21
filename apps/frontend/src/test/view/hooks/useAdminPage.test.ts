@@ -98,7 +98,7 @@ describe('useAdminPage', () => {
       })
     })
 
-    it('should initialize with default pagination model', async () => {
+    it('should initialize with default pagination model', () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -107,11 +107,9 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(result.current.paginationModel).toEqual({
-          page: 0,
-          pageSize: 10,
-        })
+      expect(result.current.paginationModel).toEqual({
+        page: 0,
+        pageSize: 10,
       })
     })
 
@@ -129,7 +127,7 @@ describe('useAdminPage', () => {
       })
     })
 
-    it('should initialize with admin role', async () => {
+    it('should initialize with admin role', () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -138,12 +136,10 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(result.current.currentUserRole).toBe('admin')
-      })
+      expect(result.current.currentUserRole).toBe('admin')
     })
 
-    it('should provide all required handlers', async () => {
+    it('should provide all required handlers', () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -152,12 +148,10 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(result.current.handleSearchChange).toBeDefined()
-        expect(result.current.handlePaginationChange).toBeDefined()
-        expect(typeof result.current.handleSearchChange).toBe('function')
-        expect(typeof result.current.handlePaginationChange).toBe('function')
-      })
+      expect(result.current.handleSearchChange).toBeDefined()
+      expect(result.current.handlePaginationChange).toBeDefined()
+      expect(typeof result.current.handleSearchChange).toBe('function')
+      expect(typeof result.current.handlePaginationChange).toBe('function')
     })
   })
 
@@ -641,17 +635,13 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('search')
       })
 
-      await waitFor(() => {
-        expect(result.current.searchQuery).toBe('search')
-      })
+      expect(result.current.searchQuery).toBe('search')
 
       act(() => {
         result.current.handleSearchChange('')
       })
 
-      await waitFor(() => {
-        expect(result.current.searchQuery).toBe('')
-      })
+      expect(result.current.searchQuery).toBe('')
     })
 
     it('should handle special characters in search query', async () => {
@@ -671,12 +661,10 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('test@example.com')
       })
 
-      await waitFor(() => {
-        expect(result.current.searchQuery).toBe('test@example.com')
-      })
+      expect(result.current.searchQuery).toBe('test@example.com')
     })
 
-    it('should not trigger new fetch when search query changes', async () => {
+    it('should not trigger new fetch when search query changes', () => {
       mockFindAllUsers.mockResolvedValue({
         success: true,
         users: mockUsers,
@@ -685,18 +673,15 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
-      })
+      expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
 
       act(() => {
         result.current.handleSearchChange('search query')
       })
 
       // Search is client-side, so no new fetch
-      await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
-      })
+
+      expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
     })
 
     it('should handle multiple rapid search changes', async () => {
@@ -1164,11 +1149,9 @@ describe('useAdminPage', () => {
       })
 
       // Each call should have a different AbortSignal instance
-      await waitFor(() => {
-        expect(signals[0]).not.toBe(signals[1])
-        expect(signals[0]).toBeDefined()
-        expect(signals[1]).toBeDefined()
-      })
+      expect(signals[0]).not.toBe(signals[1])
+      expect(signals[0]).toBeDefined()
+      expect(signals[1]).toBeDefined()
     })
 
     it('should pass signal parameter to findAllUsers', async () => {
@@ -1185,10 +1168,8 @@ describe('useAdminPage', () => {
       })
 
       const callArgs = mockFindAllUsers.mock.calls[0]![0]
-      await waitFor(() => {
-        expect(callArgs.signal).toBeInstanceOf(AbortSignal)
-        expect(callArgs.signal?.aborted).toBe(false)
-      })
+      expect(callArgs.signal).toBeInstanceOf(AbortSignal)
+      expect(callArgs.signal?.aborted).toBe(false)
     })
 
     it('should abort on unmount even if request is pending', async () => {
@@ -1220,9 +1201,7 @@ describe('useAdminPage', () => {
       unmount()
 
       // Signal should now be aborted
-      await waitFor(() => {
-        expect(requestSignal?.aborted).toBe(true)
-      })
+      expect(requestSignal?.aborted).toBe(true)
     })
 
     it('should handle abort during pagination change sequence', async () => {
