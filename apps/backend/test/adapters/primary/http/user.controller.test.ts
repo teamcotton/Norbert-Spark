@@ -557,7 +557,12 @@ describe('UserController', () => {
 
         mockRequest.body = requestBody
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -575,7 +580,12 @@ describe('UserController', () => {
 
         mockRequest.body = requestBody
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -594,7 +604,12 @@ describe('UserController', () => {
           name: 'Test User',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -609,7 +624,12 @@ describe('UserController', () => {
           name: 'Test User',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -627,14 +647,19 @@ describe('UserController', () => {
           name: 'Another User',
         }
 
-        const mockResult = { userId: 'user-456-xyz', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-456-xyz',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
 
         expect(mockReply.send).toHaveBeenCalledWith({
           success: true,
-          data: { userId: 'user-456-xyz', access_token: 'mock.jwt.token' },
+          data: mockResult,
         })
       })
 
@@ -645,7 +670,12 @@ describe('UserController', () => {
           name: 'Test User',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -853,7 +883,12 @@ describe('UserController', () => {
           anotherField: 123,
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -872,7 +907,12 @@ describe('UserController', () => {
           name: '  Test User  ',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -917,7 +957,12 @@ describe('UserController', () => {
           name: 'Test User',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
@@ -950,18 +995,25 @@ describe('UserController', () => {
           name: 'Test User',
         }
 
-        const mockResult = { userId: 'user-123-abc', access_token: 'mock.jwt.token' }
+        const mockResult = {
+          userId: 'user-123-abc',
+          access_token: 'mock.jwt.token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }
         vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
         await controller.register(mockRequest, mockReply)
 
         const sentResponse = vi.mocked(mockReply.send).mock.calls[0]?.[0] as {
-          data?: { userId: string; access_token: string }
+          data?: Record<string, any>
         }
-        expect(sentResponse.data).toEqual({
-          userId: 'user-123-abc',
-          access_token: 'mock.jwt.token',
-        })
+        expect(sentResponse.data).toEqual(
+          expect.objectContaining({
+            userId: 'user-123-abc',
+            access_token: 'mock.jwt.token',
+          })
+        )
       })
 
       it('should include error message in error response', async () => {
@@ -1041,7 +1093,12 @@ describe('UserController', () => {
         name: 'Integration Test',
       }
 
-      const mockResult = { userId: 'user-integration-123', access_token: 'mock.jwt.token' }
+      const mockResult = {
+        userId: 'user-integration-123',
+        access_token: 'mock.jwt.token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      }
       vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
       // Execute handler
@@ -1075,7 +1132,12 @@ describe('UserController', () => {
         name: 'Test User',
       }
 
-      const mockResult = { userId: 'user-123', access_token: 'mock.jwt.token' }
+      const mockResult = {
+        userId: 'user-123',
+        access_token: 'mock.jwt.token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      }
       vi.mocked(mockRegisterUserUseCase.execute).mockResolvedValue(mockResult)
 
       await registerHandler(mockRequest, mockReply)

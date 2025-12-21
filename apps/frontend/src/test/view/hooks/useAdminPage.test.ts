@@ -52,10 +52,12 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      expect(result.current.users).toEqual([])
+      await waitFor(() => {
+        expect(result.current.users).toEqual([])
+      })
     })
 
-    it('should initialize with loading state as true', () => {
+    it('should initialize with loading state as true', async () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -75,8 +77,9 @@ describe('useAdminPage', () => {
       })
 
       const { result } = renderHook(() => useAdminPage())
-
-      expect(result.current.error).toBeNull()
+      await waitFor(() => {
+        expect(result.current.error).toBeNull()
+      })
     })
 
     it('should initialize with empty search query', () => {
@@ -106,7 +109,7 @@ describe('useAdminPage', () => {
       })
     })
 
-    it('should initialize with rowCount as 0', () => {
+    it('should initialize with rowCount as 0', async () => {
       mockFindAllUsers.mockResolvedValueOnce({
         success: true,
         users: mockUsers,
@@ -115,7 +118,9 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      expect(result.current.rowCount).toBe(0)
+      await waitFor(() => {
+        expect(result.current.rowCount).toBe(0)
+      })
     })
 
     it('should initialize with admin role', () => {
@@ -425,7 +430,9 @@ describe('useAdminPage', () => {
         result.current.handlePaginationChange(newModel)
       })
 
-      expect(result.current.paginationModel).toEqual(newModel)
+      await waitFor(() => {
+        expect(result.current.paginationModel).toEqual(newModel)
+      })
     })
 
     it('should trigger new fetch when pagination changes', async () => {
@@ -549,7 +556,9 @@ describe('useAdminPage', () => {
       })
 
       // Should be loading immediately after pagination change
-      expect(result.current.loading).toBe(true)
+      await waitFor(() => {
+        expect(result.current.loading).toBe(true)
+      })
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
@@ -600,7 +609,9 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('test query')
       })
 
-      expect(result.current.searchQuery).toBe('test query')
+      await waitFor(() => {
+        expect(result.current.searchQuery).toBe('test query')
+      })
     })
 
     it('should update search query with empty string', async () => {
@@ -649,7 +660,7 @@ describe('useAdminPage', () => {
       expect(result.current.searchQuery).toBe('test@example.com')
     })
 
-    it('should not trigger new fetch when search query changes', async () => {
+    it('should not trigger new fetch when search query changes', () => {
       mockFindAllUsers.mockResolvedValue({
         success: true,
         users: mockUsers,
@@ -658,15 +669,14 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage())
 
-      await waitFor(() => {
-        expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
-      })
+      expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
 
       act(() => {
         result.current.handleSearchChange('search query')
       })
 
       // Search is client-side, so no new fetch
+
       expect(mockFindAllUsers).toHaveBeenCalledTimes(1)
     })
 
@@ -690,7 +700,9 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('admin')
       })
 
-      expect(result.current.searchQuery).toBe('admin')
+      await waitFor(() => {
+        expect(result.current.searchQuery).toBe('admin')
+      })
     })
   })
 
@@ -712,7 +724,9 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('test search')
       })
 
-      expect(result.current.searchQuery).toBe('test search')
+      await waitFor(() => {
+        expect(result.current.searchQuery).toBe('test search')
+      })
 
       act(() => {
         result.current.handlePaginationChange({ page: 1, pageSize: 10 })
@@ -753,8 +767,10 @@ describe('useAdminPage', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      expect(result.current.paginationModel).toEqual({ page: 1, pageSize: 20 })
-      expect(result.current.error).toBe('Network error')
+      await waitFor(() => {
+        expect(result.current.paginationModel).toEqual({ page: 1, pageSize: 20 })
+        expect(result.current.error).toBe('Network error')
+      })
     })
 
     it('should handle successful fetch after failed fetch', async () => {
@@ -889,7 +905,9 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange(longQuery)
       })
 
-      expect(result.current.searchQuery).toBe(longQuery)
+      await waitFor(() => {
+        expect(result.current.searchQuery).toBe(longQuery)
+      })
     })
 
     it('should handle search query with unicode characters', async () => {
@@ -909,7 +927,9 @@ describe('useAdminPage', () => {
         result.current.handleSearchChange('用户名称 🔍')
       })
 
-      expect(result.current.searchQuery).toBe('用户名称 🔍')
+      await waitFor(() => {
+        expect(result.current.searchQuery).toBe('用户名称 🔍')
+      })
     })
   })
 
@@ -954,9 +974,13 @@ describe('useAdminPage', () => {
       })
 
       // First request should have been aborted
-      expect(firstCallSignal?.aborted).toBe(true)
+      await waitFor(() => {
+        expect(firstCallSignal?.aborted).toBe(true)
+      })
       // Second request should not be aborted (yet)
-      expect(secondCallSignal?.aborted).toBe(false)
+      await waitFor(() => {
+        expect(secondCallSignal?.aborted).toBe(false)
+      })
     })
 
     it('should abort request on component unmount', async () => {
@@ -1044,8 +1068,10 @@ describe('useAdminPage', () => {
       })
 
       // Should have data from second request, not first
-      expect(result.current.users).toHaveLength(1)
-      expect(result.current.users[0]?.email).toBe('user@example.com')
+      await waitFor(() => {
+        expect(result.current.users).toHaveLength(1)
+        expect(result.current.users[0]?.email).toBe('user@example.com')
+      })
     })
 
     it('should handle multiple rapid pagination changes correctly', async () => {
@@ -1163,7 +1189,9 @@ describe('useAdminPage', () => {
       })
 
       // Request is still pending
-      expect(requestSignal?.aborted).toBe(false)
+      await waitFor(() => {
+        expect(requestSignal?.aborted).toBe(false)
+      })
 
       // Unmount component
       unmount()
@@ -1211,16 +1239,20 @@ describe('useAdminPage', () => {
       })
 
       // First signal should be aborted
-      expect(firstSignal?.aborted).toBe(true)
+      await waitFor(() => {
+        expect(firstSignal?.aborted).toBe(true)
+      })
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
       })
 
       // Should show data from second request only
-      expect(result.current.users).toHaveLength(1)
-      expect(result.current.users[0]?.email).toBe('admin@example.com')
-      expect(secondSignal?.aborted).toBe(false)
+      await waitFor(() => {
+        expect(result.current.users).toHaveLength(1)
+        expect(result.current.users[0]?.email).toBe('admin@example.com')
+        expect(secondSignal?.aborted).toBe(false)
+      })
     })
 
     it('should maintain correct state after aborting multiple requests', async () => {
@@ -1255,11 +1287,13 @@ describe('useAdminPage', () => {
       })
 
       // Should have data from one of the requests (timing may vary)
-      expect(result.current.users).toHaveLength(1)
-      // The final email could be from call 2 or call 3 due to race conditions
-      expect(['admin@example.com', 'user@example.com']).toContain(result.current.users[0]?.email)
-      expect(result.current.rowCount).toBe(1)
-      expect(result.current.error).toBeNull()
+      await waitFor(() => {
+        expect(result.current.users).toHaveLength(1)
+        // The final email could be from call 2 or call 3 due to race conditions
+        expect(['admin@example.com', 'user@example.com']).toContain(result.current.users[0]?.email)
+        expect(result.current.rowCount).toBe(1)
+        expect(result.current.error).toBeNull()
+      })
     })
   })
 })
