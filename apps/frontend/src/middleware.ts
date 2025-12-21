@@ -40,6 +40,10 @@ export async function middleware(request: Request) {
   const url = new URL(request.url)
   const { pathname } = url
 
+  // Import NextResponse dynamically to avoid TypeScript resolution issues
+  // @ts-expect-error - suppress missing types for 'next/server' in this environment
+  const { NextResponse } = await import('next/server')
+
   // Get token from cookies using next-auth
   const token = await getToken({
     req: request as never,
@@ -63,16 +67,16 @@ export async function middleware(request: Request) {
     const loginUrl = new URL('/login', request.url)
     // Add callback URL to redirect back after login
     loginUrl.searchParams.set('callbackUrl', pathname)
-    return Response.redirect(loginUrl)
+    return NextResponse.redirect(loginUrl, 302)
   }
 
   // Redirect authenticated users away from auth pages
   if (isAuthRoute && isAuthenticated) {
-    return Response.redirect(new URL('/admin', request.url))
+    return NextResponse.redirect(new URL('/admin', request.url), 302)
   }
 
-  // Allow request to proceed
-  return new Response(null, { status: 200 })
+  // Allow request to proceed to Next.js
+  return NextResponse.next()
 }
 
 /**
