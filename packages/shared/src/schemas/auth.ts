@@ -3,18 +3,16 @@ import { UserSchema } from './user.js'
 
 export const LoginSchema = z.object({
   email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .email({ message: 'Please enter a valid email address' }),
+    .email({ message: 'Please enter a valid email address' })
+    .min(1, { message: 'Email is required' }),
   password: z.string().min(1, { message: 'Password is required' }),
 })
 
 export const RegisterSchema = z
   .object({
     email: z
-      .string()
-      .min(1, { message: 'Email is required' })
-      .email({ message: 'Please enter a valid email address' }),
+      .email({ message: 'Please enter a valid email address' })
+      .min(1, { message: 'Email is required' }),
     name: z.string().min(1, { message: 'Name is required' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
     confirmPassword: z.string().min(8, { message: 'Confirm password is required' }),
