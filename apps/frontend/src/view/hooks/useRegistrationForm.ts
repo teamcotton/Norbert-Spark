@@ -35,9 +35,7 @@ export function useRegistrationForm() {
   })
 
   const [generalError, setGeneralError] = useState<string>('')
-  const mutation = useRegisterUser() as {
-    mutateAsync: (data: RegisterUserData) => Promise<RegisterUserResponse>
-  }
+  const mutation = useRegisterUser()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (field: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
