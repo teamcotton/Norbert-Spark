@@ -19,5 +19,6 @@ import { LoginSchema, LoginDTO } from '@level-2-gym/shared'
 ```
 
 Notes:
+
 - Add build step and package exports as needed when the package grows.
 - This scaffold expects `zod` to be installed in the workspace.
