@@ -47,15 +47,15 @@ frotend/src/
 │       └── external/
 │
 ├── infrastructure/      # Technical implementation details
-│   ├── serveractions/   # Fastify setup, middleware
+│   ├── serveractions/   # Calling APIs from the backend
 │   ├── config/          # Environment configuration
 │   ├── security/        # Auth, encryption
 │   └── di/              # Dependency injection
-
+│
 ├── view/                # Technical implementation of UI
 │   ├── client-components/      # UI client-side components
 │   ├── server-components/      # UI server-side components
-│   ├── hooks/           # Environment configuration
+│   ├── hooks/           # Hooks for data fetching and state management
 │
 └── shared/              # Common utilities across layers
     ├── types/
