@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import React from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { registerUser } from '@/application/actions/registerUser.js'
 import { useRegisterUser } from '@/view/hooks/queries/useRegisterUser.js'
@@ -10,13 +10,16 @@ vi.mock('@/application/actions/registerUser.js', () => ({
   registerUser: vi.fn(),
 }))
 
+// Helper function to create a QueryClientProvider wrapper
+function createWrapper(client: QueryClient) {
+  return function Wrapper({ children }: { children: React.ReactNode }) {
+    return React.createElement(QueryClientProvider, { client }, children)
+  }
+}
+
 describe('useRegisterUser', () => {
   beforeEach(() => {
     vi.resetAllMocks()
-  })
-
-  afterEach(() => {
-    vi.clearAllMocks()
   })
 
   describe('Mutation with QueryClientProvider', () => {
@@ -35,11 +38,7 @@ describe('useRegisterUser', () => {
         data: { userId: '1', access_token: 'token123', token_type: 'Bearer', expires_in: 3600 },
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       await act(async () => {
         await result.current.mutateAsync(sampleData)
@@ -61,11 +60,7 @@ describe('useRegisterUser', () => {
         error: 'Registration failed',
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       await act(async () => {
         await result.current.mutateAsync(sampleData)
@@ -85,11 +80,7 @@ describe('useRegisterUser', () => {
         error: 'Email already in use',
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       const response = await act(async () => {
         return await result.current.mutateAsync(sampleData)
@@ -110,11 +101,7 @@ describe('useRegisterUser', () => {
         error: 'Service unavailable',
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       const response = await act(async () => {
         return await result.current.mutateAsync(sampleData)
@@ -136,28 +123,21 @@ describe('useRegisterUser', () => {
         data: { userId: '3', access_token: 'token789', token_type: 'Bearer', expires_in: 3600 },
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       expect(result.current.isPending).toBe(false)
       expect(result.current.isSuccess).toBe(false)
       expect(result.current.isError).toBe(false)
 
-      const mutatePromise = act(async () => {
-        result.current.mutate(sampleData)
+      await act(async () => {
+        await result.current.mutateAsync(sampleData)
       })
 
       await waitFor(() => {
+        expect(result.current.isPending).toBe(false)
         expect(result.current.isSuccess).toBe(true)
+        expect(result.current.isError).toBe(false)
       })
-
-      await mutatePromise
-
-      expect(result.current.isPending).toBe(false)
-      expect(result.current.isError).toBe(false)
     })
 
     it('should reset mutation state', async () => {
@@ -170,11 +150,7 @@ describe('useRegisterUser', () => {
         data: { userId: '4', access_token: 'token000', token_type: 'Bearer', expires_in: 3600 },
       })
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       await act(async () => {
         await result.current.mutateAsync(sampleData)
@@ -200,11 +176,7 @@ describe('useRegisterUser', () => {
       const qc = new QueryClient()
       const invalidateSpy = vi.spyOn(qc, 'invalidateQueries')
 
-      function Wrapper({ children }: { children: React.ReactNode }) {
-        return React.createElement(QueryClientProvider, { client: qc }, children)
-      }
-
-      const { result } = renderHook(() => useRegisterUser(), { wrapper: Wrapper })
+      const { result } = renderHook(() => useRegisterUser(), { wrapper: createWrapper(qc) })
 
       // Test with success: true
       vi.mocked(registerUser).mockResolvedValue({
