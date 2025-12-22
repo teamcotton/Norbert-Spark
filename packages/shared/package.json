@@ -12,6 +12,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },
+  "dependencies": {
+    "zod": "^4.2.1"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
