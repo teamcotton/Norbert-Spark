@@ -5,6 +5,7 @@ import { createLogger } from '@/adapters/secondary/services/logger.service.js'
 const logger = createLogger({ prefix: 'backendRequest' })
 
 // Upper bound for timeout values accepted from callers
+const MIN_TIMEOUT_MS = 100
 const MAX_TIMEOUT_MS = 120000
 
 export interface BackendRequestOptions {
@@ -76,7 +77,7 @@ export async function backendRequest<T>(options: BackendRequestOptions): Promise
     if (!Number.isFinite(value) || value < 0) {
       return 15000
     }
-    return Math.min(value, MAX_TIMEOUT_MS)
+    return Math.min(Math.max(value, MIN_TIMEOUT_MS), MAX_TIMEOUT_MS)
   })()
 
   // Check for local https with a self-signed cert (localhost / 127.0.0.1 / ::1)
