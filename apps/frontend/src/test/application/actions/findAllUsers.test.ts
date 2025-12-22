@@ -202,7 +202,7 @@ describe('findAllUsers', () => {
       await findAllUsers({ limit: 10, offset: 0 })
 
       expect(global.fetch).toHaveBeenCalledWith(
-        'https://localhost:4321/api/users?limit=10&offset=0',
+        'http://localhost:3000/api/users?limit=10&offset=0',
         expect.any(Object)
       )
     })
