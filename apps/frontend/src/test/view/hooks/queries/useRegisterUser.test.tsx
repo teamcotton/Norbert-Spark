@@ -13,7 +13,7 @@ vi.mock('@/application/actions/registerUser.js', () => ({
 // Helper function to create a QueryClientProvider wrapper
 function createWrapper(client: QueryClient) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(QueryClientProvider, { client }, children)
+    return <QueryClientProvider client={client}>{children}</QueryClientProvider>
   }
 }
 
@@ -197,7 +197,7 @@ describe('useRegisterUser', () => {
       expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['users'] })
 
       // Test with success: false - should not invalidate again
-      invalidateSpy.mockClear()
+      invalidateSpy.mockReset()
       vi.mocked(registerUser).mockResolvedValue({
         success: false,
         status: 400,
