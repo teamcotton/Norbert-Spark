@@ -214,7 +214,7 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
    * ```typescript
    * const container = Container.getInstance()
    * await container.start()
-   * // Server is now listening on http://localhost:3000
+   * * // Server is now listening on the configured host and port (HTTP or HTTPS)
    * ```
    */
   async start(): Promise<void> {

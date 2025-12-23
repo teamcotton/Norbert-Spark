@@ -65,8 +65,7 @@ export class RegisterUserUseCase {
    * 5. Generating a JWT access token for immediate login
    *
    * @param {RegisterUserDto} dto - User registration data (email, password, name, role)
-   * @returns {Promise<{userId: string, access_token: string, token_type: string, expires_in: number}>}
-   *          Registration result with user ID and authentication token
+   * @returns {Promise<{ userId: string, access_token: string, token_type: string, expires_in: number }>}   *          Registration result with user ID and authentication token
    * @throws {ConflictException} If a user with the same email already exists
    * @throws {Error} If password validation, database operation, or token generation fails.
    *                 Note: Email service failures are logged but do not throw errors or prevent registration.
