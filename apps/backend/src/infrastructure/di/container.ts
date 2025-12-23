@@ -19,6 +19,31 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { readFileSync } from 'node:fs'
 
+/**
+ * Dependency Injection Container implementing the Singleton pattern
+ *
+ * Manages the application's dependency graph and lifecycle. Initializes all components
+ * in the correct order:
+ * 1. Infrastructure (logger, Fastify app with optional HTTPS)
+ * 2. Services (email, token generation)
+ * 3. Repositories (user data access)
+ * 4. Use cases (application logic)
+ * 5. Controllers (HTTP adapters)
+ * 6. Route registration
+ *
+ * The container follows hexagonal architecture with clear separation between
+ * primary adapters (controllers), application core (use cases), and secondary
+ * adapters (repositories, services).
+ *
+ * @class Container
+ * @example
+ * ```typescript
+ * const container = Container.getInstance()
+ * await container.start()
+ * // Application is now running
+ * await container.stop()
+ * ```
+ */
 export class Container {
   private static instance: Container
 
@@ -45,6 +70,18 @@ export class Container {
   public readonly userController: UserController
   public readonly authController: AuthController
 
+  /**
+   * Private constructor to enforce Singleton pattern
+   *
+   * Initializes all application components in dependency order:
+   * - Validates environment variables
+   * - Configures HTTPS for development (optional, falls back to HTTP)
+   * - Instantiates logger, services, repositories, use cases, and controllers
+   * - Registers all HTTP routes
+   *
+   * @private
+   * @throws {Error} If environment validation fails or Fastify initialization fails
+   */
   private constructor() {
     // Validate environment
     EnvConfig.validate()
@@ -130,11 +167,33 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
     this.registerRoutes()
   }
 
+  /**
+   * Registers all HTTP routes from controllers with the Fastify app
+   *
+   * Called automatically during container initialization. Controllers register
+   * their respective endpoints with the Fastify instance.
+   *
+   * @private
+   */
   private registerRoutes(): void {
     this.userController.registerRoutes(this.app)
     this.authController.registerRoutes(this.app)
   }
 
+  /**
+   * Gets the singleton instance of the Container
+   *
+   * Creates the container on first call and returns the same instance on subsequent calls.
+   * This ensures all dependencies are initialized only once.
+   *
+   * @static
+   * @returns {Container} The singleton Container instance
+   * @example
+   * ```typescript
+   * const container = Container.getInstance()
+   * const logger = container.logger
+   * ```
+   */
   static getInstance(): Container {
     if (!Container.instance) {
       Container.instance = new Container()
@@ -142,6 +201,22 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
     return Container.instance
   }
 
+  /**
+   * Starts the HTTP server
+   *
+   * Binds the Fastify server to the configured host and port. Uses HTTPS in
+   * development if certificates are available, otherwise falls back to HTTP.
+   * Logs the server URL and API documentation link.
+   *
+   * @returns {Promise<void>}
+   * @throws {Error} If the server fails to start (exits process with code 1)
+   * @example
+   * ```typescript
+   * const container = Container.getInstance()
+   * await container.start()
+   * * // Server is now listening on the configured host and port (HTTP or HTTPS)
+   * ```
+   */
   async start(): Promise<void> {
     try {
       const port = Number.parseInt(EnvConfig.PORT)
@@ -159,6 +234,22 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
     }
   }
 
+  /**
+   * Gracefully stops the HTTP server
+   *
+   * Closes the Fastify server and all active connections. Should be called
+   * during application shutdown to ensure clean termination.
+   *
+   * @returns {Promise<void>}
+   * @example
+   * ```typescript
+   * process.on('SIGTERM', async () => {
+   *   const container = Container.getInstance()
+   *   await container.stop()
+   *   process.exit(0)
+   * })
+   * ```
+   */
   async stop(): Promise<void> {
     await this.app.close()
     this.logger.info('Server stopped')
