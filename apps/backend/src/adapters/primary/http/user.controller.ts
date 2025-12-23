@@ -200,17 +200,27 @@ export class UserController {
    * ```
    */
   async getUser(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-    // Extract and validate params with runtime type checking
-    const params = request.params as Record<string, unknown>
-    
-    if (typeof params.id !== 'string') {
-      reply.code(400).send({
+    try {
+      // Extract and validate params with runtime type checking
+      const params = request.params as Record<string, unknown>
+      
+      if (typeof params.id !== 'string' || params.id.trim() === '') {
+        reply.code(400).send({
+          success: false,
+          error: 'Invalid user ID parameter',
+        })
+        return
+      }
+      
+      reply.send({ id: params.id })
+    } catch (error) {
+      const err = error as Error
+      const statusCode = err instanceof BaseException ? err.statusCode : 500
+      const errorMessage = err?.message || 'An unexpected error occurred'
+      reply.code(statusCode).send({
         success: false,
-        error: 'Invalid user ID parameter',
+        error: errorMessage,
       })
-      return
     }
-    
-    reply.send({ id: params.id })
   }
 }
