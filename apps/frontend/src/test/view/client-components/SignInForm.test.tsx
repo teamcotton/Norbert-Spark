@@ -192,10 +192,9 @@ describe('SignInForm', () => {
     })
 
     it('should not display general error when empty', () => {
-      render(<SignInForm {...defaultProps} />)
+      const { container } = render(<SignInForm {...defaultProps} />)
 
       // Check that no Alert component is rendered
-      const { container } = render(<SignInForm {...defaultProps} />)
       const alertElement = container.querySelector('.MuiAlert-root')
       expect(alertElement).not.toBeInTheDocument()
     })

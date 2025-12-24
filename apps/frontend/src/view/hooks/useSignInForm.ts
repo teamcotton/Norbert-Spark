@@ -60,7 +60,8 @@ export function useSignInForm() {
 
   const handleChange = (field: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [field]: event.target.value }))
-    // Clear error when user starts typing
+    // Clear field-specific error when user starts typing
+    // Note: general errors are preserved and only cleared on form resubmission
     setErrors((prev) => ({ ...prev, [field]: '' }))
   }
 
