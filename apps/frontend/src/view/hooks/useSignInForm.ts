@@ -10,6 +10,7 @@ type FormData = LoginDTO
 interface FormErrors {
   email: string
   password: string
+  general: string
 }
 
 export function useSignInForm() {
@@ -22,6 +23,7 @@ export function useSignInForm() {
   const [errors, setErrors] = useState<FormErrors>({
     email: '',
     password: '',
+    general: '',
   })
 
   // TanStack Query mutation wrapping NextAuth signIn
@@ -40,18 +42,18 @@ export function useSignInForm() {
         // Redirect to dashboard on successful login
         router.push('/dashboard')
       } else {
-        // Handle authentication error
+        // Handle authentication error - show as general error
         setErrors((prev) => ({
           ...prev,
-          password: result?.error || 'Invalid email or password',
+          general: result?.error || 'Invalid email or password',
         }))
       }
     },
     onError: (error: Error) => {
-      // Handle unexpected errors
+      // Handle unexpected errors (network, server unavailable, etc.) - show as general error
       setErrors((prev) => ({
         ...prev,
-        password: error.message || 'An unexpected error occurred',
+        general: error.message || 'An unexpected error occurred. Please try again.',
       }))
     },
   })
@@ -66,6 +68,7 @@ export function useSignInForm() {
     const newErrors: FormErrors = {
       email: '',
       password: '',
+      general: '',
     }
 
     // Validate entire form using shared LoginSchema
