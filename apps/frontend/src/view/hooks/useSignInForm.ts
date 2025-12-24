@@ -38,6 +38,11 @@ export function useSignInForm() {
     },
     onSuccess: (result) => {
       if (result?.ok) {
+        // Clear any previous general error on successful login
+        setErrors((prev) => ({
+          ...prev,
+          general: '',
+        }))
         // Token is automatically stored in NextAuth session
         // Redirect to dashboard on successful login
         router.push('/dashboard')
