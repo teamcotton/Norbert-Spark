@@ -87,7 +87,7 @@ describe('useUsers', () => {
 
       vi.mocked(findAllUsers).mockResolvedValue({
         success: true,
-        users: [mockUsers[1] as User],
+        users: mockUsers[1] ? [mockUsers[1]] : [],
         total: 2,
       })
 
@@ -145,7 +145,7 @@ describe('useUsers', () => {
     it('should handle error when findAllUsers throws with error message', async () => {
       const qc = new QueryClient()
 
-      // Hook throws Error when success: false
+      // findAllUsers returns success: false, which causes queryFn to throw
       vi.mocked(findAllUsers).mockResolvedValue({
         success: false,
         users: [],
@@ -178,7 +178,7 @@ describe('useUsers', () => {
     it('should handle error when findAllUsers returns success: false with no error message', async () => {
       const qc = new QueryClient()
 
-      // Hook throws generic error when success: false and no error provided
+      // findAllUsers returns success: false with no error, queryFn throws generic error
       vi.mocked(findAllUsers).mockResolvedValue({
         success: false,
         users: [],
@@ -253,7 +253,7 @@ describe('useUsers', () => {
         },
       })
 
-      let resolvePromise: (value: FindAllUsersResult) => void
+      let resolvePromise!: (value: FindAllUsersResult) => void
       const promise = new Promise<FindAllUsersResult>((resolve) => {
         resolvePromise = resolve
       })
@@ -268,7 +268,7 @@ describe('useUsers', () => {
       expect(result.current.users).toEqual([])
       expect(result.current.total).toBe(0)
 
-      resolvePromise!({
+      resolvePromise({
         success: true,
         users: mockUsers,
         total: 2,
