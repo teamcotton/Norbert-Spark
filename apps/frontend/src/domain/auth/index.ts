@@ -43,3 +43,15 @@ export interface RegisterUserResponse {
   error?: string
   status: number
 }
+
+export interface LoginResponse {
+  success: boolean
+  data?: {
+    userId: string
+    email: string
+    access_token: string
+    roles: string[]
+  }
+  error?: string
+  status: number
+}
