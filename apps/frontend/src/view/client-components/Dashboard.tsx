@@ -1,3 +1,4 @@
+'use client'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import ChatIcon from '@mui/icons-material/Chat'
 import PersonIcon from '@mui/icons-material/Person'
