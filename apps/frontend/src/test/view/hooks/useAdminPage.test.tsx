@@ -234,9 +234,9 @@ describe('useAdminPage', () => {
       })
     })
 
-    it.todo('should clear any previous errors after successful fetch', async () => {
-      // First call fails
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should clear any previous errors after successful fetch', async () => {
+      // First call fails (plus 2 retries = 3 total calls)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -245,12 +245,16 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('Network error')
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('Network error')
+        },
+        { timeout: 5000 }
+      )
 
-      // Second call succeeds
-      mockFindAllUsers.mockResolvedValueOnce({
+      // Clear the mock and set up success response
+      mockFindAllUsers.mockClear()
+      mockFindAllUsers.mockResolvedValue({
         success: true,
         users: mockUsers,
         total: 2,
@@ -308,8 +312,9 @@ describe('useAdminPage', () => {
   })
 
   describe('Data Fetching - Error Cases', () => {
-    it.todo('should handle fetch failure with error message', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should handle fetch failure with error message', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -360,8 +365,9 @@ describe('useAdminPage', () => {
       })
     })
 
-    it.todo('should set loading to false after fetch failure', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should set loading to false after fetch failure', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -370,13 +376,17 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
+      await waitFor(
+        () => {
+          expect(result.current.loading).toBe(false)
+        },
+        { timeout: 5000 }
+      )
     })
 
-    it.todo('should use fallback error message when error is undefined', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should use fallback error message when error is undefined', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -384,13 +394,17 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('Failed to load users')
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('Failed to fetch users')
+        },
+        { timeout: 5000 }
+      )
     })
 
-    it.todo('should handle network timeout error', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should handle network timeout error', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -399,15 +413,19 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('Request timeout after 30 seconds')
-        expect(result.current.users).toEqual([])
-        expect(result.current.loading).toBe(false)
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('Request timeout after 30 seconds')
+          expect(result.current.users).toEqual([])
+          expect(result.current.loading).toBe(false)
+        },
+        { timeout: 5000 }
+      )
     })
 
-    it.todo('should handle 404 error', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should handle 404 error', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -416,13 +434,17 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('HTTP 404: Resource not found')
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('HTTP 404: Resource not found')
+        },
+        { timeout: 5000 }
+      )
     })
 
-    it.todo('should handle 500 server error', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should handle 500 server error', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -431,9 +453,12 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('HTTP 500: Internal server error')
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('HTTP 500: Internal server error')
+        },
+        { timeout: 5000 }
+      )
     })
   })
 
@@ -766,8 +791,8 @@ describe('useAdminPage', () => {
       expect(result.current.searchQuery).toBe('test search')
     })
 
-    it.todo('should maintain pagination model across failed fetches', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should maintain pagination model across failed fetches', async () => {
+      mockFindAllUsers.mockResolvedValue({
         success: true,
         users: mockUsers,
         total: 2,
@@ -779,7 +804,9 @@ describe('useAdminPage', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      mockFindAllUsers.mockResolvedValueOnce({
+      // Clear and set up failure for all retry attempts
+      mockFindAllUsers.mockClear()
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -790,9 +817,12 @@ describe('useAdminPage', () => {
         result.current.handlePaginationChange({ page: 1, pageSize: 20 })
       })
 
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
+      await waitFor(
+        () => {
+          expect(result.current.loading).toBe(false)
+        },
+        { timeout: 5000 }
+      )
 
       await waitFor(() => {
         expect(result.current.paginationModel).toEqual({ page: 1, pageSize: 20 })
@@ -800,8 +830,9 @@ describe('useAdminPage', () => {
       })
     })
 
-    it.todo('should handle successful fetch after failed fetch', async () => {
-      mockFindAllUsers.mockResolvedValueOnce({
+    it('should handle successful fetch after failed fetch', async () => {
+      // Mock failure for all retry attempts (initial + 2 retries = 3 total)
+      mockFindAllUsers.mockResolvedValue({
         success: false,
         users: [],
         total: 0,
@@ -810,11 +841,16 @@ describe('useAdminPage', () => {
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
 
-      await waitFor(() => {
-        expect(result.current.error).toBe('Initial error')
-      })
+      await waitFor(
+        () => {
+          expect(result.current.error).toBe('Initial error')
+        },
+        { timeout: 5000 }
+      )
 
-      mockFindAllUsers.mockResolvedValueOnce({
+      // Clear and set up success response
+      mockFindAllUsers.mockClear()
+      mockFindAllUsers.mockResolvedValue({
         success: true,
         users: mockUsers,
         total: 2,
