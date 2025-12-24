@@ -110,7 +110,7 @@ export function useRegistrationForm() {
 
         if (result.success) {
           // Handle successful registration - redirect to admin page
-          router.push('/admin')
+          router.push('/dashboard')
         } else {
           // Handle registration error
 
