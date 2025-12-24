@@ -3,21 +3,10 @@
 import type { LoginDTO } from '@level-2-gym/shared'
 
 import { createLogger } from '@/adapters/secondary/services/logger.service.js'
+import type { LoginResponse } from '@/domain/auth/index.js'
 import { backendRequest } from '@/infrastructure/serverActions/baseServerAction.js'
 
 const logger = createLogger({ prefix: '[login:action]' })
-
-interface LoginResponse {
-  success: boolean
-  data?: {
-    userId: string
-    email: string
-    access_token: string
-    roles: string[]
-  }
-  error?: string
-  status?: number
-}
 
 type BackendError = Error & {
   status?: number
