@@ -10,7 +10,7 @@ import { DashboardPageClient } from './DashboardPageClient.js'
  * Server Component that checks authentication before rendering.
  */
 export default async function DashboardPage() {
-  // Check if user has required role (admin or moderator)
+  // Check if user has any of the required roles ('user', 'admin' or 'moderator')
   const hasAccess = await hasAnyRole(['user', 'admin', 'moderator'])
 
   // Redirect to signin if user doesn't have required role
