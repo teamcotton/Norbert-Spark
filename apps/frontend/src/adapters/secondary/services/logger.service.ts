@@ -45,6 +45,7 @@ export interface FormattedLogMessage {
    */
   prefix: string
   /**
+   *
    * The log method/level in uppercase (e.g., 'DEBUG', 'INFO', 'WARN', 'ERROR').
    */
   method: string

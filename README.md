@@ -127,7 +127,7 @@ pnpm test:e2e
 ## Project Structure
 
 ```
-level-2-gym/
+norberts-spark/
 ├── frontend/           # Next.js + React frontend
 │   ├── src/
 │   │   ├── app/       # Next.js App Router

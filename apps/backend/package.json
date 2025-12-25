@@ -1,5 +1,5 @@
 {
-  "name": "@level-2-gym/backend",
+  "name": "@norbets-spark/backend",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -25,7 +25,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:push": "drizzle-kit push",
-    "db:drop": "docker exec -i level2gym-postgres psql -U postgres -d level2gym < drizzle/drop_all_tables.sql",
+    "db:drop": "docker exec -i norbet-postgres psql -U postgres -d norbertsSpark < drizzle/drop_all_tables.sql",
     "db:reset": "pnpm db:drop && pnpm db:push",
     "seed:users": "tsx scripts/seed-users.ts"
   },
@@ -35,6 +35,7 @@
     "@fastify/swagger": "^9.6.1",
     "@fastify/swagger-ui": "^5.2.3",
     "@google/generative-ai": "^0.24.1",
+    "@norberts-spark/shared": "workspace:*",
     "ai": "^5.0.116",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",

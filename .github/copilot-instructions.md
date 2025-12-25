@@ -292,7 +292,7 @@ const { text } = await generateText({
 ### Database Connection
 
 - **Driver**: `postgres` driver via Drizzle ORM
-- **Connection string**: Reads from `process.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/level2gym`
+- **Connection string**: Reads from `process.env.DATABASE_URL` or defaults to `postgresql://postgres:postgres@localhost:5432/norbertsSpark`
 - **Docker setup**: PostgreSQL 18.1 runs in Docker (see `DOCKER_POSTGRES.md`), exposed on port 5432
 - **Location**: Database client in `frontend/src/infrastructure/db/index.ts` following DDD architecture
 

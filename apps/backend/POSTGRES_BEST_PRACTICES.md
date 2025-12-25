@@ -140,7 +140,10 @@ volumes:
 ```yaml
 healthcheck:
   test:
-    ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-level2gym} || exit 1']
+    [
+      'CMD-SHELL',
+      'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-norbertsSpark} || exit 1',
+    ]
   interval: 30s
   timeout: 10s
   retries: 3
@@ -162,7 +165,7 @@ healthcheck:
 
 ```yaml
 networks:
-  level2gym-network:
+  norbertsSpark-network:
     driver: bridge
     ipam:
       config:
@@ -294,7 +297,7 @@ LIMIT 10;
 **View query statistics**:
 
 ```bash
-docker compose exec postgres psql -U postgres -d level2gym -c "
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "
   SELECT query, calls, mean_exec_time, total_exec_time
   FROM pg_stat_statements
   ORDER BY mean_exec_time DESC
@@ -305,7 +308,7 @@ docker compose exec postgres psql -U postgres -d level2gym -c "
 **Check resource usage**:
 
 ```bash
-docker stats level2gym-postgres
+docker stats norbertsSpark-postgres
 ```
 
 **View logs**:
@@ -319,13 +322,13 @@ docker compose logs -f postgres
 **Backup database**:
 
 ```bash
-docker compose exec postgres pg_dump -U postgres -d level2gym > backup.sql
+docker compose exec postgres pg_dump -U postgres -d norbertsSpark > backup.sql
 ```
 
 **Restore database**:
 
 ```bash
-docker compose exec -T postgres psql -U postgres -d level2gym < backup.sql
+docker compose exec -T postgres psql -U postgres -d norbertsSpark < backup.sql
 ```
 
 **Backup with WAL archiving** (when enabled):
@@ -424,7 +427,7 @@ deploy:
 log_min_duration_statement = 1000  # Log queries > 1 second
 
 # View with pg_stat_statements (already enabled)
-docker compose exec postgres psql -U postgres -d level2gym -c "
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "
   SELECT * FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 10;
 "
 ```

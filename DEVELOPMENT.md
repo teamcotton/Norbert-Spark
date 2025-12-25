@@ -246,7 +246,7 @@ docker compose up -d
 3. Access the database:
 
 - PostgreSQL: localhost:5432
-- Database name: level2gym
+- Database name: norbertsSpark
 - User/Password: postgres/postgres (or as configured in .env)
 
 See `DOCKER_POSTGRES.md` for detailed instructions.
@@ -254,7 +254,7 @@ See `DOCKER_POSTGRES.md` for detailed instructions.
 ## Project Structure
 
 ```
-level-2-gym/
+norberts-spark/
 ├── frontend/              # Next.js + React frontend
 │   ├── src/
 │   │   ├── app/          # Next.js App Router pages

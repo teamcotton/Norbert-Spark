@@ -14,27 +14,27 @@ echo ""
 
 # Check resource limits
 echo "2. Resource Usage:"
-docker stats level2gym-postgres --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
+docker stats norbertsSpark-postgres --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
 echo ""
 
 # Check PostgreSQL version
 echo "3. PostgreSQL Version:"
-docker compose exec postgres psql -U postgres -d level2gym -c "SELECT version();"
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "SELECT version();"
 echo ""
 
 # Check installed extensions
 echo "4. Installed Extensions:"
-docker compose exec postgres psql -U postgres -d level2gym -c "\dx"
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "\dx"
 echo ""
 
 # Check preloaded libraries
 echo "5. Shared Preload Libraries:"
-docker compose exec postgres psql -U postgres -d level2gym -c "SHOW shared_preload_libraries;"
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "SHOW shared_preload_libraries;"
 echo ""
 
 # Check memory configuration
 echo "6. Memory Configuration:"
-docker compose exec postgres psql -U postgres -d level2gym -c "
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "
 SELECT 
   name, 
   setting, 
@@ -54,7 +54,7 @@ echo ""
 
 # Check WAL configuration
 echo "7. WAL Configuration:"
-docker compose exec postgres psql -U postgres -d level2gym -c "
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "
 SELECT 
   name, 
   setting, 
@@ -82,12 +82,12 @@ echo ""
 
 # Check health status
 echo "10. Health Check Status:"
-docker inspect level2gym-postgres --format='{{.State.Health.Status}}'
+docker inspect norbertsSpark-postgres --format='{{.State.Health.Status}}'
 echo ""
 
 # Sample query statistics (if any queries have run)
 echo "11. Query Statistics (top 5):"
-docker compose exec postgres psql -U postgres -d level2gym -c "
+docker compose exec postgres psql -U postgres -d norbertsSpark -c "
 SELECT 
   substring(query, 1, 50) as query,
   calls,
