@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { POST } from '../../../../../src/app/api/register/route.js'
+import { POST } from '@/app/api/register/route.js'
 
 vi.mock('../../../application/services/logger.service.test.js', () => ({
   UnifiedLogger: vi.fn().mockImplementation(() => ({

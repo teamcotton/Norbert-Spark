@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import RootLayout from '../../app/layout.js'
+import RootLayout from '@/app/layout.js'
 
 // Mock the providers to avoid dependencies
 vi.mock('../../app/providers/SessionProvider.js', () => ({
