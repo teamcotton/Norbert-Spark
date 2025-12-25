@@ -129,7 +129,6 @@ export function useSignInForm() {
     handleSignUp,
     showPassword,
     togglePasswordVisibility,
-    isLoading,
-    isError: false,
+    isLoading
   }
 }
