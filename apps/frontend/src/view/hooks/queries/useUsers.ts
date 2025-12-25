@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { findAllUsers } from '@/application/actions/findAllUsers.js'
+import { mapBackendError } from '@/application/errors/errorMapper.js'
 import type { User } from '@/domain/user/user.js'
 
 export interface UseUsersParams {
@@ -38,7 +39,7 @@ export function useUsers(params: UseUsersParams): UseUsersResult {
       })
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to fetch users')
+        mapBackendError(result.status, result.error || 'Failed to fetch users')
       }
 
       return {

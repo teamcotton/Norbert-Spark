@@ -1,6 +1,6 @@
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import { EnvConfig } from '../config/env.config.js'
-import { isString, isNullOrUndefined } from '../../shared/guards/type.guards.js'
+import { isString, isNullOrUndefined } from '@norberts-spark/shared'
 import type { JwtUserClaims } from '../../shared/types/index.js'
 import { UnauthorizedException } from '../../shared/exceptions/unauthorized.exception.js'
 import { ErrorCode } from '../../shared/constants/error-codes.js'

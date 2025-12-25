@@ -55,6 +55,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -89,6 +90,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers[1] ? [mockUsers[1]] : [],
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 1, offset: 1 }), {
@@ -121,6 +123,7 @@ describe('useUsers', () => {
         success: true,
         users: [],
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 100 }), {
@@ -152,6 +155,7 @@ describe('useUsers', () => {
         total: 0,
         error:
           'Failed to load users: Server returned 500 Internal Server Error. Please try refreshing the page.',
+        status: 500,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -183,6 +187,7 @@ describe('useUsers', () => {
         success: false,
         users: [],
         total: 0,
+        status: 500,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -272,6 +277,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       await waitFor(() => {
@@ -292,6 +298,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -325,6 +332,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       // First render with limit: 10, offset: 0
@@ -373,6 +381,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       // First render
@@ -417,6 +426,7 @@ describe('useUsers', () => {
           success: true,
           users: mockUsers,
           total: 2,
+          status: 200,
         }
       })
 
@@ -479,6 +489,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -509,6 +520,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -541,6 +553,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result, unmount } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {
@@ -578,6 +591,7 @@ describe('useUsers', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useUsers({ limit: 10, offset: 0 }), {

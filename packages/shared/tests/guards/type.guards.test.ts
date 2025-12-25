@@ -9,7 +9,7 @@ import {
   isNumber,
   isObject,
   isString,
-} from '../../../src/shared/guards/type.guards.js'
+} from '../../src/guards/type.guards.js'
 
 describe('Type Guards', () => {
   describe('isString', () => {

@@ -72,6 +72,7 @@ describe('useAdminPage', () => {
         success: true,
         users: [],
         total: 0,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -86,6 +87,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -98,6 +100,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -111,6 +114,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -123,6 +127,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -138,6 +143,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -152,6 +158,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -164,6 +171,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -181,6 +189,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -201,6 +210,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -215,6 +225,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -229,6 +240,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -245,6 +257,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Network error',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -262,6 +275,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       // Trigger re-fetch by changing pagination
@@ -279,6 +293,7 @@ describe('useAdminPage', () => {
         success: true,
         users: [],
         total: 0,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -304,6 +319,7 @@ describe('useAdminPage', () => {
         success: true,
         users: largeUserList,
         total: 100,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -324,6 +340,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Failed to fetch users from server',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -346,6 +363,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Network error',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -361,6 +379,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Server error',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -377,6 +396,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Failed to load',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -395,6 +415,7 @@ describe('useAdminPage', () => {
         success: false,
         users: [],
         total: 0,
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -414,6 +435,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Request timeout after 30 seconds',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -435,6 +457,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'HTTP 404: Resource not found',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -454,6 +477,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'HTTP 500: Internal server error',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -473,6 +497,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -497,6 +522,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -519,6 +545,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -546,6 +573,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -573,6 +601,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 100,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -600,6 +629,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -627,6 +657,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 100,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -654,6 +685,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -676,6 +708,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -702,6 +735,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -722,6 +756,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -742,6 +777,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -769,6 +805,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -801,6 +838,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -816,6 +854,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Network error',
+        status: 500,
       })
 
       act(() => {
@@ -842,6 +881,7 @@ describe('useAdminPage', () => {
         users: [],
         total: 0,
         error: 'Initial error',
+        status: 500,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -859,6 +899,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       act(() => {
@@ -878,6 +919,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -905,6 +947,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -932,6 +975,7 @@ describe('useAdminPage', () => {
         success: true,
         users: [mockUsers[0]!],
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -959,6 +1003,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
@@ -983,6 +1028,7 @@ describe('useAdminPage', () => {
         success: true,
         users: mockUsers,
         total: 2,
+        status: 200,
       })
 
       const { result } = renderHook(() => useAdminPage(), { wrapper: createWrapper() })
