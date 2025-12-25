@@ -1,5 +1,5 @@
-import type { LoginDTO } from '@level-2-gym/shared'
-import { LoginSchema } from '@level-2-gym/shared'
+import type { LoginDTO } from '@norberts-spark/shared'
+import { LoginSchema } from '@norberts-spark/shared'
 import { useRouter } from 'next/navigation.js'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'

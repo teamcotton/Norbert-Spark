@@ -15,8 +15,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@level-2-gym/shared": ["../../packages/shared/src/index.ts"],
-      "@level-2-gym/shared/*": ["../../packages/shared/src/*"]
+      "@@norberts-spark/shared": ["../../packages/shared/src/index.ts"],
+      "@@norberts-spark/shared/*": ["../../packages/shared/src/*"]
     },
     "target": "ES2017"
   },

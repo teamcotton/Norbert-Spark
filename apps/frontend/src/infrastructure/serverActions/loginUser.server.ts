@@ -1,6 +1,6 @@
 'use server'
 
-import type { LoginDTO } from '@level-2-gym/shared'
+import type { LoginDTO } from '@norberts-spark/shared'
 
 import { createLogger } from '@/adapters/secondary/services/logger.service.js'
 import type { LoginResponse } from '@/domain/auth/index.js'

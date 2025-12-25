@@ -119,7 +119,7 @@ docker compose down
 docker compose logs postgres
 
 # Access PostgreSQL CLI
-docker compose exec postgres psql -U postgres -d level2gym
+docker compose exec postgres psql -U postgres -d norbertsSpark
 
 # Restart database
 docker compose restart postgres
@@ -145,7 +145,7 @@ docker compose up -d
 The database connection string is configured in `.env`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/norbertsSpark
 ```
 
 ## Project Structure
@@ -191,10 +191,10 @@ Copy `.env.example` to `.env` and configure:
 # PostgreSQL Configuration
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-POSTGRES_DB=level2gym
+POSTGRES_DB=norbertsSpark
 
 # Database connection string
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/norbertsSpark
 
 # Server Configuration
 USE_HTTPS=true  # Enable HTTPS in development

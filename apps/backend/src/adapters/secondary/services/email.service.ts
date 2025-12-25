@@ -57,7 +57,7 @@ export class ResendService implements EmailServicePort {
 
     const emailData = {
       to,
-      from: 'noreply@gym.com',
+      from: 'noreply@norbertsSpark.com',
       subject: 'Reset Your Password',
       html: `<p>Click here to reset: <a href="https://gym.com/reset/${resetToken}">Reset Password</a></p>`,
     }

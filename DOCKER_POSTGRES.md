@@ -23,8 +23,8 @@ Edit `.env` to customize your database credentials if needed:
 ```env
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-POSTGRES_DB=level2gym
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+POSTGRES_DB=norbertsSpark
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/norbertSpark
 ```
 
 ### 2. Start PostgreSQL
@@ -37,7 +37,7 @@ docker compose up -d
 This will:
 
 - Pull the PostgreSQL 18.1 Alpine image
-- Create a container named `level2gym-postgres`
+- Create a container named `norbertsSpark-postgres`
 - Expose PostgreSQL on port 5432
 - Create a persistent volume for data storage
 - Run any initialization scripts from `init-scripts/` directory
@@ -50,12 +50,12 @@ Check that PostgreSQL is running:
 docker compose ps
 ```
 
-You should see the `level2gym-postgres` container with status "Up" and "healthy".
+You should see the `norbertsSpark-postgres` container with status "Up" and "healthy".
 
 Test the connection:
 
 ```bash
-docker compose exec postgres psql -U postgres -d level2gym
+docker compose exec postgres psql -U postgres -d norbertsSparke
 ```
 
 ## Common Commands
@@ -99,7 +99,7 @@ docker compose logs -f postgres
 ### Access PostgreSQL CLI
 
 ```bash
-docker compose exec postgres psql -U postgres -d level2gym
+docker compose exec postgres psql -U postgres -d norbertsSpark
 ```
 
 ### Restart the database
@@ -166,7 +166,7 @@ ports:
 Update your connection string accordingly:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5433/level2gym
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/norbertsSpark
 ```
 
 ### Persistent Data
@@ -177,14 +177,14 @@ To backup the data:
 
 ```bash
 cd backend
-docker compose exec postgres pg_dump -U postgres level2gym > backup.sql
+docker compose exec postgres pg_dump -U postgres norbertsSpark§ > backup.sql
 ```
 
 To restore from backup:
 
 ```bash
 cd backend
-docker compose exec -T postgres psql -U postgres -d level2gym < backup.sql
+docker compose exec -T postgres psql -U postgres -d norbertsSpark < backup.sql
 ```
 
 ## Connecting from Your Application
@@ -194,7 +194,7 @@ docker compose exec -T postgres psql -U postgres -d level2gym < backup.sql
 Update `frontend/.env.local`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/norbertsSpark
 ```
 
 The database client in `frontend/src/infrastructure/db/index.ts` will use this connection string.
@@ -204,7 +204,7 @@ The database client in `frontend/src/infrastructure/db/index.ts` will use this c
 The backend can also connect to the database. Update `backend/.env`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/level2gym
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/norbertsSpark
 ```
 
 ### Running Migrations
