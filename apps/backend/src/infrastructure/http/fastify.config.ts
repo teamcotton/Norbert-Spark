@@ -8,6 +8,7 @@ import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import { OpenAPI } from '@norberts-spark/shared'
 /**
  * Creates and configures a Fastify server instance with CORS, Swagger, and OpenAPI support.
  *
@@ -52,18 +53,11 @@ export function createFastifyApp(options?: FastifyServerOptions): FastifyInstanc
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = dirname(__filename)
-
-  // Load OpenAPI specification
-  const openapiPath = join(__dirname, '../../../../..', 'packages/shared/src/openapi.json')
-  const openapiSpec = JSON.parse(readFileSync(openapiPath, 'utf8'))
-
   // Register Swagger
   fastify.register(swagger, {
     mode: 'static',
     specification: {
-      document: openapiSpec,
+      document: OpenAPI as any,
     },
   })
 
