@@ -1,9 +1,8 @@
 import 'modern-normalize/modern-normalize.css'
 
 import type { Metadata } from 'next'
-import React, { Suspense } from 'react'
+import React from 'react'
 
-import Loading from './loading.js'
 import { QueryProvider } from './providers/QueryProvider.js'
 import { SessionProvider } from './providers/SessionProvider.js'
 import ThemeRegistry from './ThemeRegistry.js'
@@ -23,9 +22,7 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           <QueryProvider>
-            <ThemeRegistry>
-              <Suspense fallback={<Loading />}>{children}</Suspense>
-            </ThemeRegistry>
+            <ThemeRegistry>{children}</ThemeRegistry>
           </QueryProvider>
         </SessionProvider>
       </body>

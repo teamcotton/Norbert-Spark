@@ -312,7 +312,7 @@ export async function middleware(request: Request) {
 
   // Redirect authenticated users away from auth pages
   if (isAuthRoute && isAuthenticated) {
-    const resp = NextResponse.redirect(new URL('/admin', request.url), 302)
+    const resp = NextResponse.redirect(new URL('/dashboard', request.url), 302)
     if (rateLimitResult) {
       attachRateLimitHeaders(resp, rateLimitResult)
     }

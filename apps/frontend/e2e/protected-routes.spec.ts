@@ -77,7 +77,7 @@ test.describe('Protected Routes Authentication', () => {
 
     // Verify user remains on homepage
     expect(page.url()).not.toContain('/signin')
-    await expect(page.locator('h1')).toContainText('Level 2 Gym')
+    await expect(page.locator('h1')).toContainText("Norbert's Spark")
   })
 
   test('should allow unauthenticated user to access registration page', async ({ page }) => {

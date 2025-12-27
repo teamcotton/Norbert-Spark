@@ -29,7 +29,7 @@ export default function Home() {
             backgroundClip: 'text',
           }}
         >
-          Welcome to Level 2 Gym
+          Norbert&#39;s Spark
         </Typography>
 
         <Box
