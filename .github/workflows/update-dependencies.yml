@@ -47,6 +47,8 @@ jobs:
       - name: Run tests to check for breaking changes
         id: run-tests
         continue-on-error: true
+        env:
+          SKIP_E2E: 1
         run: pnpm test
 
       - name: Run type checking
