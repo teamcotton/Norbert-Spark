@@ -1,5 +1,5 @@
 import type { AppProps, NextWebVitalsMetric } from 'next/app.js'
-import type { NextPage } from 'next/types/index.js'
+import type { NextPage } from 'next/types.js'
 import { useReportWebVitals } from 'next/web-vitals.js'
 
 export type NextPageWithLayout = NextPage & {
