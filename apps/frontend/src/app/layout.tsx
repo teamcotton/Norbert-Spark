@@ -8,7 +8,7 @@ import { SessionProvider } from './providers/SessionProvider.js'
 import ThemeRegistry from './ThemeRegistry.js'
 
 export const metadata: Metadata = {
-  title: 'Level 2 Gym',
+  title: "Norbert's Spark",
   description: 'A monorepo built with PNPM and Turborepo',
 }
 

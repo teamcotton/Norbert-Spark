@@ -1,6 +1,6 @@
 import { TypeException } from '../../shared/exceptions/type.exception.js'
 import { ValidationException } from '../../shared/exceptions/validation.exception.js'
-import { isString } from '../../shared/guards/type.guards.js'
+import { isString } from '@norberts-spark/shared'
 
 export class RegisterUserDto {
   constructor(

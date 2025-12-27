@@ -12,6 +12,7 @@ export interface FindAllUsersResult {
   users: readonly User[]
   total: number
   error?: string
+  status: number
 }
 
 const logger = new UnifiedLogger({ prefix: '[find-all-users]' })
@@ -36,6 +37,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
 
     if (response.status === 404) {
       return {
+        status: response.status,
         success: false,
         users: [],
         total: 0,
@@ -45,6 +47,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
 
     if (!response.ok) {
       return {
+        status: response.status,
         success: false,
         users: [],
         total: 0,
@@ -65,6 +68,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
       })) || []
 
     return {
+      status: response.status,
       success: true,
       users: mappedUsers,
       total: data.pagination?.total ?? 0,
@@ -75,6 +79,7 @@ export async function findAllUsers(params: FindAllUsersParams): Promise<FindAllU
     }
     logger.warn('Error fetching users:', error)
     return {
+      status: 500,
       success: false,
       users: [],
       total: 0,
