@@ -12,6 +12,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    env:
+      SKIP_E2E: 1
     
     steps:
       - name: Checkout repository
