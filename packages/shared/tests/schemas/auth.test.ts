@@ -1,4 +1,4 @@
-import { describe, expect,it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { LoginSchema, RegisterSchema } from '../../src/schemas/auth.js'
 
