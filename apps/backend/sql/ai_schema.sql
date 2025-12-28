@@ -33,6 +33,7 @@ CREATE INDEX messages_chat_id_created_at_idx ON messages(chat_id, created_at);
 
 CREATE TABLE ai_options (
     id UUID PRIMARY KEY DEFAULT uuidv7(),
+    message_id UUID NOT NULL REFERENCES messages(id) ON DELETE CASCADE,
     prompt TEXT NOT NULL,
     max_tokens INTEGER NOT NULL,
     temperature FLOAT NOT NULL,
