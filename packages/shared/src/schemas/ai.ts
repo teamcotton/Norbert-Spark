@@ -67,7 +67,15 @@ export const AIRequestSchema = z.object({
 })
 
 export const MessagePartSchema = z.object({
-  type: z.enum(['text', 'step-start']),
+  type: z.enum([
+    'text',
+    'reasoning',
+    'file',
+    'source_url',
+    'source_document',
+    'step-start',
+    'data',
+  ]),
   text: z.string().optional(),
   state: z.enum(['done']).optional(),
 })
