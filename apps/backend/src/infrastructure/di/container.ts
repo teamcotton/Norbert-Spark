@@ -8,6 +8,7 @@ import { LoginUserUseCase } from '../../application/use-cases/login-user.use-cas
 
 // Adapters
 import { PostgresUserRepository } from '../../adapters/secondary/repositories/user.repository.js'
+import { AIRepository } from '../../adapters/secondary/repositories/ai.repository.js'
 import { ResendService } from '../../adapters/secondary/services/email.service.js'
 import { PinoLoggerService } from '../../adapters/secondary/services/logger.service.js'
 import { JwtTokenGeneratorService } from '../../adapters/secondary/services/jwt-token-generator.service.js'
@@ -58,6 +59,7 @@ export class Container {
 
   // Repositories
   public readonly userRepository: PostgresUserRepository
+  public readonly aiRepository: AIRepository
 
   // Domain Services
   // public readonly workoutCalculator: WorkoutCalculator
@@ -143,6 +145,7 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
 
     // Initialize repositories (secondary adapters)
     this.userRepository = new PostgresUserRepository()
+    this.aiRepository = new AIRepository()
 
     // Initialize domain services
     // this.workoutCalculator = new WorkoutCalculator()
@@ -181,6 +184,7 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
   private registerRoutes(): void {
     this.userController.registerRoutes(this.app)
     this.authController.registerRoutes(this.app)
+    this.aiController.registerRoutes(this.app)
   }
 
   /**
