@@ -28,7 +28,7 @@ import { readFileSync } from 'node:fs'
  * in the correct order:
  * 1. Infrastructure (logger, Fastify app with optional HTTPS)
  * 2. Services (email, token generation)
- * 3. Repositories (user data access)
+ * 3. Repositories (user data access, AI data access)
  * 4. Use cases (application logic)
  * 5. Controllers (HTTP adapters)
  * 6. Route registration
