@@ -43,7 +43,7 @@ export const UpdateAISchema = CreateAISchema.partial()
 export const AISummarySchema = z.object({
   id: z.string(),
   prompt: z.string(),
-  createdAt: z.string().optional(),
+  createdAt: z.coerce.date().optional(),
 })
 
 export const AIListSchema = z.array(AISummarySchema)
