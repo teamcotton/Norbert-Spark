@@ -1,10 +1,15 @@
+import type { LoggerPort } from '../../../application/ports/logger.port.js'
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import type { GetChatUseCase } from '../../../application/use-cases/get-chat.use-case.js'
 import { AIReturnedResponseSchema } from '@norberts-spark/shared'
+
 import { z } from 'zod'
 
 export class AIController {
-  constructor(private readonly getChatUseCase: GetChatUseCase) {}
+  constructor(
+    private readonly getChatUseCase: GetChatUseCase,
+    private readonly logger: LoggerPort
+  ) {}
 
   registerRoutes(app: FastifyInstance): void {
     app.post('/ai/chat', this.chat.bind(this))
@@ -23,6 +28,8 @@ export class AIController {
       })
     }
     const { messages, id } = parsed
+
+    const data = await this.getChatUseCase.execute(id)
 
     return reply.status(200).send({
       id,

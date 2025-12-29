@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UserController } from '../../../src/adapters/primary/http/user.controller.js'
 import { PostgresUserRepository } from '../../../src/adapters/secondary/repositories/user.repository.js'
-import { AIRepository } from '../../../src/adapters/secondary/repositories/ai.repository.js'
 import { ResendService } from '../../../src/adapters/secondary/services/email.service.js'
 import { PinoLoggerService } from '../../../src/adapters/secondary/services/logger.service.js'
 import { RegisterUserUseCase } from '../../../src/application/use-cases/register-user.use-case.js'

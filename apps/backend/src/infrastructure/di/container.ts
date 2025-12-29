@@ -170,7 +170,7 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
     // Initialize controllers (primary adapters)
     this.userController = new UserController(this.registerUserUseCase, this.getAllUsersUseCase)
     this.authController = new AuthController(this.loginUserUseCase)
-    this.aiController = new AIController(this.getChatUseCase)
+    this.aiController = new AIController(this.getChatUseCase, this.logger)
 
     // Register routes
     this.registerRoutes()

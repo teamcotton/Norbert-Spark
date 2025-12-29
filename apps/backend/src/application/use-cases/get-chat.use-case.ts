@@ -71,6 +71,7 @@ export class GetChatUseCase {
       })
     } else {
       this.logger.info('No chat data found for user', { userId })
+      return null
     }
 
     return chatData
