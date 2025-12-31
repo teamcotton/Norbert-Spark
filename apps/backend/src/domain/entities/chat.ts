@@ -9,7 +9,7 @@ import { Uuid7Util } from '../../shared/utils/uuid7.util.js'
 
 export class Chat {
   constructor(
-    private readonly user_id: string,
+    private readonly userId: string,
     public readonly id: string = Uuid7Util.createUuidv7(),
     private readonly createdAt: Date = new Date(),
     private readonly updatedAt: Date = new Date()
@@ -42,7 +42,7 @@ export class Chat {
    * ```
    */
   getUserId(): string {
-    return this.user_id
+    return this.userId
   }
 
   /**
