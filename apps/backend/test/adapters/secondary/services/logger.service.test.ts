@@ -57,7 +57,7 @@ describe('PinoLoggerService', () => {
       await createLoggerService()
 
       expect(pino).toHaveBeenCalledWith({
-        level: 'info',
+        level: 'trace',
         transport: {
           target: 'pino-pretty',
           options: {

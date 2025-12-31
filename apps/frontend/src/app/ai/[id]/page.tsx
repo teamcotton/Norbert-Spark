@@ -42,6 +42,11 @@ export default function AIChatPage({ params }: { params: Promise<{ id: string }>
   const { id } = use(params)
   logger.warn('id', id)
 
+  logger.info(
+    'process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL',
+    process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL
+  )
+
   const { messages, sendMessage } = useChat({
     id: id ?? uuidv7(),
     transport: new DefaultChatTransport({
