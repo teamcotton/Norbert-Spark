@@ -56,17 +56,21 @@ export class AIController {
     const mostRecentMessage = messages[messages.length - 1]
 
     if (!mostRecentMessage) {
-      return FastifyUtil.createResponse('No messages provided', 400)
+      return reply.status(400).send(FastifyUtil.createResponse('No messages provided', 400))
     }
 
     if (mostRecentMessage.role !== 'user') {
-      return FastifyUtil.createResponse('Last message must be from the user', 400)
+      return reply
+        .status(400)
+        .send(FastifyUtil.createResponse('Last message must be from the user', 400))
     }
 
     if (!chat) {
       const userId = request.user?.sub
       if (!userId) {
-        return FastifyUtil.createResponse('User not authenticated', 401)
+        return reply
+          .status(401)
+          .send(FastifyUtil.createResponse('User not authenticated', 401))
       }
       this.logger.info('Chat does not exist, creating new chat', { id })
       await this.getChatUseCase.execute(userId, messages)
