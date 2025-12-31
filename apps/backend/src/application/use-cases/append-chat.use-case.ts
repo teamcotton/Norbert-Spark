@@ -2,13 +2,18 @@ import type { LoggerPort } from '../ports/logger.port.js'
 import type { UIMessage } from 'ai'
 import type { AIServicePort } from '../ports/ai.port.js'
 
+export interface AppendedChatResult {
+  chatId: string
+  appendedMessages: UIMessage[]
+}
+
 export class AppendedChatUseCase {
   constructor(
     private readonly aiService: AIServicePort,
     private readonly logger: LoggerPort
   ) {}
 
-  async execute(chatId: string, messages: UIMessage[]): Promise<object | null> {
+  async execute(chatId: string, messages: UIMessage[]): Promise<AppendedChatResult | null> {
     this.logger.info('Appending chat messages', { chatId, messageCount: messages.length })
     // Here you would add the logic to append messages to the chat with the given chatId
     // For example, you might interact with a repository or database layer to perform the update
