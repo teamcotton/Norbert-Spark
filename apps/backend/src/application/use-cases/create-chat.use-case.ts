@@ -1,7 +1,6 @@
 import type { LoggerPort } from '../ports/logger.port.js'
 import type { UIMessage } from 'ai'
 import { AIRepository } from '../../adapters/secondary/repositories/ai.repository.js'
-//userRepository
 
 export interface CreateChatResult {
   chatId: string

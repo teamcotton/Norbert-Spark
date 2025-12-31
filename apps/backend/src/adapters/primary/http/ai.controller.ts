@@ -130,7 +130,11 @@ export class AIController {
         // Called for each partial piece of output
         if (chunk.type === 'text-delta') {
           process.stdout.write(chunk.text)
-          // (Debugging) To log chunk text, use console.log or a logger. For production, do not output to stdout.
+          // For debugging, prefer using the application logger at debug level instead of stdout,
+          // and ensure such logging is disabled or minimized in production.
+          // Example:
+          // logger.debug({ text: chunk.text }, 'AI stream text-delta chunk')        }
+          // you can also inspect chunk.reasoning / chunk.sources / etc.
         }
         // you can also inspect chunk.reasoning / chunk.sources / etc.
       },
