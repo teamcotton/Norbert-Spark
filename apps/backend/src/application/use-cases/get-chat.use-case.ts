@@ -53,8 +53,12 @@ export class GetChatUseCase {
   async execute(userId: string): Promise<ChatResponseResult | null> {
     this.logger.info('Getting chat for user', { userId })
 
+    if (!Uuid7Util.isValidUUID(userId)) {
+      throw new Error('Invalid UUID format provided')
+    }
+
     // Validate UUID format
-    const uuidVersion = Uuid7Util.processUserUUID(userId)
+    const uuidVersion = Uuid7Util.uuidVersionValidation(userId)
     if (uuidVersion !== 'v7') {
       this.logger.warn('Invalid userId format', { userId, uuidVersion })
       throw new ValidationException(`Invalid userId provided: expected v7, got ${uuidVersion}`)
