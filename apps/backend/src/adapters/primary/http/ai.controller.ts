@@ -3,7 +3,6 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import type { GetChatUseCase } from '../../../application/use-cases/get-chat.use-case.js'
 import { AIReturnedResponseSchema } from '@norberts-spark/shared'
 import { FastifyUtil } from '../../../shared/utils/fastify.utils.js'
-import { AIRepository } from '../../secondary/repositories/ai.repository.js'
 
 import { z } from 'zod'
 import { convertToModelMessages, stepCountIs, streamText, tool, type UIMessage } from 'ai'
