@@ -187,18 +187,3 @@ export class AIController {
     })
   }
 }
-
-/**
- * const UIMessageSchema = z.object({
- *     id: z.string(),
- *     role: z.string(),
- *     content: z.string().optional(),
- *     name: z.string().optional(),
- *     parts: z.array(z.any()).optional(),
- *     trigger: z.string().optional(),
- *   })
- *   const RequestBodySchema = z.object({
- *     messages: z.array(UIMessageSchema),
- *     id: z.string(),
- *   })
- */
