@@ -174,7 +174,6 @@ describe('GetAllUsersUseCase', () => {
       expect(result.data[0]!.role).toBe('admin')
       expect(result.data[1]!.role).toBe('user')
     })
-
   })
 
   describe('execute() - logging', () => {
