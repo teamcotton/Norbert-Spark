@@ -5,19 +5,22 @@ import { AIReturnedResponseSchema } from '@norberts-spark/shared'
 import { FastifyUtil } from '../../../shared/utils/fastify.utils.js'
 
 import { z } from 'zod'
-import { convertToModelMessages, stepCountIs, streamText, tool, type UIMessage } from 'ai'
+import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from 'ai'
 import { google } from '@ai-sdk/google'
-import { GetText } from '../../../infrastructure/ai/tools/getText.js'
 import { AppendedChatUseCase } from '../../../application/use-cases/append-chat.use-case.js'
-
-const getTextInstance = new GetText('data', 'heart-of-darkness.txt')
+import { EnvConfig } from '../../../infrastructure/config/env.config.js'
+import { HeartOfDarknessTool } from '../../../infrastructure/ai/tools/heart-of-darkness.tool.js'
 
 export class AIController {
+  private readonly heartOfDarknessTool: HeartOfDarknessTool
+
   constructor(
     private readonly getChatUseCase: GetChatUseCase,
     private readonly logger: LoggerPort,
     private readonly appendChatUseCase: AppendedChatUseCase
-  ) {}
+  ) {
+    this.heartOfDarknessTool = new HeartOfDarknessTool(this.logger)
+  }
 
   registerRoutes(app: FastifyInstance): void {
     app.post('/ai/chat', this.chat.bind(this))
@@ -83,49 +86,22 @@ export class AIController {
 
     const logger = this.logger
 
+    if (!EnvConfig.MODEL_NAME) {
+      this.logger.error('MODEL_NAME environment variable is not configured')
+      return reply
+        .status(500)
+        .send(FastifyUtil.createResponse('AI service configuration error', 500))
+    }
+
     const result = streamText({
-      model: google('gemini-2.0-flash-001'),
+      model: google(EnvConfig.MODEL_NAME),
       messages: convertToModelMessages(messages as UIMessage[]),
       system: ` ${SYSTEM_PROMPT}
       You have access to the following tools:
       - heartOfDarknessQA (for answering questions about the novella Heart of Darkness)
     `,
       tools: {
-        heartOfDarknessQA: tool({
-          description:
-            'Answer questions about Joseph Conrad\'s novella "Heart of Darkness" using the full text of the book',
-          inputSchema: z.object({
-            question: z.string().describe('The question to answer about Heart of Darkness'),
-          }),
-          execute: async ({ question }) => {
-            try {
-              // Read the Heart of Darkness text file using the singleton instance
-              const filePath = getTextInstance.filePath
-
-              let heartOfDarknessText
-
-              if (getTextInstance.hasCachedContent(filePath)) {
-                heartOfDarknessText = getTextInstance.getCachedContent(filePath)
-                this.logger.info('CACHED')
-              } else {
-                heartOfDarknessText = await getTextInstance.getText()
-                this.logger.info('FROM FILE')
-              }
-
-              // Return the full text as context for the AI to use in answering
-              return {
-                question,
-                textLength: heartOfDarknessText ? heartOfDarknessText.length : 0,
-                context: heartOfDarknessText,
-                instructions:
-                  'Use the provided full text of Heart of Darkness to answer the question comprehensively and accurately. Reference specific passages where relevant.',
-              }
-            } catch (error) {
-              const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-              throw new Error(`Error loading Heart of Darkness text: ${errorMessage}`)
-            }
-          },
-        }),
+        heartOfDarknessQA: this.heartOfDarknessTool.getTool(),
       },
       stopWhen: [stepCountIs(10)],
       onChunk({ chunk }) {
