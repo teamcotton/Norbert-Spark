@@ -2,12 +2,12 @@
 
 ## Overview
 
-This guide explains how to integrate Redis as a caching and session management solution into the existing backend architecture, following the backend's Hexagonal Architecture (Ports & Adapters pattern) and the overall project conventions already established in the project.
+This guide explains how to integrate Redis as a caching and session management solution into the existing backend architecture, following the Hexagonal Architecture (Ports & Adapters) pattern already established in the project.
 
 ## Prerequisites
 
 - Docker installed (for running Redis locally)
-- Understanding of the backend's Hexagonal Architecture (Ports & Adapters) structure
+- Understanding of the backend's Hexagonal Architecture structure
 - Familiarity with the existing ports and adapters pattern
 
 ---
@@ -43,7 +43,7 @@ This guide explains how to integrate Redis as a caching and session management s
 
 ---
 
-## Step 3: Define the Cache Port (Application Layer)
+## Step 3: Define the Cache Port (Application/Ports)
 
 Following the ports and adapters pattern, create an abstraction for caching:
 
@@ -62,7 +62,7 @@ Following the ports and adapters pattern, create an abstraction for caching:
 
 ---
 
-## Step 4: Implement Redis Adapter (Infrastructure Layer)
+## Step 4: Implement Redis Adapter (Secondary Adapter)
 
 Create the concrete implementation that fulfills the cache port:
 
@@ -317,19 +317,19 @@ Document the Redis integration:
 
 ## Architecture Considerations
 
-### Following Clean Architecture Principles:
+### Following Hexagonal Architecture (Ports & Adapters):
 
-1. **Domain Layer**: No Redis knowledge (pure business logic)
-2. **Application Layer**: Defines `CachePort` interface (framework-agnostic)
-3. **Infrastructure Layer**: Implements Redis adapter (concrete implementation)
-4. **Presentation Layer**: Uses services that internally leverage cache
+1. **Domain**: No Redis knowledge (pure business logic, center of hexagon)
+2. **Application Ports**: Define `CachePort` interface (secondary/driven port)
+3. **Secondary Adapter**: Implement Redis adapter (concrete implementation of CachePort)
+4. **Primary Adapters**: HTTP controllers use application use cases that internally leverage cache through ports
 
 ### Benefits of This Approach:
 
-- Easy to swap Redis for Memcached or another cache provider
-- Testable without actual Redis instance
-- Clear separation of concerns
-- Follows SOLID principles
+- Easy to swap Redis for Memcached or another cache provider (replace adapter, keep port)
+- Testable without actual Redis instance (mock the port interface)
+- Clear separation of concerns following dependency rule (Infrastructure → Adapters → Application → Domain)
+- Adapters can be replaced without changing core logic
 
 ---
 
