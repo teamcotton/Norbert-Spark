@@ -377,6 +377,49 @@
           }
         }
       }
+    },
+    "/ai/chat/{id}": {
+      "get": {
+        "summary": "Get AI response by ID",
+        "description": "Retrieves a previously generated AI response by its unique identifier",
+        "operationId": "getAIResponseById",
+        "tags": ["ai"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The AI response's unique identifier",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AI response found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIRequest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "AI response not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
