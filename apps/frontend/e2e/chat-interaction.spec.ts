@@ -93,8 +93,10 @@ test.describe('Chat Interaction', () => {
     const firstAiResponse = page.locator('text=/^AI:/').first()
     await expect(firstAiResponse).toBeVisible({ timeout: 5000 })
 
-    // Wait for first response to settle
-    await expect(firstAiResponse).toHaveText(/AI:/, { timeout: 5000 })
+    // Wait for first response to settle and ensure it has meaningful content after "AI:"
+    const firstAiResponseText = (await firstAiResponse.innerText()).trim()
+    expect(firstAiResponseText.length).toBeGreaterThan(4)
+    expect(firstAiResponseText).toMatch(/^AI:\s*\S/)
 
     // Second message
     await chatInput.fill('how are you?')
