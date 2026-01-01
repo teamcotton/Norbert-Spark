@@ -7,3 +7,15 @@
   Redis (data cache, sessions)
     ↓
   Database
+
+
+  Client
+    ↓
+  NGINX
+    ├─ /           → frontend/dist
+    └─ /api/*      → Fastify
+                      ↓
+                    Redis
+                      ↓
+                    Database
+
