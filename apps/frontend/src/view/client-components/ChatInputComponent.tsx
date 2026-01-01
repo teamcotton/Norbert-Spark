@@ -76,7 +76,6 @@ export const ChatInput = ({
         >
           <AttachFileIcon />
           <input
-            disabled={disabled}
             data-testid="file-input"
             type="file"
             hidden
