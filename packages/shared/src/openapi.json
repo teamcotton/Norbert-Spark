@@ -382,7 +382,7 @@
       "get": {
         "summary": "Get AI response by UserId",
         "description": "Retrieves previous chats by UserId",
-        "operationId": "getAIResponseById",
+        "operationId": "getAIChatsByUserId",
         "tags": ["ai"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [

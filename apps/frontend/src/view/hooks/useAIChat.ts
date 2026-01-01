@@ -19,7 +19,7 @@ export function useAIChat({ id }: UseAIChatProps) {
   const router = useRouter()
 
   const { messages, sendMessage } = useChat({
-    id: id ?? uuidv7(),
+    id: id || uuidv7(),
     transport: new DefaultChatTransport({
       api: process.env.NEXT_PUBLIC_POST_AI_CALLBACK_URL,
     }),
@@ -80,6 +80,7 @@ export function useAIChat({ id }: UseAIChatProps) {
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         setErrorMessage('File too large. Maximum size is 10MB')
+        setSelectedFile(null)
         return
       }
     }

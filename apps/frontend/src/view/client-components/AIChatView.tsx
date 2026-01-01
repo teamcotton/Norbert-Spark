@@ -179,7 +179,7 @@ export function AIChatView({
               borderColor: 'divider',
             }}
           >
-            <IconButton onClick={onDrawerToggle}>
+            <IconButton onClick={onDrawerToggle} aria-label="Open navigation menu">
               <MenuIcon />
             </IconButton>
           </Box>
