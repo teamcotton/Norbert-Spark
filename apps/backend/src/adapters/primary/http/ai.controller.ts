@@ -5,7 +5,7 @@ import { AIReturnedResponseSchema } from '@norberts-spark/shared'
 import { FastifyUtil } from '../../../shared/utils/fastify.utils.js'
 
 import { z } from 'zod'
-import { convertToModelMessages, stepCountIs, streamText, tool, type UIMessage } from 'ai'
+import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from 'ai'
 import { google } from '@ai-sdk/google'
 import { GetText } from '../../../infrastructure/ai/tools/getText.js'
 import { AppendedChatUseCase } from '../../../application/use-cases/append-chat.use-case.js'
