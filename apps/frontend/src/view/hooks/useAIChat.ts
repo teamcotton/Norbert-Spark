@@ -51,10 +51,11 @@ export function useAIChat({ id }: UseAIChatProps = {}) {
     },
   })
 
-  if (disabled) {
-    stop().catch(console.error)
-  }
+  useEffect(() => {
+    if (!disabled) return
 
+    void stop().catch(console.error)
+  }, [disabled, stop])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
