@@ -133,6 +133,7 @@ export class LoginUserUseCase {
     if (!user.id) {
       this.logger.error('User found but has no ID', new InternalErrorException('Missing user ID'), {
         email: dto.email,
+        user,
       })
       throw new InternalErrorException('User found but has no ID', {
         email: dto.email,
