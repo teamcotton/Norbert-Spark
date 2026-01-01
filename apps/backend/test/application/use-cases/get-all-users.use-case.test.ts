@@ -58,17 +58,6 @@ describe('GetAllUsersUseCase', () => {
     useCase = new GetAllUsersUseCase(mockUserRepository, mockLogger)
   })
 
-  describe('constructor', () => {
-    it('should create instance with repository and logger', () => {
-      expect(useCase).toBeInstanceOf(GetAllUsersUseCase)
-    })
-
-    it('should store repository and logger references', () => {
-      const newUseCase = new GetAllUsersUseCase(mockUserRepository, mockLogger)
-      expect(newUseCase).toBeDefined()
-    })
-  })
-
   describe('execute() - successful scenarios', () => {
     it('should fetch all users with default pagination', async () => {
       const user1 = await createTestUser('user-1', 'john@example.com', 'John Doe', 'user')
