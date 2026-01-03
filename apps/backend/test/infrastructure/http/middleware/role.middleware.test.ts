@@ -1,8 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
+import { uuidv7 } from 'uuidv7'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 import { requireRole } from '../../../../src/infrastructure/http/middleware/role.middleware.js'
 import type { JwtUserClaims } from '../../../../src/shared/types/index.js'
+
+// Helper function to create mock user claims with proper UserIdType
+function createMockUserClaims(email: string, roles?: string[], userId?: string): JwtUserClaims {
+  return {
+    sub: new UserId(userId || uuidv7()) as UserIdType,
+    email,
+    roles,
+  }
+}
 
 describe('requireRole middleware', () => {
   let mockRequest: Partial<FastifyRequest>
@@ -70,11 +81,8 @@ describe('requireRole middleware', () => {
 
   describe('Role authorization', () => {
     it('should allow access when user has required role', async () => {
-      mockRequest.user = {
-        sub: 'user-123',
-        email: 'admin@example.com',
-        roles: ['admin'],
-      } as JwtUserClaims
+      const userId = uuidv7()
+      mockRequest.user = createMockUserClaims('admin@example.com', ['admin'], userId)
 
       const middleware = requireRole(['admin'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -84,7 +92,7 @@ describe('requireRole middleware', () => {
       expect(logInfoSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           method: 'GET',
-          userId: 'user-123',
+          userId,
           userRoles: ['admin'],
         }),
         'Role check passed'
@@ -92,11 +100,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should allow access when user has one of multiple required roles', async () => {
-      mockRequest.user = {
-        sub: 'user-456',
-        email: 'moderator@example.com',
-        roles: ['moderator', 'user'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('moderator@example.com', ['moderator', 'user'])
 
       const middleware = requireRole(['admin', 'moderator'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -107,11 +111,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should allow access when user has admin role and moderator is required', async () => {
-      mockRequest.user = {
-        sub: 'user-789',
-        email: 'admin@example.com',
-        roles: ['admin'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('admin@example.com', ['admin'])
 
       const middleware = requireRole(['admin', 'moderator'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -121,11 +121,8 @@ describe('requireRole middleware', () => {
     })
 
     it('should deny access when user lacks required role', async () => {
-      mockRequest.user = {
-        sub: 'user-999',
-        email: 'user@example.com',
-        roles: ['user'],
-      } as JwtUserClaims
+      const userId = uuidv7()
+      mockRequest.user = createMockUserClaims('user@example.com', ['user'], userId)
 
       const middleware = requireRole(['admin', 'moderator'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -137,7 +134,7 @@ describe('requireRole middleware', () => {
       })
       expect(logWarnSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: 'user-999',
+          userId,
           userRoles: ['user'],
           requiredRoles: ['admin', 'moderator'],
         }),
@@ -146,11 +143,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should deny access when user has no roles', async () => {
-      mockRequest.user = {
-        sub: 'user-000',
-        email: 'noroles@example.com',
-        roles: [],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('noroles@example.com', [])
 
       const middleware = requireRole(['admin'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -163,10 +156,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should deny access when user roles property is undefined', async () => {
-      mockRequest.user = {
-        sub: 'user-111',
-        email: 'noroles@example.com',
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('noroles@example.com')
 
       const middleware = requireRole(['admin'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -181,11 +171,7 @@ describe('requireRole middleware', () => {
 
   describe('Multiple roles scenarios', () => {
     it('should handle single role requirement', async () => {
-      mockRequest.user = {
-        sub: 'user-single',
-        email: 'admin@example.com',
-        roles: ['admin', 'user', 'moderator'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('admin@example.com', ['admin', 'user', 'moderator'])
 
       const middleware = requireRole(['admin'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -195,11 +181,11 @@ describe('requireRole middleware', () => {
     })
 
     it('should handle multiple required roles with user having multiple roles', async () => {
-      mockRequest.user = {
-        sub: 'user-multi',
-        email: 'superuser@example.com',
-        roles: ['admin', 'moderator', 'user'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('superuser@example.com', [
+        'admin',
+        'moderator',
+        'user',
+      ])
 
       const middleware = requireRole(['admin', 'moderator', 'editor'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -208,11 +194,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should correctly identify when none of multiple roles match', async () => {
-      mockRequest.user = {
-        sub: 'user-nomatch',
-        email: 'guest@example.com',
-        roles: ['guest', 'viewer'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('guest@example.com', ['guest', 'viewer'])
 
       const middleware = requireRole(['admin', 'moderator', 'editor'])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -245,11 +227,7 @@ describe('requireRole middleware', () => {
 
     it('should handle very long role names', async () => {
       const longRole = 'a'.repeat(200)
-      mockRequest.user = {
-        sub: 'user-long',
-        email: 'user@example.com',
-        roles: [longRole],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('user@example.com', [longRole])
 
       const middleware = requireRole([longRole])
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -259,11 +237,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should handle case-sensitive role matching', async () => {
-      mockRequest.user = {
-        sub: 'user-case',
-        email: 'user@example.com',
-        roles: ['Admin'], // Capital A
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('user@example.com', ['Admin']) // Capital A
 
       const middleware = requireRole(['admin']) // lowercase a
       await middleware.call(null as any, mockRequest as FastifyRequest, mockReply as FastifyReply)
@@ -273,11 +247,7 @@ describe('requireRole middleware', () => {
     })
 
     it('should preserve request context through middleware chain', async () => {
-      mockRequest.user = {
-        sub: 'user-preserve',
-        email: 'user@example.com',
-        roles: ['admin'],
-      } as JwtUserClaims
+      mockRequest.user = createMockUserClaims('user@example.com', ['admin'])
 
       const originalUser = mockRequest.user
 

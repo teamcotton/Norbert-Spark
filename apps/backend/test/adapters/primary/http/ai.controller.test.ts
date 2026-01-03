@@ -1,10 +1,13 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import { uuidv7 } from 'uuidv7'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { AIController } from '../../../../src/adapters/primary/http/ai.controller.js'
 import type { LoggerPort } from '../../../../src/application/ports/logger.port.js'
 import type { AppendedChatUseCase } from '../../../../src/application/use-cases/append-chat.use-case.js'
 import type { GetChatUseCase } from '../../../../src/application/use-cases/get-chat.use-case.js'
+import type { SaveChatUseCase } from '../../../../src/application/use-cases/save-chat.use-case.js'
+import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 
 // Mock the AI SDK modules
 vi.mock('ai', () => ({
@@ -40,6 +43,7 @@ describe('AIController', () => {
   let controller: AIController
   let mockGetChatUseCase: GetChatUseCase
   let mockAppendChatUseCase: AppendedChatUseCase
+  let mockSaveChatUseCase: SaveChatUseCase
   let mockLogger: LoggerPort
   let mockRequest: FastifyRequest
   let mockReply: FastifyReply
@@ -57,6 +61,10 @@ describe('AIController', () => {
       execute: vi.fn(),
     } as any
 
+    mockSaveChatUseCase = {
+      execute: vi.fn(),
+    } as any
+
     // Create mock logger
     mockLogger = {
       info: vi.fn(),
@@ -66,7 +74,12 @@ describe('AIController', () => {
     }
 
     // Create controller instance with mocked dependencies
-    controller = new AIController(mockGetChatUseCase, mockLogger, mockAppendChatUseCase)
+    controller = new AIController(
+      mockGetChatUseCase,
+      mockLogger,
+      mockAppendChatUseCase,
+      mockSaveChatUseCase
+    )
 
     // Create mock Fastify reply with chainable methods
     mockReply = {
@@ -80,20 +93,33 @@ describe('AIController', () => {
       body: {},
       params: {},
       query: {},
-      user: { sub: 'user-123' },
+      user: {
+        sub: new UserId(uuidv7()) as UserIdType,
+        email: 'user@example.com',
+      },
     } as any
   })
 
   describe('constructor', () => {
     it('should create instance with required dependencies', () => {
-      const instance = new AIController(mockGetChatUseCase, mockLogger, mockAppendChatUseCase)
+      const instance = new AIController(
+        mockGetChatUseCase,
+        mockLogger,
+        mockAppendChatUseCase,
+        mockSaveChatUseCase
+      )
 
       expect(instance).toBeInstanceOf(AIController)
       expect(instance).toBeDefined()
     })
 
     it('should accept GetChatUseCase, LoggerPort, and AppendedChatUseCase as dependencies', () => {
-      const instance = new AIController(mockGetChatUseCase, mockLogger, mockAppendChatUseCase)
+      const instance = new AIController(
+        mockGetChatUseCase,
+        mockLogger,
+        mockAppendChatUseCase,
+        mockSaveChatUseCase
+      )
 
       expect(instance).toBeDefined()
       expect(instance).toBeInstanceOf(AIController)
@@ -109,7 +135,11 @@ describe('AIController', () => {
       controller.registerRoutes(mockApp)
 
       expect(mockApp.post).toHaveBeenCalledTimes(1)
-      expect(mockApp.post).toHaveBeenCalledWith('/ai/chat', expect.any(Function))
+      expect(mockApp.post).toHaveBeenCalledWith(
+        '/ai/chat',
+        expect.objectContaining({ preHandler: expect.any(Array) }),
+        expect.any(Function)
+      )
     })
 
     it('should bind controller context to route handler', () => {
@@ -119,8 +149,10 @@ describe('AIController', () => {
 
       controller.registerRoutes(mockApp)
 
-      // Verify handler is a bound function
-      const chatHandler = vi.mocked(mockApp.post).mock.calls[0]?.[1]
+      // Verify handler is a bound function (at index 2, the third argument)
+      // Using 'any' cast because Fastify has multiple overloads and TypeScript infers the 2-arg version
+      const mockCalls = vi.mocked(mockApp.post).mock.calls[0] as any
+      const chatHandler = mockCalls?.[2] as Function
 
       expect(chatHandler).toBeTypeOf('function')
     })
@@ -160,7 +192,7 @@ describe('AIController', () => {
 
       it('should return 400 if messages array is missing', async () => {
         mockRequest.body = {
-          id: 'chat-123',
+          id: uuidv7(),
         }
 
         await controller.chat(mockRequest, mockReply)
@@ -188,7 +220,7 @@ describe('AIController', () => {
 
       it('should return 400 if no messages are provided', async () => {
         mockRequest.body = {
-          id: '550e8400-e29b-41d4-a716-446655440000',
+          id: uuidv7(),
           messages: [],
           trigger: 'user-input',
         }
@@ -203,7 +235,7 @@ describe('AIController', () => {
 
       it('should return 400 if last message is not from user', async () => {
         mockRequest.body = {
-          id: '550e8400-e29b-41d4-a716-446655440000',
+          id: uuidv7(),
           messages: [
             { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
             { id: '2', role: 'assistant', parts: [{ type: 'text', text: 'Hi there!' }] },
@@ -221,7 +253,7 @@ describe('AIController', () => {
 
       it('should return 401 if user is not authenticated for new chat', async () => {
         mockRequest.body = {
-          id: '550e8400-e29b-41d4-a716-446655440000',
+          id: uuidv7(),
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],
           trigger: 'user-input',
         }
@@ -238,7 +270,8 @@ describe('AIController', () => {
 
     describe('successful chat processing', () => {
       it('should process valid chat request with existing chat', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440000'
+        const chatId = uuidv7()
+        const userId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [
@@ -248,41 +281,59 @@ describe('AIController', () => {
           ],
           trigger: 'user-input',
         }
+        mockRequest.user = {
+          sub: new UserId(userId) as UserIdType,
+          email: 'user@example.com',
+        }
 
         vi.mocked(mockGetChatUseCase.execute).mockResolvedValue({
           id: chatId,
-          userId: 'user-123',
+          userId: userId,
           messages: [],
         } as any)
 
         await controller.chat(mockRequest, mockReply)
 
-        expect(mockGetChatUseCase.execute).toHaveBeenCalledWith(chatId, [])
-        expect(mockAppendChatUseCase.execute).toHaveBeenCalledWith(chatId, [
-          expect.objectContaining({ id: '3', role: 'user' }),
-        ])
+        expect(mockGetChatUseCase.execute).toHaveBeenCalledWith(
+          expect.objectContaining({ value: userId }),
+          [
+            expect.objectContaining({ id: '1', role: 'user' }),
+            expect.objectContaining({ id: '2', role: 'assistant' }),
+            expect.objectContaining({ id: '3', role: 'user' }),
+          ]
+        )
+        expect(mockAppendChatUseCase.execute).toHaveBeenCalledWith(
+          expect.objectContaining({ value: chatId }),
+          [expect.objectContaining({ id: '3', role: 'user' })]
+        )
       })
 
       it('should create new chat if chat does not exist', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440000'
+        const chatId = uuidv7()
+        const userId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],
           trigger: 'user-input',
         }
-        mockRequest.user = { sub: 'user-123', email: 'user@example.com' }
+        mockRequest.user = {
+          sub: new UserId(userId) as UserIdType,
+          email: 'user@example.com',
+        }
 
         vi.mocked(mockGetChatUseCase.execute).mockResolvedValue(null)
 
         await controller.chat(mockRequest, mockReply)
 
-        expect(mockGetChatUseCase.execute).toHaveBeenCalledWith('user-123', [
-          expect.objectContaining({ id: '1', role: 'user' }),
-        ])
+        expect(mockGetChatUseCase.execute).toHaveBeenCalledWith(
+          expect.objectContaining({ value: userId }),
+          [expect.objectContaining({ id: '1', role: 'user' })]
+        )
       })
 
       it('should log debug message when sending to chat', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440000'
+        const chatId = uuidv7()
+        const userId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],
@@ -291,7 +342,7 @@ describe('AIController', () => {
 
         vi.mocked(mockGetChatUseCase.execute).mockResolvedValue({
           id: chatId,
-          userId: 'user-123',
+          userId: userId,
           messages: [],
         } as any)
 
@@ -307,13 +358,16 @@ describe('AIController', () => {
       })
 
       it('should log info when creating new chat', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440001'
+        const chatId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],
           trigger: 'user-input',
         }
-        mockRequest.user = { sub: 'user-123', email: 'user@example.com' }
+        mockRequest.user = {
+          sub: new UserId(uuidv7()) as UserIdType,
+          email: 'user@example.com',
+        }
 
         vi.mocked(mockGetChatUseCase.execute).mockResolvedValue(null)
 
@@ -325,7 +379,7 @@ describe('AIController', () => {
       })
 
       it('should log info when appending to existing chat', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440002'
+        const chatId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [
@@ -353,7 +407,7 @@ describe('AIController', () => {
     describe('AI streaming', () => {
       it('should call streamText with correct parameters', async () => {
         const { streamText } = await import('ai')
-        const chatId = '550e8400-e29b-41d4-a716-446655440003'
+        const chatId = uuidv7()
 
         mockRequest.body = {
           id: chatId,
@@ -388,7 +442,7 @@ describe('AIController', () => {
       })
 
       it('should return stream response', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440004'
+        const chatId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],
@@ -425,7 +479,7 @@ describe('AIController', () => {
       })
 
       it('should handle use case errors gracefully', async () => {
-        const chatId = '550e8400-e29b-41d4-a716-446655440005'
+        const chatId = uuidv7()
         mockRequest.body = {
           id: chatId,
           messages: [{ id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] }],

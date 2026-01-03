@@ -10,6 +10,7 @@ import { RegisterUserDto } from '../dtos/register-user.dto.js'
 import { ConflictException } from '../../shared/exceptions/conflict.exception.js'
 import { DatabaseUtil } from '../../shared/utils/database.util.js'
 import { EnvConfig } from '../../infrastructure/config/env.config.js'
+import type { UserIdType } from '../../domain/value-objects/userID.js'
 
 /**
  * Use case for registering a new user in the system
@@ -103,7 +104,7 @@ export class RegisterUserUseCase {
     // try to register the same email, one will succeed and the other will fail
     // with a duplicate key error. We catch that error and convert it to a
     // user-friendly ConflictException.
-    let userId: string
+    let userId: UserIdType
     try {
       userId = await this.userRepository.save(user)
     } catch (error) {
@@ -119,13 +120,13 @@ export class RegisterUserUseCase {
       await this.emailService.sendWelcomeEmail(dto.email, dto.name)
     } catch (error) {
       this.logger.error('Failed to send welcome email', error as Error, {
-        userId,
+        userId: userId.getValue(),
         email: dto.email,
       })
       // Don't fail registration if email fails
     }
 
-    this.logger.info('User registered successfully', { userId })
+    this.logger.info('User registered successfully', { userId: userId.getValue() })
 
     // Generate JWT access token
     const accessToken = this.tokenGenerator.generateToken({
@@ -138,7 +139,7 @@ export class RegisterUserUseCase {
     const safeExpiresIn = Number.isNaN(expiresIn) ? 3600 : expiresIn
 
     return {
-      userId,
+      userId: userId.getValue(),
       access_token: accessToken,
       token_type: 'Bearer',
       expires_in: safeExpiresIn,

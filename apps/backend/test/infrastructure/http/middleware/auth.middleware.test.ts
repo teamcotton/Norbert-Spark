@@ -1,11 +1,22 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
+import { uuidv7 } from 'uuidv7'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 import { authMiddleware } from '../../../../src/infrastructure/http/middleware/auth.middleware.js'
 import { JwtUtil } from '../../../../src/infrastructure/security/jwt.util.js'
 import { ErrorCode } from '../../../../src/shared/constants/error-codes.js'
 import { UnauthorizedException } from '../../../../src/shared/exceptions/unauthorized.exception.js'
 import type { JwtUserClaims } from '../../../../src/shared/types/index.js'
+
+// Helper function to create mock claims with proper UserIdType
+function createMockClaims(email: string, roles?: string[], userId?: string): JwtUserClaims {
+  return {
+    sub: new UserId(userId || uuidv7()) as UserIdType,
+    email,
+    roles,
+  }
+}
 
 describe('authMiddleware', () => {
   let mockRequest: Partial<FastifyRequest>
@@ -14,11 +25,7 @@ describe('authMiddleware', () => {
   let codeSpy: ReturnType<typeof vi.fn>
   let logWarnSpy: ReturnType<typeof vi.fn>
 
-  const validClaims: JwtUserClaims = {
-    sub: 'user-123',
-    email: 'test@example.com',
-    roles: ['user'],
-  }
+  const validClaims: JwtUserClaims = createMockClaims('test@example.com', ['user'])
 
   beforeEach(() => {
     // Reset all mocks and restore spies
@@ -77,15 +84,12 @@ describe('authMiddleware', () => {
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
 
       expect(mockRequest.user).toBeDefined()
-      expect(mockRequest.user?.sub).toBe(validClaims.sub)
+      expect(mockRequest.user?.sub.getValue()).toBe(validClaims.sub.getValue())
       expect(mockRequest.user?.email).toBe(validClaims.email)
     })
 
     it('should authenticate token without roles', async () => {
-      const claimsWithoutRoles: JwtUserClaims = {
-        sub: 'user-456',
-        email: 'noroles@example.com',
-      }
+      const claimsWithoutRoles: JwtUserClaims = createMockClaims('noroles@example.com')
       const token = JwtUtil.generateToken(claimsWithoutRoles)
       mockRequest.headers = { authorization: `Bearer ${token}` }
 
@@ -99,11 +103,11 @@ describe('authMiddleware', () => {
     })
 
     it('should authenticate token with multiple roles', async () => {
-      const multiRoleClaims: JwtUserClaims = {
-        sub: 'admin-789',
-        email: 'admin@example.com',
-        roles: ['user', 'admin', 'moderator'],
-      }
+      const multiRoleClaims: JwtUserClaims = createMockClaims('admin@example.com', [
+        'user',
+        'admin',
+        'moderator',
+      ])
       const token = JwtUtil.generateToken(multiRoleClaims)
       mockRequest.headers = { authorization: `Bearer ${token}` }
 
@@ -527,18 +531,17 @@ describe('authMiddleware', () => {
     })
 
     it('should handle very long tokens', async () => {
-      const longClaimsClaims: JwtUserClaims = {
-        sub: 'a'.repeat(100), // Reduced from 1000 to avoid potential JWT size issues
-        email: 'test@example.com',
-        roles: Array.from({ length: 50 }, (_, i) => `role-${i}`), // Reduced from 100
-      }
+      const longClaimsClaims: JwtUserClaims = createMockClaims(
+        'test@example.com',
+        Array.from({ length: 50 }, (_, i) => `role-${i}`) // Reduced from 100
+      )
       const token = JwtUtil.generateToken(longClaimsClaims)
       mockRequest.headers = { authorization: `Bearer ${token}` }
 
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
 
       expect(mockRequest.user).toBeDefined()
-      expect(mockRequest.user?.sub).toBe(longClaimsClaims.sub)
+      expect(mockRequest.user?.sub.getValue()).toBe(longClaimsClaims.sub.getValue())
       expect(mockRequest.user?.roles).toHaveLength(50)
     })
 
@@ -559,7 +562,7 @@ describe('authMiddleware', () => {
       const token = JwtUtil.generateToken(validClaims)
       const verified = JwtUtil.verifyToken(token)
 
-      expect(verified.sub).toBe(validClaims.sub)
+      expect(verified.sub).toBe(validClaims.sub.getValue())
       expect(verified.email).toBe(validClaims.email)
       expect(verified.roles).toEqual(validClaims.roles)
     })
@@ -570,7 +573,7 @@ describe('authMiddleware', () => {
       // First request
       mockRequest.headers = { authorization: `Bearer ${token}` }
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
-      expect(mockRequest.user?.sub).toBe(validClaims.sub)
+      expect(mockRequest.user?.sub.getValue()).toBe(validClaims.sub.getValue())
 
       // Reset request and reply with fresh spies
       vi.clearAllMocks()
@@ -595,20 +598,12 @@ describe('authMiddleware', () => {
 
       // Second request with same token
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
-      expect(mockRequest.user?.sub).toBe(validClaims.sub)
+      expect(mockRequest.user?.sub.getValue()).toBe(validClaims.sub.getValue())
     })
 
     it('should authenticate different users with different tokens', async () => {
-      const user1Claims: JwtUserClaims = {
-        sub: 'user-1',
-        email: 'user1@example.com',
-        roles: ['user'],
-      }
-      const user2Claims: JwtUserClaims = {
-        sub: 'user-2',
-        email: 'user2@example.com',
-        roles: ['admin'],
-      }
+      const user1Claims: JwtUserClaims = createMockClaims('user1@example.com', ['user'])
+      const user2Claims: JwtUserClaims = createMockClaims('user2@example.com', ['admin'])
 
       const token1 = JwtUtil.generateToken(user1Claims)
       const token2 = JwtUtil.generateToken(user2Claims)
@@ -616,7 +611,7 @@ describe('authMiddleware', () => {
       // First user
       mockRequest.headers = { authorization: `Bearer ${token1}` }
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
-      expect(mockRequest.user?.sub).toBe('user-1')
+      expect(mockRequest.user?.sub.getValue()).toBe(user1Claims.sub.getValue())
       expect(mockRequest.user?.roles).toEqual(['user'])
 
       // Reset request with fresh spies
@@ -643,7 +638,7 @@ describe('authMiddleware', () => {
       // Second user
       mockRequest.headers = { authorization: `Bearer ${token2}` }
       await authMiddleware(mockRequest as FastifyRequest, mockReply as FastifyReply)
-      expect(mockRequest.user?.sub).toBe('user-2')
+      expect(mockRequest.user?.sub.getValue()).toBe(user2Claims.sub.getValue())
       expect(mockRequest.user?.roles).toEqual(['admin'])
     })
 

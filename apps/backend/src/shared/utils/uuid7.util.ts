@@ -1,5 +1,11 @@
 import { uuidv7 } from 'uuidv7'
 import { isValidUUID, uuidVersionValidation } from 'uuidv7-utilities'
+import type { UserIdType } from '../../domain/value-objects/userID.js'
+import type { UUIDType } from '../../domain/value-objects/uuid.js'
+import type { ChatIdType } from '../../domain/value-objects/chatID.js'
+import { isString } from '@norberts-spark/shared'
+
+type Uuid7UtilInputType = UserIdType | UUIDType | ChatIdType | string
 
 /**
  * Utility class for generating and validating UUIDv7.
@@ -34,7 +40,8 @@ export class Uuid7Util {
    * Uuid7Util.uuidVersionValidation('') // undefined
    * ```
    */
-  static uuidVersionValidation(uuid: string): string | undefined {
+  static uuidVersionValidation(uuid: Uuid7UtilInputType): string | undefined {
+    if (!isString(uuid)) return undefined
     return uuidVersionValidation(uuid)
   }
 
@@ -52,7 +59,8 @@ export class Uuid7Util {
    * Uuid7Util.isValidUUID('') // false
    * ```
    */
-  static isValidUUID(uuid: string): boolean {
+  static isValidUUID(uuid: Uuid7UtilInputType): boolean {
+    if (!isString(uuid)) return false
     return isValidUUID(uuid)
   }
 

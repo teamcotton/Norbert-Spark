@@ -9,7 +9,9 @@ import {
   type MyDBUIMessagePartSelect,
 } from '../../../infrastructure/database/schema.js'
 import type { UIMessage } from 'ai'
-import { Uuid7Util } from '../../../shared/utils/uuid7.util.js'
+import type { UserIdType } from '../../../domain/value-objects/userID.js'
+import type { ChatIdType } from '../../../domain/value-objects/chatID.js'
+import type { LoggerPort } from '../../../application/ports/logger.port.js'
 
 export type ChatResponseResult = {
   message: DBMessageSelect
@@ -17,20 +19,25 @@ export type ChatResponseResult = {
 }[]
 
 export class AIRepository implements AIServicePort {
-  async createChat(userId: string, initialMessages: UIMessage[] = []): Promise<string> {
-    const chatId = Uuid7Util.createUuidv7()
+  constructor(private readonly logger: LoggerPort) {}
 
+  async createChat(
+    chatId: ChatIdType,
+    userId: UserIdType,
+    initialMessages: UIMessage[] = []
+  ): Promise<string> {
     const newChat = {
-      id: chatId,
-      userId,
+      userId: userId.getValue()!,
+      id: chatId.getValue()!,
     }
+    this.logger.info('createChat', newChat)
 
     await db.insert(chats).values(newChat)
 
     // Insert initial messages if provided
     if (initialMessages.length > 0) {
       const messageRecords = initialMessages.map((msg) => ({
-        chatId,
+        chatId: chatId.getValue()!,
         role: msg.role,
       }))
 
@@ -60,9 +67,9 @@ export class AIRepository implements AIServicePort {
       }
     }
 
-    return chatId
+    return chatId.getValue()!
   }
-  async getChatResponse(chatId: string): Promise<ChatResponseResult | null> {
+  async getChatResponse(chatId: string | any): Promise<ChatResponseResult | null> {
     try {
       // Query messages based on chatId and retrieve related parts
       const result = await db

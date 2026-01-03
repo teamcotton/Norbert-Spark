@@ -1,7 +1,11 @@
 import type { UIMessage } from 'ai'
+import { uuidv7 } from 'uuidv7'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { AIRepository } from '../../../../src/adapters/secondary/repositories/ai.repository.js'
+import type { LoggerPort } from '../../../../src/application/ports/logger.port.js'
+import { ChatId, type ChatIdType } from '../../../../src/domain/value-objects/chatID.js'
+import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 import { db } from '../../../../src/infrastructure/database/index.js'
 import { Uuid7Util } from '../../../../src/shared/utils/uuid7.util.js'
 
@@ -17,18 +21,32 @@ vi.mock('../../../../src/infrastructure/database/index.js', () => ({
 vi.mock('../../../../src/shared/utils/uuid7.util.js', () => ({
   Uuid7Util: {
     createUuidv7: vi.fn(),
+    isValidUUID: vi.fn(() => true),
+    uuidVersionValidation: vi.fn((_uuid: string) => 'v7'),
   },
 }))
 
 describe('AIRepository', () => {
   let repository: AIRepository
-  const mockChatId = '01234567-89ab-cdef-0123-456789abcdef'
-  const mockUserId = 'user-123'
+  let mockLogger: LoggerPort
+  const mockChatIdString = uuidv7()
+  const mockUserIdString = uuidv7()
+  const mockChatId = new ChatId(mockChatIdString) as ChatIdType
+  const mockUserId = new UserId(mockUserIdString) as UserIdType
 
   beforeEach(() => {
     vi.clearAllMocks()
-    repository = new AIRepository()
-    vi.mocked(Uuid7Util.createUuidv7).mockReturnValue(mockChatId)
+
+    // Create mock logger
+    mockLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn(),
+    }
+
+    repository = new AIRepository(mockLogger)
+    vi.mocked(Uuid7Util.createUuidv7).mockReturnValue(mockChatIdString)
   })
 
   describe('createChat', () => {
@@ -37,14 +55,13 @@ describe('AIRepository', () => {
       const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
       vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
 
-      const chatId = await repository.createChat(mockUserId)
+      const chatId = await repository.createChat(mockChatId, mockUserId)
 
-      expect(chatId).toBe(mockChatId)
-      expect(Uuid7Util.createUuidv7).toHaveBeenCalledTimes(1)
+      expect(chatId).toBe(mockChatIdString)
       expect(db.insert).toHaveBeenCalledTimes(1)
       expect(mockValues).toHaveBeenCalledWith({
-        id: mockChatId,
-        userId: mockUserId,
+        id: mockChatIdString,
+        userId: mockUserIdString,
       })
     })
 
@@ -53,13 +70,13 @@ describe('AIRepository', () => {
       const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
       vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
 
-      const chatId = await repository.createChat(mockUserId, [])
+      const chatId = await repository.createChat(mockChatId, mockUserId, [])
 
-      expect(chatId).toBe(mockChatId)
+      expect(chatId).toBe(mockChatIdString)
       expect(db.insert).toHaveBeenCalledTimes(1)
       expect(mockValues).toHaveBeenCalledWith({
-        id: mockChatId,
-        userId: mockUserId,
+        id: mockChatIdString,
+        userId: mockUserIdString,
       })
     })
 
@@ -78,8 +95,8 @@ describe('AIRepository', () => {
       ]
 
       const mockInsertedMessages = [
-        { id: 'db-msg-1', chatId: mockChatId, role: 'user' },
-        { id: 'db-msg-2', chatId: mockChatId, role: 'assistant' },
+        { id: 'db-msg-1', chatId: mockChatIdString, role: 'user' },
+        { id: 'db-msg-2', chatId: mockChatIdString, role: 'assistant' },
       ]
 
       // Mock for chats insert
@@ -100,21 +117,21 @@ describe('AIRepository', () => {
         .mockReturnValueOnce(mockMessagesInsert() as any)
         .mockReturnValueOnce(mockPartsInsert() as any)
 
-      const chatId = await repository.createChat(mockUserId, initialMessages)
+      const chatId = await repository.createChat(mockChatId, mockUserId, initialMessages)
 
-      expect(chatId).toBe(mockChatId)
+      expect(chatId).toBe(mockChatIdString)
       expect(db.insert).toHaveBeenCalledTimes(3)
 
       // Verify chat insert
       expect(mockChatValues).toHaveBeenCalledWith({
-        id: mockChatId,
-        userId: mockUserId,
+        id: mockChatIdString,
+        userId: mockUserIdString,
       })
 
       // Verify messages insert
       expect(mockMessagesValues).toHaveBeenCalledWith([
-        { chatId: mockChatId, role: 'user' },
-        { chatId: mockChatId, role: 'assistant' },
+        { chatId: mockChatIdString, role: 'user' },
+        { chatId: mockChatIdString, role: 'assistant' },
       ])
 
       // Verify parts insert
@@ -137,7 +154,7 @@ describe('AIRepository', () => {
         } as any,
       ]
 
-      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatId, role: 'user' }]
+      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatIdString, role: 'user' }]
 
       const mockChatValues = vi.fn().mockResolvedValue(undefined)
       const mockChatInsert = vi.fn().mockReturnValue({ values: mockChatValues })
@@ -154,7 +171,7 @@ describe('AIRepository', () => {
         .mockReturnValueOnce(mockMessagesInsert() as any)
         .mockReturnValueOnce(mockPartsInsert() as any)
 
-      await repository.createChat(mockUserId, initialMessages)
+      await repository.createChat(mockChatId, mockUserId, initialMessages)
 
       expect(mockPartsValues).toHaveBeenCalledWith([
         { messageId: 'db-msg-1', type: 'text', text: 'First part' },
@@ -178,7 +195,7 @@ describe('AIRepository', () => {
         } as any,
       ]
 
-      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatId, role: 'user' }]
+      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatIdString, role: 'user' }]
 
       const mockChatValues = vi.fn().mockResolvedValue(undefined)
       const mockChatInsert = vi.fn().mockReturnValue({ values: mockChatValues })
@@ -195,7 +212,7 @@ describe('AIRepository', () => {
         .mockReturnValueOnce(mockMessagesInsert() as any)
         .mockReturnValueOnce(mockPartsInsert() as any)
 
-      await repository.createChat(mockUserId, initialMessages)
+      await repository.createChat(mockChatId, mockUserId, initialMessages)
 
       // Should only insert valid parts
       expect(mockPartsValues).toHaveBeenCalledWith([
@@ -213,7 +230,7 @@ describe('AIRepository', () => {
         } as any,
       ]
 
-      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatId, role: 'user' }]
+      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatIdString, role: 'user' }]
 
       const mockChatValues = vi.fn().mockResolvedValue(undefined)
       const mockChatInsert = vi.fn().mockReturnValue({ values: mockChatValues })
@@ -226,7 +243,7 @@ describe('AIRepository', () => {
         .mockReturnValueOnce(mockChatInsert() as any)
         .mockReturnValueOnce(mockMessagesInsert() as any)
 
-      await repository.createChat(mockUserId, initialMessages)
+      await repository.createChat(mockChatId, mockUserId, initialMessages)
 
       // Should only call insert twice (chat and messages, not parts)
       expect(db.insert).toHaveBeenCalledTimes(2)
@@ -241,7 +258,7 @@ describe('AIRepository', () => {
         } as any,
       ]
 
-      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatId, role: 'user' }]
+      const mockInsertedMessages = [{ id: 'db-msg-1', chatId: mockChatIdString, role: 'user' }]
 
       const mockChatValues = vi.fn().mockResolvedValue(undefined)
       const mockChatInsert = vi.fn().mockReturnValue({ values: mockChatValues })
@@ -254,25 +271,10 @@ describe('AIRepository', () => {
         .mockReturnValueOnce(mockChatInsert() as any)
         .mockReturnValueOnce(mockMessagesInsert() as any)
 
-      await repository.createChat(mockUserId, initialMessages)
+      await repository.createChat(mockChatId, mockUserId, initialMessages)
 
       // Should insert message but not parts (content is not an array)
       expect(db.insert).toHaveBeenCalledTimes(2)
-    })
-
-    it('should generate unique chat ID using Uuid7Util', async () => {
-      const mockValues = vi.fn().mockResolvedValue(undefined)
-      const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
-      vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
-
-      await repository.createChat(mockUserId)
-
-      expect(Uuid7Util.createUuidv7).toHaveBeenCalledTimes(1)
-      expect(mockValues).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: mockChatId,
-        })
-      )
     })
   })
 
@@ -280,13 +282,13 @@ describe('AIRepository', () => {
     it('should retrieve chat messages with parts', async () => {
       const mockResult = [
         {
-          message: { id: 'msg-1', chatId: mockChatId, role: 'user', createdAt: new Date() },
+          message: { id: 'msg-1', chatId: mockChatIdString, role: 'user', createdAt: new Date() },
           part: { id: 'part-1', messageId: 'msg-1', type: 'text', textText: 'Hello' },
         },
         {
           message: {
             id: 'msg-2',
-            chatId: mockChatId,
+            chatId: mockChatIdString,
             role: 'assistant',
             createdAt: new Date(),
           },
@@ -319,7 +321,7 @@ describe('AIRepository', () => {
     it('should handle messages without parts', async () => {
       const mockResult = [
         {
-          message: { id: 'msg-1', chatId: mockChatId, role: 'user', createdAt: new Date() },
+          message: { id: 'msg-1', chatId: mockChatIdString, role: 'user', createdAt: new Date() },
           part: null,
         },
       ]
@@ -338,11 +340,11 @@ describe('AIRepository', () => {
     it('should handle multiple parts for the same message', async () => {
       const mockResult = [
         {
-          message: { id: 'msg-1', chatId: mockChatId, role: 'user', createdAt: new Date() },
+          message: { id: 'msg-1', chatId: mockChatIdString, role: 'user', createdAt: new Date() },
           part: { id: 'part-1', messageId: 'msg-1', type: 'text', textText: 'First part' },
         },
         {
-          message: { id: 'msg-1', chatId: mockChatId, role: 'user', createdAt: new Date() },
+          message: { id: 'msg-1', chatId: mockChatIdString, role: 'user', createdAt: new Date() },
           part: { id: 'part-2', messageId: 'msg-1', type: 'text', textText: 'Second part' },
         },
       ]

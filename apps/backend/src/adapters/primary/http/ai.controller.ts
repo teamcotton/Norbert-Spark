@@ -1,8 +1,8 @@
 import type { LoggerPort } from '../../../application/ports/logger.port.js'
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import type { GetChatUseCase } from '../../../application/use-cases/get-chat.use-case.js'
 import { AIReturnedResponseSchema } from '@norberts-spark/shared'
 import { FastifyUtil } from '../../../shared/utils/fastify.utils.js'
+import { authMiddleware } from '../../../infrastructure/http/middleware/auth.middleware.js'
 
 import { z } from 'zod'
 import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from 'ai'
@@ -10,6 +10,9 @@ import { google } from '@ai-sdk/google'
 import { AppendedChatUseCase } from '../../../application/use-cases/append-chat.use-case.js'
 import { EnvConfig } from '../../../infrastructure/config/env.config.js'
 import { HeartOfDarknessTool } from '../../../infrastructure/ai/tools/heart-of-darkness.tool.js'
+import { SaveChatUseCase } from '../../../application/use-cases/save-chat.use-case.js'
+import { GetChatUseCase } from '../../../application/use-cases/get-chat.use-case.js'
+import { ChatId, type ChatIdType } from '../../../domain/value-objects/chatID.js'
 
 export class AIController {
   private readonly heartOfDarknessTool: HeartOfDarknessTool
@@ -17,13 +20,20 @@ export class AIController {
   constructor(
     private readonly getChatUseCase: GetChatUseCase,
     private readonly logger: LoggerPort,
-    private readonly appendChatUseCase: AppendedChatUseCase
+    private readonly appendChatUseCase: AppendedChatUseCase,
+    private readonly saveChatUseCase: SaveChatUseCase
   ) {
     this.heartOfDarknessTool = new HeartOfDarknessTool(this.logger)
   }
 
   registerRoutes(app: FastifyInstance): void {
-    app.post('/ai/chat', this.chat.bind(this))
+    app.post(
+      '/ai/chat',
+      {
+        preHandler: [authMiddleware],
+      },
+      this.chat.bind(this)
+    )
   }
 
   /**
@@ -54,9 +64,17 @@ export class AIController {
         details: e instanceof z.ZodError ? e.issues : e,
       })
     }
-    const { messages, id } = parsed
 
-    const chat = await this.getChatUseCase.execute(id, [])
+    const { messages, id } = parsed
+    const userId = request.user?.sub
+    if (!userId) {
+      return reply.status(401).send(FastifyUtil.createResponse('User not authenticated', 401))
+    }
+
+    // Convert string id to ChatIdType branded type
+    const chatId = new ChatId(id) as ChatIdType
+
+    const chat = await this.getChatUseCase.execute(userId, messages)
 
     const mostRecentMessage = messages[messages.length - 1]
 
@@ -71,14 +89,10 @@ export class AIController {
     }
 
     if (!chat) {
-      const userId = request.user?.sub
-      if (!userId) {
-        return reply.status(401).send(FastifyUtil.createResponse('User not authenticated', 401))
-      }
       this.logger.info('Chat does not exist, creating new chat', { id })
-      await this.getChatUseCase.execute(userId, messages)
+      await this.saveChatUseCase.execute(chatId, userId, messages)
     } else {
-      await this.appendChatUseCase.execute(id, [mostRecentMessage as UIMessage])
+      await this.appendChatUseCase.execute(chatId, [mostRecentMessage as UIMessage])
       this.logger.info('Chat exists, appending most recent message', { id })
     }
 
@@ -160,7 +174,7 @@ export class AIController {
         // console.log('toUIMessageStreamResponse.onFinish')
         // console.log('  responseMessage')
         // console.dir(responseMessage, { depth: null })
-        await this.appendChatUseCase.execute(id, [responseMessage])
+        await this.appendChatUseCase.execute(chatId, [responseMessage])
       },
     })
   }

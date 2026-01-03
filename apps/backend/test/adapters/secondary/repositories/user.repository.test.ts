@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { PostgresUserRepository } from '../../../../src/adapters/secondary/repositories/user.repository.js'
@@ -5,6 +6,7 @@ import { User } from '../../../../src/domain/entities/user.js'
 import { Email } from '../../../../src/domain/value-objects/email.js'
 import { Password } from '../../../../src/domain/value-objects/password.js'
 import { Role } from '../../../../src/domain/value-objects/role.js'
+import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 // Import db after mocking
 import { db } from '../../../../src/infrastructure/database/index.js'
 import { POSTGRES_ERROR_CODE } from '../../../../src/shared/constants/error-codes.js'
@@ -36,7 +38,8 @@ describe('PostgresUserRepository', () => {
     testEmail = new Email('test@example.com')
     testPassword = await Password.create('password123')
     testRole = new Role('user')
-    testUser = new User('user-123', testEmail, testPassword, 'John Doe', testRole)
+    const testUserId = new UserId(uuidv7()) as UserIdType
+    testUser = new User(testUserId, testEmail, testPassword, 'John Doe', testRole)
 
     // Valid bcrypt hash for testing (hash of "password123")
     validBcryptHash = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
@@ -44,18 +47,19 @@ describe('PostgresUserRepository', () => {
 
   describe('save', () => {
     it('should insert a new user into the database', async () => {
-      const mockReturning = vi.fn().mockResolvedValue([{ userId: 'user-123' }])
+      const userIdValue = testUser.id?.getValue()
+      const mockReturning = vi.fn().mockResolvedValue([{ userId: userIdValue }])
       const mockValues = vi.fn().mockReturnValue({ returning: mockReturning })
       const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
       vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
 
       const userId = await repository.save(testUser)
 
-      expect(userId).toBe('user-123')
+      expect(userId?.getValue()).toBe(userIdValue)
       expect(db.insert).toHaveBeenCalledTimes(1)
       expect(mockValues).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: 'user-123',
+          userId: userIdValue,
           email: 'test@example.com',
           name: 'John Doe',
           createdAt: expect.any(Date),
@@ -67,7 +71,8 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should save user password hash', async () => {
-      const mockReturning = vi.fn().mockResolvedValue([{ userId: 'user-123' }])
+      const userIdValue = testUser.id?.getValue()
+      const mockReturning = vi.fn().mockResolvedValue([{ userId: userIdValue }])
       const mockValues = vi.fn().mockReturnValue({ returning: mockReturning })
       const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
       vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
@@ -79,7 +84,9 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should save user with correct email', async () => {
-      const mockReturning = vi.fn().mockResolvedValue([{ userId: 'user-456' }])
+      const userId = new UserId(uuidv7()) as UserIdType
+      const userIdValue = userId.getValue()
+      const mockReturning = vi.fn().mockResolvedValue([{ userId: userIdValue }])
       const mockValues = vi.fn().mockReturnValue({ returning: mockReturning })
       const mockInsert = vi.fn().mockReturnValue({ values: mockValues })
       vi.mocked(db.insert).mockReturnValue(mockInsert() as any)
@@ -87,11 +94,11 @@ describe('PostgresUserRepository', () => {
       const email = new Email('newemail@example.com')
       const password = await Password.create('newpass123')
       const role = new Role('admin')
-      const user = new User('user-456', email, password, 'Jane Doe', role)
+      const user = new User(userId, email, password, 'Jane Doe', role)
 
-      const userId = await repository.save(user)
+      const returnedUserId = await repository.save(user)
 
-      expect(userId).toBe('user-456')
+      expect(returnedUserId).toBeInstanceOf(UserId)
       const callArgs = mockValues.mock.calls?.[0]?.[0]
       expect(callArgs.email).toBe('newemail@example.com')
       expect(callArgs.name).toBe('Jane Doe')
@@ -101,9 +108,11 @@ describe('PostgresUserRepository', () => {
 
   describe('findAll', () => {
     it('should return paginated users with default limit and offset', async () => {
+      const userId1 = uuidv7()
+      const userId2 = uuidv7()
       const dbRecords = [
         {
-          userId: 'user-1',
+          userId: userId1,
           email: 'user1@example.com',
           password: validBcryptHash,
           name: 'User One',
@@ -111,7 +120,7 @@ describe('PostgresUserRepository', () => {
           createdAt: new Date('2024-01-01'),
         },
         {
-          userId: 'user-2',
+          userId: userId2,
           email: 'user2@example.com',
           password: validBcryptHash,
           name: 'User Two',
@@ -144,9 +153,10 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should return paginated users with custom limit and offset', async () => {
+      const userId3 = uuidv7()
       const dbRecords = [
         {
-          userId: 'user-3',
+          userId: userId3,
           email: 'user3@example.com',
           password: validBcryptHash,
           name: 'User Three',
@@ -222,8 +232,9 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should return User entity when found', async () => {
+      const userId = uuidv7()
       const dbRecord = {
-        userId: 'user-123',
+        userId: userId,
         email: 'test@example.com',
         password: validBcryptHash,
         name: 'John Doe',
@@ -236,10 +247,10 @@ describe('PostgresUserRepository', () => {
       const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
       vi.mocked(db.select).mockReturnValue(mockSelect() as any)
 
-      const result = await repository.findById('user-123')
+      const result = await repository.findById(userId)
 
       expect(result).toBeInstanceOf(User)
-      expect(result?.id).toBe('user-123')
+      expect(result?.id?.getValue()).toBe(userId)
       expect(result?.getEmail()).toBe('test@example.com')
       expect(result?.getName()).toBe('John Doe')
       expect(result?.getRole()).toBe('user')
@@ -270,8 +281,9 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should return User entity when found by email', async () => {
+      const userId = uuidv7()
       const dbRecord = {
-        userId: 'user-456',
+        userId: userId,
         email: 'found@example.com',
         password: validBcryptHash,
         name: 'Found User',
@@ -292,8 +304,10 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should handle multiple results by returning first', async () => {
+      const userId1 = uuidv7()
+      const userId2 = uuidv7()
       const dbRecord1 = {
-        userId: 'user-1',
+        userId: userId1,
         email: 'duplicate@example.com',
         password: validBcryptHash,
         name: 'User 1',
@@ -301,7 +315,7 @@ describe('PostgresUserRepository', () => {
         createdAt: new Date(),
       }
       const dbRecord2 = {
-        userId: 'user-2',
+        userId: userId2,
         email: 'duplicate@example.com',
         password: validBcryptHash,
         name: 'User 2',
@@ -317,7 +331,7 @@ describe('PostgresUserRepository', () => {
       const result = await repository.findByEmail('duplicate@example.com')
 
       expect(result).toBeInstanceOf(User)
-      expect(result?.id).toBe('user-1')
+      expect(result?.id?.getValue()).toBe(userId1)
     })
   })
 
@@ -348,7 +362,8 @@ describe('PostgresUserRepository', () => {
       vi.mocked(db.update).mockReturnValue(mockUpdate() as any)
 
       const newEmail = new Email('updated@example.com')
-      const updatedUser = new User('user-789', newEmail, testPassword, 'Updated Name', testRole)
+      const userId = new UserId(uuidv7()) as UserIdType
+      const updatedUser = new User(userId, newEmail, testPassword, 'Updated Name', testRole)
 
       await repository.update(updatedUser)
 
@@ -364,7 +379,8 @@ describe('PostgresUserRepository', () => {
       const mockDelete = vi.fn().mockReturnValue({ where: mockWhere })
       vi.mocked(db.delete).mockReturnValue(mockDelete() as any)
 
-      await repository.delete('user-to-delete')
+      const userId = uuidv7()
+      await repository.delete(userId)
 
       expect(db.delete).toHaveBeenCalledTimes(1)
       expect(mockWhere).toHaveBeenCalledTimes(1)
@@ -383,7 +399,8 @@ describe('PostgresUserRepository', () => {
 
   describe('existsByEmail', () => {
     it('should return true when email exists', async () => {
-      const mockWhere = vi.fn().mockResolvedValue([{ id: 'user-123' }])
+      const userId = uuidv7()
+      const mockWhere = vi.fn().mockResolvedValue([{ id: userId }])
       const mockFrom = vi.fn().mockReturnValue({ where: mockWhere })
       const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
       vi.mocked(db.select).mockReturnValue(mockSelect() as any)
@@ -405,7 +422,9 @@ describe('PostgresUserRepository', () => {
     })
 
     it('should return true when multiple records exist with same email', async () => {
-      const mockWhere = vi.fn().mockResolvedValue([{ id: 'user-1' }, { id: 'user-2' }])
+      const userId1 = uuidv7()
+      const userId2 = uuidv7()
+      const mockWhere = vi.fn().mockResolvedValue([{ id: userId1 }, { id: userId2 }])
       const mockFrom = vi.fn().mockReturnValue({ where: mockWhere })
       const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
       vi.mocked(db.select).mockReturnValue(mockSelect() as any)
@@ -418,8 +437,9 @@ describe('PostgresUserRepository', () => {
 
   describe('toDomain', () => {
     it('should convert database record to User entity', async () => {
+      const userId = uuidv7()
       const dbRecord = {
-        userId: 'user-convert',
+        userId: userId,
         email: 'convert@example.com',
         password: validBcryptHash,
         name: 'Convert User',
@@ -432,17 +452,18 @@ describe('PostgresUserRepository', () => {
       const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
       vi.mocked(db.select).mockReturnValue(mockSelect() as any)
 
-      const result = await repository.findById('user-convert')
+      const result = await repository.findById(userId)
 
       expect(result).toBeInstanceOf(User)
-      expect(result?.id).toBe('user-convert')
+      expect(result?.id?.getValue()).toBe(userId)
       expect(result?.getEmail()).toBe('convert@example.com')
       expect(result?.getName()).toBe('Convert User')
     })
 
     it('should preserve password hash when converting to domain', async () => {
+      const userId = uuidv7()
       const dbRecord = {
-        userId: 'user-password',
+        userId: userId,
         email: 'password@example.com',
         password: validBcryptHash,
         name: 'Password User',
@@ -455,7 +476,7 @@ describe('PostgresUserRepository', () => {
       const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
       vi.mocked(db.select).mockReturnValue(mockSelect() as any)
 
-      const result = await repository.findById('user-password')
+      const result = await repository.findById(userId)
 
       expect(result).toBeInstanceOf(User)
       // Password should be properly converted from hash
@@ -495,14 +516,15 @@ describe('PostgresUserRepository', () => {
     describe('findById', () => {
       it('should throw DatabaseException on database error', async () => {
         const dbError = new Error('Database connection lost')
+        const userId = uuidv7()
 
         const mockWhere = vi.fn().mockRejectedValue(dbError)
         const mockFrom = vi.fn().mockReturnValue({ where: mockWhere })
         const mockSelect = vi.fn().mockReturnValue({ from: mockFrom })
         vi.mocked(db.select).mockReturnValue(mockSelect() as any)
 
-        await expect(repository.findById('user-123')).rejects.toThrow(DatabaseException)
-        await expect(repository.findById('user-123')).rejects.toThrow('Failed to find user by ID')
+        await expect(repository.findById(userId)).rejects.toThrow(DatabaseException)
+        await expect(repository.findById(userId)).rejects.toThrow('Failed to find user by ID')
       })
     })
 
@@ -554,13 +576,14 @@ describe('PostgresUserRepository', () => {
     describe('delete', () => {
       it('should throw DatabaseException on database error', async () => {
         const dbError = new Error('Delete operation failed')
+        const userId = uuidv7()
 
         const mockWhere = vi.fn().mockRejectedValue(dbError)
         const mockDelete = vi.fn().mockReturnValue({ where: mockWhere })
         vi.mocked(db.delete).mockReturnValue(mockDelete() as any)
 
-        await expect(repository.delete('user-123')).rejects.toThrow(DatabaseException)
-        await expect(repository.delete('user-123')).rejects.toThrow('Failed to delete user')
+        await expect(repository.delete(userId)).rejects.toThrow(DatabaseException)
+        await expect(repository.delete(userId)).rejects.toThrow('Failed to delete user')
       })
     })
 
