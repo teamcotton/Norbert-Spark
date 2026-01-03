@@ -63,7 +63,7 @@ export class AIController {
         details: e instanceof z.ZodError ? e.issues : e,
       })
     }
-    debugger
+
     const { messages, id } = parsed
     const userId = request.user?.sub
     if (!userId) {
@@ -71,7 +71,6 @@ export class AIController {
     }
 
     const chat = await this.getChatUseCase.execute(userId, messages)
-    debugger
 
     const mostRecentMessage = messages[messages.length - 1]
 
