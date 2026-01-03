@@ -206,7 +206,7 @@ describe('JwtUtil', () => {
     it('should handle token with extra claims', () => {
       const claimsWithExtra = {
         ...validClaims,
-        sub: validClaims.sub, // Convert UserId to string for jwt.sign
+        sub: validClaims.sub, // sub is already a branded string (UserIdType) suitable for jwt.sign
         extraClaim: 'extra-value',
         anotherField: 123,
       }
