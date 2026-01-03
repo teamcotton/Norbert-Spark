@@ -41,9 +41,8 @@ export class Uuid7Util {
    * ```
    */
   static uuidVersionValidation(uuid: Uuid7UtilInputType): string | undefined {
-    const uuidString = String(uuid)
-    if (!isString(uuidString)) return undefined
-    return uuidVersionValidation(uuidString)
+    if (!isString(uuid)) return undefined
+    return uuidVersionValidation(uuid)
   }
 
   /**
@@ -61,9 +60,8 @@ export class Uuid7Util {
    * ```
    */
   static isValidUUID(uuid: Uuid7UtilInputType): boolean {
-    const uuidString = String(uuid)
-    if (!isString(uuidString)) return false
-    return isValidUUID(uuidString)
+    if (!isString(uuid)) return false
+    return isValidUUID(uuid)
   }
 
   /**
