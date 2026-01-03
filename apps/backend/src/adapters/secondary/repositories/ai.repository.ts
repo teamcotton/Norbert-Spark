@@ -11,6 +11,7 @@ import {
 import type { UIMessage } from 'ai'
 import type { UserIdType } from '../../../domain/value-objects/userID.js'
 import type { ChatIdType } from '../../../domain/value-objects/chatID.js'
+import type { LoggerPort } from '../../../application/ports/logger.port.js'
 
 export type ChatResponseResult = {
   message: DBMessageSelect
@@ -18,6 +19,8 @@ export type ChatResponseResult = {
 }[]
 
 export class AIRepository implements AIServicePort {
+  constructor(private readonly logger: LoggerPort) {}
+
   async createChat(
     chatId: ChatIdType,
     userId: UserIdType,
@@ -27,7 +30,7 @@ export class AIRepository implements AIServicePort {
       userId: userId.getValue()!,
       id: chatId.getValue()!,
     }
-    console.log('createChat', newChat)
+    this.logger.info('createChat', newChat)
 
     await db.insert(chats).values(newChat)
 

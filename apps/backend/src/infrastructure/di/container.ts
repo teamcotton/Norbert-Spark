@@ -153,7 +153,7 @@ cd apps/backend/certs && mkcert -key-file key.pem -cert-file cert.pem \\
 
     // Initialize repositories (secondary adapters)
     this.userRepository = new PostgresUserRepository()
-    this.aiRepository = new AIRepository()
+    this.aiRepository = new AIRepository(this.logger)
 
     // Initialize domain services
     // this.workoutCalculator = new WorkoutCalculator()

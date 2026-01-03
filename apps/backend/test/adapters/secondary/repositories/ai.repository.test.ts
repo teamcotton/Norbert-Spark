@@ -3,6 +3,7 @@ import { uuidv7 } from 'uuidv7'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { AIRepository } from '../../../../src/adapters/secondary/repositories/ai.repository.js'
+import type { LoggerPort } from '../../../../src/application/ports/logger.port.js'
 import { ChatId, type ChatIdType } from '../../../../src/domain/value-objects/chatID.js'
 import { UserId, type UserIdType } from '../../../../src/domain/value-objects/userID.js'
 import { db } from '../../../../src/infrastructure/database/index.js'
@@ -21,12 +22,13 @@ vi.mock('../../../../src/shared/utils/uuid7.util.js', () => ({
   Uuid7Util: {
     createUuidv7: vi.fn(),
     isValidUUID: vi.fn(() => true),
-    uuidVersionValidation: vi.fn((uuid: string) => 'v7'),
+    uuidVersionValidation: vi.fn((_uuid: string) => 'v7'),
   },
 }))
 
 describe('AIRepository', () => {
   let repository: AIRepository
+  let mockLogger: LoggerPort
   const mockChatIdString = uuidv7()
   const mockUserIdString = uuidv7()
   const mockChatId = new ChatId(mockChatIdString) as ChatIdType
@@ -34,7 +36,16 @@ describe('AIRepository', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    repository = new AIRepository()
+
+    // Create mock logger
+    mockLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn(),
+    }
+
+    repository = new AIRepository(mockLogger)
     vi.mocked(Uuid7Util.createUuidv7).mockReturnValue(mockChatIdString)
   })
 
