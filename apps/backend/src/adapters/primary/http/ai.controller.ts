@@ -83,10 +83,8 @@ export class AIController {
       userId,
       messageCount: messages.length,
     })
-    debugger
 
     const chat = await this.getChatUseCase.execute(userId, messages)
-    debugger
 
     const mostRecentMessage = messages[messages.length - 1]
 
