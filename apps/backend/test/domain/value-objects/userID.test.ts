@@ -138,18 +138,22 @@ describe('UserId Value Object', () => {
 
   describe('Type Safety with UserIdType', () => {
     it('should be assignable to UserIdType with type assertion', () => {
-      const userId = new UserId(validUuid) as UserIdType
+      const userIdObj = new UserId(validUuid)
+      const userId: UserIdType = userIdObj.getValue()
 
-      expect(userId).toBeInstanceOf(UserId)
-      expect(userId.getValue()).toBe(validUuid)
+      expect(userIdObj).toBeInstanceOf(UserId)
+      expect(userId).toBe(validUuid)
     })
 
     it('should maintain type brand for compile-time safety', () => {
-      const userId = new UserId(validUuid) as UserIdType<string>
+      const userIdObj = new UserId(validUuid)
+      const userId: UserIdType<string> = userIdObj.getValue()
 
       // This test verifies that the branded type works at compile-time
-      // At runtime, UserIdType is just UserId
-      expect(userId).toBeInstanceOf(UserId)
+      // At runtime, UserIdType is just a branded string
+      expect(userIdObj).toBeInstanceOf(UserId)
+      // At runtime, UserIdType is just a branded string
+      expect(typeof userId).toBe('string')
     })
   })
 

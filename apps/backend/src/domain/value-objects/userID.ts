@@ -7,22 +7,27 @@ import { Uuid7Util } from '../../shared/utils/uuid7.util.js'
 declare const UserIdBrand: unique symbol
 
 /**
- * Branded UUIDType that wraps the Uuid class with compile-time type safety.
- * The brand ensures that only validated Uuid instances can be used where this type is expected.
+ * Branded type for User IDs that ensures type safety at compile time.
+ * The brand prevents regular strings from being used where UserIdType is expected,
+ * enforcing proper validation through the UserId class.
  *
- * @template T - The string literal type of the uuid (defaults to string)
+ * @template T - The string literal type of the UUID (defaults to string)
  */
-export type UserIdType<T extends string = string> = UserId<T> & { readonly [UserIdBrand]: T }
+export type UserIdType<T extends string = string> = string & { readonly [UserIdBrand]: T }
 
-export class UserId<T> {
-  private readonly value: string
+function brandUserId<T extends string>(value: string): UserIdType<T> {
+  return value as UserIdType<T>
+}
+
+export class UserId<T extends string = string> {
+  private readonly value: UserIdType<T>
   declare readonly [UserIdBrand]: T
 
   constructor(value: string) {
     this.value = this.processUserIdUUID(value)
   }
 
-  private processUserIdUUID(userUUID: string): string {
+  private processUserIdUUID<T extends string = string>(userUUID: string): UserIdType<T> {
     if (!Uuid7Util.isValidUUID(userUUID)) {
       throw new Error('Invalid UUID format provided')
     }
@@ -31,10 +36,10 @@ export class UserId<T> {
     if (version !== 'v7') {
       throw new Error(`Invalid UUID version: ${version}`)
     }
-    return userUUID
+    return brandUserId<T>(userUUID)
   }
 
-  getValue(): string {
+  getValue(): UserIdType {
     return this.value
   }
 }

@@ -13,6 +13,7 @@ import { HeartOfDarknessTool } from '../../../infrastructure/ai/tools/heart-of-d
 import { SaveChatUseCase } from '../../../application/use-cases/save-chat.use-case.js'
 import { GetChatUseCase } from '../../../application/use-cases/get-chat.use-case.js'
 import { ChatId } from '../../../domain/value-objects/chatID.js'
+import { UserId } from '../../../domain/value-objects/userID.js'
 
 export class AIController {
   private readonly heartOfDarknessTool: HeartOfDarknessTool
@@ -66,10 +67,12 @@ export class AIController {
     }
 
     const { messages, id } = parsed
-    const userId = request.user?.sub
-    if (!userId) {
+
+    if (!request.user?.sub) {
       return reply.status(401).send(FastifyUtil.createResponse('User not authenticated', 401))
     }
+
+    const userId = new UserId(request.user.sub).getValue()
 
     // Convert string id to ChatIdType branded type
     const chatId = new ChatId(id).getValue()
@@ -79,8 +82,10 @@ export class AIController {
       userId,
       messageCount: messages.length,
     })
+    debugger
 
     const chat = await this.getChatUseCase.execute(userId, messages)
+    debugger
 
     const mostRecentMessage = messages[messages.length - 1]
 

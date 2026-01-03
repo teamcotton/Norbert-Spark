@@ -100,7 +100,7 @@ export class JwtUtil {
       issuer: EnvConfig.JWT_ISSUER,
     }
     // Extract the actual UUID string from the UserId value object
-    const userIdString = sub.getValue()
+    const userIdString = sub
     if (isString(userIdString)) {
       options.subject = userIdString
     }
