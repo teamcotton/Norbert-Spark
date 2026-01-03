@@ -116,7 +116,7 @@ describe('Chat Entity', () => {
         const userId = new UserId('').getValue()
         const chatId = new ChatId(uuidv7()).getValue()
         new Chat(userId, chatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid userID UUID format provided')
     })
 
     it('should handle very long userId', () => {
@@ -124,7 +124,7 @@ describe('Chat Entity', () => {
         const longUserId = new UserId('user-' + 'x'.repeat(1000)).getValue()
         const chatId = new ChatId(uuidv7()).getValue()
         return new Chat(longUserId, chatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid userID UUID format provided')
     })
 
     it('should handle special characters in userId', () => {
@@ -132,7 +132,7 @@ describe('Chat Entity', () => {
         const specialUserId = new UserId('user@#$%^&*()-_=+[]{}|;:,.<>?').getValue()
         const chatId = new ChatId(uuidv7()).getValue()
         return new Chat(specialUserId, chatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid userID UUID format provided')
     })
 
     it('should handle empty string chatId', () => {
@@ -140,7 +140,7 @@ describe('Chat Entity', () => {
         const userId = new UserId(uuidv7()).getValue()
         const chatId = new ChatId('').getValue()
         return new Chat(userId, chatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid chatId UUID format provided')
     })
 
     it('should handle very long chatId', () => {
@@ -148,7 +148,7 @@ describe('Chat Entity', () => {
         const userId = new UserId(uuidv7()).getValue()
         const longChatId = new ChatId('chat-' + 'x'.repeat(1000)).getValue()
         return new Chat(userId, longChatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid chatId UUID format provided')
     })
 
     it('should handle special characters in chatId', () => {
@@ -156,7 +156,7 @@ describe('Chat Entity', () => {
         const userId = new UserId(uuidv7()).getValue()
         const specialChatId = new ChatId('chat@#$%^&*()-_=+[]{}|;:,.<>?').getValue()
         return new Chat(userId, specialChatId)
-      }).toThrow('Invalid UUID format provided')
+      }).toThrow('Invalid chatId UUID format provided')
     })
   })
 })

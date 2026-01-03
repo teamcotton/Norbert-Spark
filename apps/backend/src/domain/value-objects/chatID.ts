@@ -150,12 +150,12 @@ export class ChatId<T extends string = string> {
    */
   private processChatUUID<T extends string = string>(userUUID: string): ChatIdType<T> {
     if (!Uuid7Util.isValidUUID(userUUID)) {
-      throw new Error('Invalid UUID format provided')
+      throw new Error('Invalid chatId UUID format provided')
     }
     // Validate the UUID version but return the UUID itself, not the version string
     const version = Uuid7Util.uuidVersionValidation(userUUID)
     if (version !== 'v7') {
-      throw new Error(`Invalid UUID version: ${version}`)
+      throw new Error(`Invalid chatId UUID version: ${version}`)
     }
     return brandChatId<T>(userUUID)
   }

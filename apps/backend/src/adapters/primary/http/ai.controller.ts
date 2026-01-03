@@ -72,6 +72,7 @@ export class AIController {
       return reply.status(401).send(FastifyUtil.createResponse('User not authenticated', 401))
     }
 
+    // Convert string request.user.sub id to UserIdType branded type
     const userId = new UserId(request.user.sub).getValue()
 
     // Convert string id to ChatIdType branded type
