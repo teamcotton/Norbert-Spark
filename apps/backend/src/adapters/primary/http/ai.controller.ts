@@ -84,7 +84,9 @@ export class AIController {
       messageCount: messages.length,
     })
 
-    const chat = await this.getChatUseCase.execute(userId, messages)
+    const chat = await this.getChatUseCase.execute(chatId, messages)
+
+    this.logger.info('Received chat', { chat: chat ?? null })
 
     const mostRecentMessage = messages[messages.length - 1]
 
@@ -106,9 +108,7 @@ export class AIController {
       this.logger.info('Chat exists, appending most recent message', { id })
     }
 
-    const SYSTEM_PROMPT = `You must respond in the same style of Charles Marlow the narrator in Joseph Conrad's The Heart of Darkness novella. Only answer factual questions about the novella when using the heartOfDarknessQA tool. Do not use other sources.`
-
-    const logger = this.logger
+    const SYSTEM_PROMPT = `You must respond in a neutral, polite tone. Make sure responses are concise but comprehensive. Only answer factual questions about the novella when using the heartOfDarknessQA tool. Do not use other sources.`
 
     if (!EnvConfig.MODEL_NAME) {
       this.logger.error('MODEL_NAME environment variable is not configured')
@@ -146,34 +146,34 @@ export class AIController {
         // console.log('Full text:', text)
         // The reason the model finished generating the text.
         // "stop" | "length" | "content-filter" | "tool-calls" | "error" | "other" | "unknown"
-        logger.info('Finish reason:', { finishReason })
-        logger.info('Usage info:', { usage, totalUsage })
+        console.log('Finish reason:', { finishReason })
+        console.log('Usage info:', { usage, totalUsage })
         // use proper logging for production
-        logger.info('streamText.onFinish')
+        console.log('streamText.onFinish')
         // Model messages (AssistantModelMessage or ToolModelMessage)
         // Minimal information, no UI data
         // Not suitable for UI applications
-        logger.info('  messages')
-        logger.debug(JSON.stringify(messages), { depth: null })
+        console.log('  messages')
+        console.log(JSON.stringify(messages), { depth: null })
         // 'response.messages' is an array of ToolModelMessage and AssistantModelMessage,
         // which are the model messages that were generated during the stream.
         // This is useful if you don't need UIMessages - for simpler applications.
-        logger.info('  response')
-        logger.info(JSON.stringify(response), { depth: null })
+        console.log('  response')
+        console.log(JSON.stringify(response), { depth: null })
       },
       onError({ error }) {
         // use proper logging for production
-        logger.error('Stream error:', error as Error)
+        console.log('Stream error:', error as Error)
       },
     })
 
     return result.toUIMessageStreamResponse({
       originalMessages: messages as UIMessage[],
-      onFinish: async ({ responseMessage }) => {
+      onFinish: async ({ messages, responseMessage }) => {
         // 'messages' is the full message history, including the original messages
         // Includes original user message and assistant's response with all parts
         // Ideal for persisting entire conversations
-        this.logger.info('toUIMessageStreamResponse.onFinish', {
+        console.log('toUIMessageStreamResponse.onFinish', {
           chatId: id,
           messageCount: Array.isArray(messages) ? messages.length : undefined,
         })
@@ -181,9 +181,9 @@ export class AIController {
         // Single message
         // Just the newly generated assistant message
         // Good for persisting only the latest response
-        // console.log('toUIMessageStreamResponse.onFinish')
-        // console.log('  responseMessage')
-        // console.dir(responseMessage, { depth: null })
+        console.log('toUIMessageStreamResponse.onFinish')
+        console.log('  responseMessage')
+        console.dir(responseMessage, { depth: null })
         await this.appendChatUseCase.execute(chatId, [responseMessage])
       },
     })
